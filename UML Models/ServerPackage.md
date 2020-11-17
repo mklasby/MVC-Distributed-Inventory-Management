@@ -8,22 +8,30 @@ package Server{
         class ServerController{
 
         }
-        Server *--- "0...5" ServerController: Owns several
+
+        class DBInit{
+
+        }
+
+        Server *--- "*" ServerController: Owns several
+        Server "1" ...> "1" DBInit: Uses a
     }
     
     package ModelController{
-        abstract class ModelController{
+        interface ModelController{
 
         }
-        class InventoryController extends ModelController{
+        class InventoryController implements ModelController{
 
         }
-        class CustomerController extends ModelController{
+        class CustomerController implements ModelController{
 
         }
 
-        ServerController *--- "2" ModelController: Owns 2
-        ModelController *--- "2" DBController: Owns 2
+        ServerController "1" ---o InventoryController: Has a
+        ServerController "1 "---o CustomerController: Has a
+        InventoryController o--- "1" DBController: Has a
+        CustomerController o--- "1" DBController: Has a
     }
 
     package InventoryModel{
@@ -36,23 +44,21 @@ package Server{
 
     package DBController{
 
-        abstract class DBController{
+        class DBController{
 
         }
 
-        class InventoryDBController extends DBController{
+        class InventoryDBController{
 
         }
 
-        class CustomerDBController extends DBController{
+        class CustomerDBController{
 
         }
 
-        class DBInit{
 
-        }
-
-        DBController ... DBInit: Uses
+        DBController *--- "1" InventoryDBController: Owns a
+        DBController *--- "1" CustomerDBController: Owns a
 
     }
 
@@ -63,3 +69,6 @@ package Server{
 
 
 @enduml
+
+
+                DBController ... DBInit: Uses

@@ -6,13 +6,17 @@ package Client{
 
         }
 
-        class IMSController extends ViewController{
+        class IMSController{
 
         }
 
-        class CMSController extends ViewController{
+        class CMSController{
 
         }
+
+        CMSController "1" ---o  ViewController: Has a
+        IMSController "1" ---o ViewController: Has a
+
     }
 
     class ClientController{
@@ -21,19 +25,17 @@ package Client{
 
 
     package View{
-        abstract class GenericView{
+
+
+        class CMSView {
 
         }
 
-        class CMSView extends GenericView{
+        class IMSView {
 
         }
 
-        class IMSView extends GenericView{
-
-        }
-
-        class GUI extends GenericView{
+        class GUI{
 
         }
 
@@ -41,13 +43,15 @@ package Client{
 
         }
 
-        GenericView ... OrderWriter: Uses
+        GUI ... OrderWriter: Uses
     }
 
-    ClientController *... "2" ViewController: Owns 
-    IMSController *... "1" IMSView: Owns a
-    CMSController *... "1" CMSView: Owns a
-    ViewController *... "1" GUI: Owns a
+    ClientController "1" ---o ViewController: Has a 
+    IMSController o--- "1" IMSView: Has a
+    CMSController o--- "1" CMSView: Has a
+    GUI o--- "1" CMSView: Has a
+    GUI o--- "1" IMSView: Has a
+
 }
 
 @enduml

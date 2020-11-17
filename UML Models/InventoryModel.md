@@ -50,21 +50,15 @@ class Tool{
 
 class Procurement {
     -orders: ArrayList<Order>
-    -vendors: VendorList
+    -vendors: ArrayList<Supplier>
 
     +Procurement(vendors: VendorList)
     +generateOrder(orders: ArrayList<OrderLine>): String
+    +getVendor(supplierID: int): Supplier
+    +getNameByID(supplierID: int): String
     -writeOrder(order: Order): void
     -getNextOrderID(): int
     -getOrder(value: <V>): Order
-}
-
-class VendorList{
-    -vendors: ArrayList<Supplier>
-
-    +VendorList(ArrayList<Supplier>)
-    +getVendor(supplierID: int): Supplier
-    +getNameByID(supplierID: int): String
 }
 
 class Supplier{
@@ -125,9 +119,8 @@ class OrderWriter {
 }
 
 Procurement ... OrderWriter: Uses
-Procurement o--- "1" VendorList: Has 
 Procurement *--- "*" Order: Creates
-VendorList "1" o--- "1...*" Supplier: Has 
+Procurement "1" o--- "1...*" Supplier: Has 
 Inventory o-- "1...*" Tool: Consists of 1 or more
 Inventory  *--- "*" OrderLine: Generates
 InvMgmt "1" *-- "1" Inventory: Creates
