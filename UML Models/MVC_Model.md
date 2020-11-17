@@ -1,22 +1,21 @@
 @startuml
 
-ClientController o... Client
+ClientController o--- Client
 
-ClientController o... ViewController
+ClientController o--- ViewController
 
-ViewController o... View
+ViewController o--- View
 
-ClientController "1" ... "1" ServerController
+ClientController  <...>  ServerController
 
-ServerController o... InventoryController
+ServerController o--- InventoryController
 
-ServerController o... Server
+ServerController o--- Server
 
-ServerController o... DatabaseController
+ServerController o--- DatabaseController
 
-InventoryController o... Inventory
-
-DatabaseController "1" ... "1" InventoryDatabase
+InventoryController o--- Inventory
 
 
 @enduml
+DatabaseController <...> InventoryDatabase
