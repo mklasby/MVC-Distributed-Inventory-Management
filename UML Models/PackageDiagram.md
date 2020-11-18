@@ -12,13 +12,13 @@ package "Server"{
     package ModelController{}
 }
 
-ClientController ... ServerController
-ClientController ... ViewController
-ViewController ... View
+ClientController ...> ServerController
+ClientController ...> ViewController
+ViewController ...> View
 
-ModelController ... Model
-ModelController ... DatabaseController
-ServerController ... ModelController
+ModelController ...> Model
+ModelController ...> DatabaseController
+ServerController <... ModelController
 
 @enduml
 
