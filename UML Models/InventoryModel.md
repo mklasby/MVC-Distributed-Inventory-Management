@@ -2,8 +2,6 @@
 
 package InventoryModel{
 class InvMgmt{
-    -inventory: Inventory
-    -procurement: Procurement
     +printInventory(tools: ResultSet): JsonObject
     +searchInventory(tool: ResultSet): JsonObject
     +checkItemQuantity(tool: ResultSet): JsonObject
@@ -14,7 +12,6 @@ class InvMgmt{
 }
 
 class Inventory{
-    -tools: ArrayLists<Tool>
     +Inventory(tools: ResultSet)
     +searchInventory(tool: ResultSet): JsonObject
     +checkItemQuantity(tool: ResultSet): JsonObject
@@ -23,7 +20,7 @@ class Inventory{
 }
 
 class Tool{
-    -tool: ResultSet
+    -toolID: int
     -name: String
     -quantity: int
     -price: double
@@ -41,8 +38,6 @@ class ElectricalTool extends Tool{
 }
 
 class Procurement {
-    -order: Order
-    -vendors: HashMap<Suppliers>
     +generateOrder(orders: ArrayList<OrderLine>): JsonObject
     +getSupplier(supplier: ResultSet): Supplier
 }
