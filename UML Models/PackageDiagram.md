@@ -1,6 +1,6 @@
 @startuml
 package "Client"{
-    class ClientController{}
+    package ClientController{}
     package ViewController{}
     package View{}
 }

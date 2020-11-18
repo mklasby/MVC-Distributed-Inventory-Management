@@ -34,13 +34,17 @@ package Server{
         CustomerController o--- "1" DBController: Has a
     }
 
-    package InventoryModel{
+    package model{
+        package InventoryModel{
 
+        }
+
+        package CustomerModel{
+
+        }
     }
 
-    package CustomerModel{
 
-    }
 
     package DBController{
 

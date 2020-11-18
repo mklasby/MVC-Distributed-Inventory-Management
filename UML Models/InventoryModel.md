@@ -4,61 +4,42 @@ package InventoryModel{
 class InvMgmt{
     -inventory: Inventory
     -procurement: Procurement
-    -------------------------
-    +InvMgmt()
-    +printInventory(): String
-    +searchInventory(name: String): String
-    +searchInventory(toolID: int): String 
-    +checkItemQuantity(toolID: int): String
-    +checkItemQuantity(name: String): String
-    +makeSale(toolID: int): String
-    +returnTool(toolID: int): String
-    +generateOrder(): String
-    +receiveOrder(fname: String): String
+    +printInventory(tools: ResultSet): JsonObject
+    +searchInventory(tool: ResultSet): JsonObject
+    +checkItemQuantity(tool: ResultSet): JsonObject
+    +makeSale(tool: ResultSet): JsonObject
+    +returnTool(tool: ResultSet): JsonObject
+    +generateOrder(orderLines: ResultSet): JsonObject
+    +restock(toolID: int, amount: int): JsonObject
 }
 
 class Inventory{
-    -tools: ArrayList<Tool>
-    -pendingOrders: ArrayList<OrderLine>
-
-    +Inventory(tools: ArrayList<Tool>)
-    +searchInventory(toolName: String): String
-    +searchInventory(toolID: int): String
-    +checkItemQuantity(toolID: int): String
-    +checkItemQuantity(name: String): String
-    +makeSale(toolID: int): String
-    +returnTool(toolID: int): String
-    +receiveOrder(orderLines: ArrayList<OrderLine>): String
-    +returnTool(toolID: int): String
-    +populatePendingOrders(): void
-    -restock(tool: Tool): void
-    -getTool(int: toolID): Tool
-    -getTool(name: String): Tool
-    -toolNotFound(query: <V>): String
-    
+    -tools: ArrayLists<Tool>
+    +Inventory(tools: ResultSet)
+    +searchInventory(tool: ResultSet): JsonObject
+    +checkItemQuantity(tool: ResultSet): JsonObject
+    +makeSale(tool: ResultSet): JsonObject
+    +returnTool(tool: ResultSet): JsonObject
 }
 
 class Tool{
-    -toolID: int
+    -tool: ResultSet
     -name: String
     -quantity: int
     -price: double
     -supplierID: int
     -powerTool: boolean
     -powerType: String
+    +Tool(attributes: ResultSet)
+    +Tool(toolID:int, description: String, quantity: int, price: double, supplierID: int, powered: boolean, powerType: String)
+    +encode(): JsonObject
 }
 
 class Procurement {
-    -orders: ArrayList<Order>
-    -vendors: ArrayList<Supplier>
-
-    +Procurement(vendors: VendorList)
-    +generateOrder(orders: ArrayList<OrderLine>): String
-    +getVendor(supplierID: int): Supplier
-    +getNameByID(supplierID: int): String
-    -writeOrder(order: Order): void
-    -getNextOrderID(): int
-    -getOrder(value: <V>): Order
+    -order: Order
+    -vendors: HashMap<Suppliers>
+    +generateOrder(orders: ArrayList<OrderLine>): JsonObject
+    +getSupplier(supplier: ResultSet): Supplier
 }
 
 class Supplier{
@@ -68,72 +49,42 @@ class Supplier{
     -salesContact: String
     -internationalSupplier: Boolean
     -importTax: double
+    +Supplier(attributes: ResultSet)
+    +Supplier(id: int, name: String, address: String, salesContact: String, internationalSupplier: Boolean, tax: double)
+    +encode(): JsonObject
 }
 
 class Order{
     -orderID: int
     -date: String
     -items: ArrayList<OrderLine>
-    
     +Order(items: ArrayList<OrderLine>, date: String, id: int)
-    +toString(): String
-    +getOrderID(): int
-    +setOrderID(id: int): void
-    +getDate(): String
-    +setDate(date: String): void
-    +getItems(): ArrayList<OrderLine>
-    +setItems(): ArrayList<OrderLine>
-    +addItem(item: OrderLine): void
-    +deleteItem(item: OrderLine): OrderLine
-    +deleteItem(desc: String): OrderLine
+    +encode(): JsonObject
 }
 
 class OrderLine{
-    -description: String
     -amount: int
-    -supplier: String
-    -supplierID: int
     -toolID: int
-    
-    +OrderLine(toolID: int, desc: String, amt: int, supplierID: int, supplier: String)
-    +getDescription(): String
-    +setDescription(desc: String): void
-    +getAmount(): int
-    +setAmount(i: int): void
-    +getSupplier(): String
-    +setSupplier(supplier: String): void    
-    +getSupplierID(): int
-    +setSupplierId(id: int): void
-    +getToolID(): int
-    +setToolID(toolID: int): void
-    +toString(): String
+    +OrderLine(toolId: int, amt: int)
+    +encode(): JsonObject
 }
 
 
-class OrderWriter {
-    -{static} workingDir: String
-    -{static}bw: BufferedWriter
+Inventory *--- "1...*" Tool: Generates 1 or more 
+Procurement *--- "1" Order: Generates
+Procurement *--- "1...*" Supplier: Has 
 
-    -OrderWriter()
-    +{static}writeOrder(order: Order): String
-}
-
-Procurement ... OrderWriter: Uses
-Procurement *--- "*" Order: Creates
-Procurement "1" o--- "1...*" Supplier: Has 
-Inventory o-- "1...*" Tool: Consists of 1 or more
-Inventory  *--- "*" OrderLine: Generates
-InvMgmt "1" *-- "1" Inventory: Creates
-InvMgmt "1" *-- "1" Procurement: Creates
-Order "1" o-- "1...*" OrderLine: Has
-OrderWriter ... Order: Uses
+InvMgmt  ...>  OrderLine: Uses
+InvMgmt *-- "1" Inventory: Creates
+InvMgmt *-- "1" Procurement: Creates
+Order o-- "1...*" OrderLine: Has
 
 @enduml
 
 Unused: 
 
     +addTool(tool: Tool): Tool
-    +deleteTool(toolID: int): Tool
+    +deleteTool(tool: ResultSet): Tool
     
 
     +addVendor(supplier: Supplier): Supplier
@@ -157,3 +108,11 @@ class dbReader{
 
 
     +Tool(toolID:int, description: String, quantity: int, price: double, supplierID: int, powerTool: boolean, powerType: String)
+
+    class OrderWriter {
+    -{static} workingDir: String
+    -{static}bw: BufferedWriter
+
+    -OrderWriter()
+    +{static}writeOrder(order: Order): String
+}
