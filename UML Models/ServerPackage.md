@@ -11,16 +11,13 @@ package Server{
         Server ...> DBInit: Uses a
     }
     package ModelController{
-        interface ModelController{
+        abstract class ModelController{
         }
-        class InventoryController implements ModelController{
+        class InventoryController extends ModelController{
         }
-        class CustomerController implements ModelController{
+        class CustomerController extends ModelController{
         }
-        ServerController "1" ---o InventoryController: Has a
-        ServerController "1 "---o CustomerController: Has a
-        InventoryController o--- "1" DBController: Has a
-        CustomerController o--- "1" DBController: Has a
+
     }
     
    package model{
@@ -31,18 +28,21 @@ package Server{
     }
     
    package DBController{
-    		class DBController{
+    		abstract class DBController{
     		}
-    		class InventoryDBController{
+    		class InventoryDBController extends DBController{
     		}
-    		class CustomerDBController{
+    		class CustomerDBController extends DBController{
     		}
-    		DBController *--- "1" InventoryDBController: Owns a
-        DBController *--- "1" CustomerDBController: Owns a
+
     }
+
+}
+    ServerController "1" ---o ModelController: Has a
+    InventoryController o--- "1" InventoryDBController
+    CustomerController o--- "1" CustomerDBController
     InventoryController ...> InventoryModel
     CustomerController ...> CustomerModel
-}
 
 
 

@@ -2,77 +2,42 @@
 
 package InventoryModel{
 class InvMgmt{
-    +printInventory(tools: ResultSet): JsonObject
-    +searchInventory(tool: ResultSet): JsonObject
-    +checkItemQuantity(tool: ResultSet): JsonObject
-    +makeSale(tool: ResultSet): JsonObject
-    +returnTool(tool: ResultSet): JsonObject
-    +generateOrder(orderLines: ResultSet): JsonObject
-    +restock(toolID: int, amount: int): JsonObject
 }
 
 class Inventory{
-    +Inventory(tools: ResultSet)
-    +searchInventory(tool: ResultSet): JsonObject
-    +checkItemQuantity(tool: ResultSet): JsonObject
-    +makeSale(tool: ResultSet): JsonObject
-    +returnTool(tool: ResultSet): JsonObject
 }
 
-class Tool{
-    -toolID: int
-    -name: String
-    -quantity: int
-    -price: double
-    -supplierID: int
+abstract class Tool{
+}
 
-    +Tool(attributes: ResultSet)
-    +encode(): JsonObject
+class HandTool extends Tool{
+    
 }
 
 class ElectricalTool extends Tool{
-    -powerType: String
-    +ElectricalTool(attributes: ResultSet)
-    +encode(): JsonObject
 
 }
 
 class Procurement {
-    +generateOrder(orders: ArrayList<OrderLine>): JsonObject
-    +getSupplier(supplier: ResultSet): Supplier
+
 }
 
-class Supplier{
-    -supplierID: int
-    -companyName: String
-    -address: String
-    -salesContact: String
-
-    +Supplier(attributes: ResultSet)
-    +encode(): JsonObject
+abstract class Supplier{
 }
 
 class InternationalSupplier extends Supplier{
-    -importTax: double
-    +InternationalSupplier(attributes: ResultSet)
-    +encode(): JsonObject
+
+}
+
+class LocalSupplier extends Supplier{
 
 }
 
 
 class Order{
-    -orderID: int
-    -date: String
-    -items: ArrayList<OrderLine>
-    +Order(items: ArrayList<OrderLine>, date: String, id: int)
-    +encode(): JsonObject
 }
 
 class OrderLine{
-    -amount: int
-    -toolID: int
-    +OrderLine(toolId: int, amt: int)
-    +encode(): JsonObject
 }
 
 
