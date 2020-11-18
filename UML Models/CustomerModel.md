@@ -3,19 +3,19 @@ package CustomerModel{
     class CustomerList{
 
     }
-    interface Customer{
+    abstract class Customer{
 
     }
 
-    class CommercialCustomer implements Customer{
+    class CommercialCustomer extends Customer{
 
     }
 
-    class ResidentialCustomer implements Customer{
+    class ResidentialCustomer extends Customer{
 
     }
 
-    CustomerList o--- "*" Customer
+    CustomerList *--- "*" Customer
 }
 
 @enduml
