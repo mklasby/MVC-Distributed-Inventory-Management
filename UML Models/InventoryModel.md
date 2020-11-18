@@ -2,8 +2,6 @@
 
 package InventoryModel{
 class InvMgmt{
-    -inventory: Inventory
-    -procurement: Procurement
     +printInventory(tools: ResultSet): JsonObject
     +searchInventory(tool: ResultSet): JsonObject
     +checkItemQuantity(tool: ResultSet): JsonObject
@@ -14,7 +12,6 @@ class InvMgmt{
 }
 
 class Inventory{
-    -tools: ArrayLists<Tool>
     +Inventory(tools: ResultSet)
     +searchInventory(tool: ResultSet): JsonObject
     +checkItemQuantity(tool: ResultSet): JsonObject
@@ -23,21 +20,24 @@ class Inventory{
 }
 
 class Tool{
-    -tool: ResultSet
+    -toolID: int
     -name: String
     -quantity: int
     -price: double
     -supplierID: int
-    -powerTool: boolean
-    -powerType: String
+
     +Tool(attributes: ResultSet)
-    +Tool(toolID:int, description: String, quantity: int, price: double, supplierID: int, powered: boolean, powerType: String)
     +encode(): JsonObject
 }
 
+class ElectricalTool extends Tool{
+    -powerType: String
+    +ElectricalTool(attributes: ResultSet)
+    +encode(): JsonObject
+
+}
+
 class Procurement {
-    -order: Order
-    -vendors: HashMap<Suppliers>
     +generateOrder(orders: ArrayList<OrderLine>): JsonObject
     +getSupplier(supplier: ResultSet): Supplier
 }
@@ -47,12 +47,18 @@ class Supplier{
     -companyName: String
     -address: String
     -salesContact: String
-    -internationalSupplier: Boolean
-    -importTax: double
+
     +Supplier(attributes: ResultSet)
-    +Supplier(id: int, name: String, address: String, salesContact: String, internationalSupplier: Boolean, tax: double)
     +encode(): JsonObject
 }
+
+class InternationalSupplier extends Supplier{
+    -importTax: double
+    +InternationalSupplier(attributes: ResultSet)
+    +encode(): JsonObject
+
+}
+
 
 class Order{
     -orderID: int
