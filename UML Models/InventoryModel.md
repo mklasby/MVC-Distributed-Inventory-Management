@@ -28,11 +28,16 @@ class Tool{
     -quantity: int
     -price: double
     -supplierID: int
-    -powerTool: boolean
-    -powerType: String
+
     +Tool(attributes: ResultSet)
-    +Tool(toolID:int, description: String, quantity: int, price: double, supplierID: int, powered: boolean, powerType: String)
     +encode(): JsonObject
+}
+
+class ElectricalTool extends Tool{
+    -powerType: String
+    +ElectricalTool(attributes: ResultSet)
+    +encode(): JsonObject
+
 }
 
 class Procurement {
@@ -47,12 +52,18 @@ class Supplier{
     -companyName: String
     -address: String
     -salesContact: String
-    -internationalSupplier: Boolean
-    -importTax: double
+
     +Supplier(attributes: ResultSet)
-    +Supplier(id: int, name: String, address: String, salesContact: String, internationalSupplier: Boolean, tax: double)
     +encode(): JsonObject
 }
+
+class InternationalSupplier extends Supplier{
+    -importTax: double
+    +InternationalSupplier(attributes: ResultSet)
+    +encode(): JsonObject
+
+}
+
 
 class Order{
     -orderID: int
