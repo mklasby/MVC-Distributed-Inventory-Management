@@ -13,7 +13,7 @@ package "Server"{
 }
 
 ClientController ...> ServerController
-ClientController ...> ViewController
+ClientController <... ViewController
 ViewController ...> View
 
 ModelController ...> Model
