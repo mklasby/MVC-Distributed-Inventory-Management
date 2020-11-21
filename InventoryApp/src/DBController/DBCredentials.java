@@ -1,6 +1,6 @@
 package DBController;
 
-public interface TXDBCredentials {
+public interface DBCredentials {
 	
 	   // JDBC driver name and database URL
 	   static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";  
@@ -8,6 +8,7 @@ public interface TXDBCredentials {
 
 	   //  Database credentials
 	   static final String USERNAME = "root";
-	   static final String PASSWORD = "JennyXu1020";
+	   static final String PASSWORD = "";
+	   //TODO: fill in password
 
 }

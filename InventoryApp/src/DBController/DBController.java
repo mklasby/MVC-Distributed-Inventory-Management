@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public abstract class DBController implements TXDBCredentials {
+public abstract class DBController implements DBCredentials {
 	
 	// Attributes
 	protected Connection conn;//Object of type connection from the JDBC class that deals with connecting to 
