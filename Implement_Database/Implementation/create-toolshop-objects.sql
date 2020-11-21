@@ -8,7 +8,7 @@ CREATE TABLE TOOL (
   Name         			varchar(50),
   Type      			varchar(15),
   Quantity     			int(5), 
-  Price					float,
+  Price					double(5,2),
   SupplierID			int(15),
   primary key (ToolID),
   foreign key (SupplierID) references SUPPLIER(SupplierID)
@@ -38,7 +38,7 @@ CREATE TABLE SUPPLIER (
 DROP TABLE IF EXISTS INTERNATIONAL;
 CREATE TABLE INTERNATIONAL (
   SupplierID			int(15),
-  ImportTax				float,
+  ImportTax				double(5,2),
   primary key (SupplierID),
   foreign key (SupplierID) references SUPPLIER(SupplierID)
 );
