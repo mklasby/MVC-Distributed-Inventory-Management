@@ -1,86 +1,89 @@
--- DROP DATABASE IF EXISTS university;
--- CREATE DATABASE university; 
--- USE university;
+DROP DATABASE IF EXISTS toolshop;
+CREATE DATABASE toolshop; 
+USE toolshop;
 
--- DROP TABLE IF EXISTS STUDENT;
--- CREATE TABLE STUDENT (
---   Name         		varchar(15),
---   Student_number      	int,
---   Class     			int, 
---   Major					varchar(5),
---   primary key (Student_number)
--- );
+DROP TABLE IF EXISTS TOOL;
+CREATE TABLE TOOL (
+  ToolID				int(15),
+  Name         			varchar(50),
+  Type      			varchar(15),
+  Quantity     			int(5), 
+  Price					float,
+  SupplierID			int(15),
+  primary key (ToolID),
+  foreign key (SupplierID) references SUPPLIER(SupplierID)
+);
 
--- DROP TABLE IF EXISTS COURSE;
--- CREATE TABLE COURSE (
---   Course_name		    varchar(50), 
---   Course_number    		varchar(15),
---   Credit_hours		    int,
---   Department		    char(15),
---   primary key (Course_number)
--- );
-
-
--- DROP TABLE IF EXISTS SECTION;
--- CREATE TABLE SECTION (
---   Section_identifier	int,
---   Course_number			varchar(15),
---   Semester            	varchar(15),
---   Year 			        int,
---   Instructor		    varchar(15),
---   primary key (Section_identifier),
---   foreign key (Course_number) references COURSE(Course_number)
--- );
+DROP TABLE IF EXISTS ELECTRICAL;
+CREATE TABLE ELECTRICAL (
+  ToolID			    int(15), 
+  PowerType	    		varchar(15),
+  primary key (ToolID),
+  foreign key (ToolID) references TOOL(ToolID)
+);
 
 
--- DROP TABLE IF EXISTS GRADE_REPORT;
--- CREATE TABLE GRADE_REPORT (
---   Student_number		int,
---   Section_identifier	int,
---   Grade					char,
---   foreign key (Student_number) references STUDENT(Student_number),
---   foreign key (Section_identifier) references SECTION(Section_identifier)
--- 			  ON DELETE SET NULL
--- );
+DROP TABLE IF EXISTS SUPPLIER;
+CREATE TABLE SUPPLIER (
+  SupplierID			int(15),
+  Name					varchar(50),
+  Type            		varchar(15),
+  Address		        varchar(50),
+  CName				    varchar(50),
+  Phone					varchar(20),
+  primary key (SupplierID)
+);
 
 
--- DROP TABLE IF EXISTS PREREQUISITE;
--- CREATE TABLE PREREQUISITE (
---   Course_number      	varchar(15),
---   Prerequisite_number	varchar(15),
---   foreign key (Course_number) references COURSE(Course_number),
---     foreign key (Prerequisite_number) references COURSE(Course_number)
--- );
+DROP TABLE IF EXISTS INTERNATIONAL;
+CREATE TABLE INTERNATIONAL (
+  SupplierID			int(15),
+  ImportTax				float,
+  primary key (SupplierID),
+  foreign key (SupplierID) references SUPPLIER(SupplierID)
+);
 
 
+DROP TABLE IF EXISTS ORDERS;
+CREATE TABLE ORDERS (
+  OrderID      			int(15),
+  Date					DATE,
+  primary key (OrderID)
+);
 
-INSERT INTO STUDENT 
-VALUES ('Smith', 17, 1, 'CS'),
-	   ('Brown', 8, 2, 'CS');
 
-INSERT INTO COURSE 
-VALUES ('Intro to Computer Science', 'CS1310', 4, 'CS'),
-	   ('Data Structures', 'CS3320', 4, 'CS'),
-       ('Discrete Mathematics', 'MATH2410', 4, 'MATH'),
-       ('Database', 'CS3380', 3, 'CS');
+DROP TABLE IF EXISTS ORDERLINE;
+CREATE TABLE ORDERLINE (
+  OrderID      			int(15),
+  ToolID				int(15),
+  SupplierID			int(15),
+  Quantity				int(5),
+  primary key (OrderID, ToolID),
+  foreign key (OrderID) references ORDERS(OrderID),
+  foreign key (ToolID) references TOOL(ToolID),
+  foreign key (SupplierID) references SUPPLIER(SupplierID)
+);
 
-INSERT INTO SECTION
-VALUES (85, 'MATH2410', 'Fall', 07, 'King'),
-	   (92, 'CS1310', 'Fall', 07, 'Anderson'),
-	   (102, 'CS3320', 'Spring', 08, 'Knuth'),
-       (112, 'MATH2410', 'Fall', 08, 'Chang'),
-	   (119, 'CS1310', 'Fall', 08, 'Anderson'),
-       (135, 'CS3380', 'Fall', 08, 'Stone');
 
-INSERT INTO GRADE_REPORT
-VALUES (17, 112, 'B'),
-	   (17, 119, 'C'),
-       (8, 85, 'A'),
-       (8, 92, 'A'),
-       (8, 102, 'B'),
-       (8, 135, 'A');
+DROP TABLE IF EXISTS CLIENT;
+CREATE TABLE CLIENT (
+  ClientID     			int(15),
+  LName					varchar(15),
+  FName					varchar(15),
+  Type					varchar(15),
+  Phone					varchar(20),
+  Address				varchar(50),
+  PostalCode			varchar(10),
+  primary key (ClientID)
+);
 
-INSERT INTO PREREQUISITE
-VALUES ('CS3380', 'CS3320'),
-	   ('CS3380', 'MATH2410'),
-       ('CS3320', 'CS1310');
+
+DROP TABLE IF EXISTS PURCHASES;
+CREATE TABLE PURCHASES (
+  ClientID     			int(15),
+  ToolID				int(15),
+  Date					DATE,
+  primary key (ClientID, ToolID, Date),
+  foreign key (ClientID) references CLIENT(ClientID),
+  foreign key (ToolID) references TOOL(ToolID)
+);
