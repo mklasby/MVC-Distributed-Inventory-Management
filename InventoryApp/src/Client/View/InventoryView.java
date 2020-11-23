@@ -9,7 +9,7 @@ public class InventoryView extends SubView {
 
     @Override
     public void display() {
-        gui.setPanel("InventoryPanel");
+        gui.setPanel("inventoryPanel");
 
     }
 

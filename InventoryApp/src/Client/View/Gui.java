@@ -2,9 +2,7 @@ package Client.View;
 
 import java.awt.event.ActionListener;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.*;
-
 import javax.swing.*;
 
 public class Gui extends JFrame {
@@ -14,8 +12,6 @@ public class Gui extends JFrame {
     private JButton inventoryButton;
     private JButton customerButton;
     private JLabel header;
-    private JPanel inventoryPanel;
-    private JPanel customerPanel;
 
     public Gui() {
         picture = new JPanel();
@@ -31,15 +27,10 @@ public class Gui extends JFrame {
         picture.setPreferredSize(ViewConstants.PICTURE_DIMENSION);
         picture.setLayout(new CardLayout());
 
-        header.setAlignmentX(Component.CENTER_ALIGNMENT);
         header.setFont(ViewConstants.HEADER_FONT);
-
-        JTextArea dummyPicture = new JTextArea("Hello World");
-        dummyPicture.setPreferredSize(new Dimension(1000, 800));
-        picture.add(dummyPicture);
-
-        picture.add(inventoryPanel);
-        picture.add(customerPanel);
+        // JTextArea dummyPicture = new JTextArea("Hello World");
+        // dummyPicture.setPreferredSize(new Dimension(1000, 800));
+        // picture.add(dummyPicture);
 
         frame.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -66,75 +57,27 @@ public class Gui extends JFrame {
         c.gridx = 0;
         c.gridy = 0;
         c.gridwidth = 2;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.anchor = GridBagConstraints.PAGE_START;
-        frame.add(header, c);
-
-        this.add(frame);
-        this.pack();
-        this.setVisible(true);
-
-    };
-
-    public Gui(JPanel customerPanel, JPanel inventoryPanel) {
-        this.customerPanel = customerPanel;
-        this.inventoryPanel = inventoryPanel;
-        picture = new JPanel();
-        frame = new JPanel();
-        inventoryButton = new JButton("Inventory Management System");
-        customerButton = new JButton("Client Management System");
-        header = new JLabel("LaXu Automated Tool Shop Management Solution");
-
-        // picture is content, frame is menu buttons and header
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setPreferredSize(ViewConstants.FRAME_DIMENSION);
-
-        picture.setPreferredSize(ViewConstants.PICTURE_DIMENSION);
-        picture.setLayout(new CardLayout());
-
-        header.setAlignmentX(Component.CENTER_ALIGNMENT);
-        header.setFont(ViewConstants.HEADER_FONT);
-
-        picture.add(inventoryPanel, "InventoryPanel");
-        picture.add(customerPanel, "CustomerPanel");
-
-        frame.setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.gridx = 1;
-        c.gridy = 2;
-        c.weightx = 0.5;
-        c.weighty = 0.5;
-        c.anchor = GridBagConstraints.LAST_LINE_START;
-        frame.add(inventoryButton, c);
-
-        c.gridx = 0;
-        c.gridy = 2;
-        c.anchor = GridBagConstraints.LAST_LINE_START;
-        frame.add(customerButton, c);
-
-        c.gridx = 0;
-        c.gridy = 1;
-        c.gridwidth = 2;
-        c.fill = GridBagConstraints.BOTH;
         c.anchor = GridBagConstraints.CENTER;
-        frame.add(picture, c);
-
-        c.gridx = 0;
-        c.gridy = 0;
-        c.gridwidth = 2;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.anchor = GridBagConstraints.PAGE_START;
+        c.fill = GridBagConstraints.BOTH;
+        c.insets = new Insets(0, ViewConstants.X_DIMENSION / 4 - 10, 0, 0); // top, right, bottom, left
         frame.add(header, c);
+    }
 
+    public void display() {
         this.add(frame);
         this.pack();
         this.setVisible(true);
+    }
 
-    };
+    public void addCard(JPanel card, String cardName) {
+        this.picture.add(card, cardName);
+    }
 
     public static void main(String[] args) {
         Gui gui = new Gui();
+        CustomerView custView = new CustomerView(gui);
+        gui.setPanel("customerPanel");
+        gui.display();
     }
 
     public JPanel getPicture() {
@@ -156,5 +99,6 @@ public class Gui extends JFrame {
     public void setPanel(String panelName) {
         CardLayout pictureLayout = (CardLayout) picture.getLayout();
         pictureLayout.show(picture, panelName);
+        picture.requestFocus();
     }
 }
