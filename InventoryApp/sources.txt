@@ -1,0 +1,13 @@
+./src/DBController/DBController.java
+./src/DBController/DBCredentials.java
+./src/DBController/InventoryController.java
+./src/DBController/CustomerController.java
+./src/Client/ClientController/ClientController.java
+./src/Client/View/SubView.java
+./src/Client/View/ViewConstants.java
+./src/Client/View/CustomerView.java
+./src/Client/View/Gui.java
+./src/Client/View/InventoryView.java
+./src/Client/ViewController/InventoryControl.java
+./src/Client/ViewController/ViewController.java
+./src/Client/ViewController/CustomerController.java

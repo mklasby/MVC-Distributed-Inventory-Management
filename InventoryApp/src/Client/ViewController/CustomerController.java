@@ -7,15 +7,25 @@ import javax.swing.*;
 import java.awt.event.*;
 import Client.View.*;
 import Client.ClientController.*;
+import org.json.JSONObject;
 
 public class CustomerController extends ViewController {
     public CustomerView view;
     private String searchBy;
 
-    CustomerController(CustomerView view, ClientController clientCtrl) {
+    public CustomerController(CustomerView view, ClientController clientCtrl) {
         super(clientCtrl);
         this.view = view;
         registerGuiMenu();
+        registerButtons();
+        registerComboBox();
+    }
+
+    private void registerComboBox() {
+        view.registerComboBox(new ComboBoxListener());
+    }
+
+    private void registerButtons() {
         view.registerButtons(new ButtonListener());
     }
 
@@ -24,8 +34,18 @@ public class CustomerController extends ViewController {
         this.view.registerGuiMenu(new MenuListener());
     }
 
-    public JsonObject searchCustomer(ActionEvent e) {
-        return null;
+    public void searchCustomer(ActionEvent e) {
+        return;
+    }
+
+    public void clearSearch(ActionEvent e) {
+        view.clearSearch();
+    }
+
+    public void deleteRecord(ActionEvent e) {
+    }
+
+    public void updateRecord(ActionEvent e) {
     }
 
     public class MenuListener implements ActionListener {
@@ -40,19 +60,25 @@ public class CustomerController extends ViewController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            JButton button = (JButton) e.getSource();
+            String text = button.getText();
+            System.out.print(text);
+            String cmd = e.getActionCommand();
+            System.out.print(cmd);
+
             if (e.getActionCommand() == "search") {
                 searchCustomer(e);
-            } else if (e.getActionCommand() == "clearSearch"){
+            } else if (e.getActionCommand() == "clearSearch") {
+                System.out.println("clear search!");
                 clearSearch(e);
-            } else if (e.getActionCommand() == "update"){
+            } else if (e.getActionCommand() == "update") {
                 updateRecord(e);
-            } else if (e.getActionCommand() == "delete"){
+            } else if (e.getActionCommand() == "delete") {
                 deleteRecord(e);
-            } else if (e.getActionCommand() == "clear"){
-                view.clearInfoFields(); 
+            } else if (e.getActionCommand() == "clear") {
+                view.clearInfoFields();
             }
-
-            }view.display();
+        }
     }
 
     public class ComboBoxListener implements ActionListener {
@@ -61,8 +87,6 @@ public class CustomerController extends ViewController {
         public void actionPerformed(ActionEvent e) {
             view.clearResults();
             searchBy = e.getActionCommand();
-
         }
     }
-
 }

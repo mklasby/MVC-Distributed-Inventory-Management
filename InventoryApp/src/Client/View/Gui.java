@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.*;
 import javax.swing.*;
 
+import Client.ClientController.ClientController;
+
 public class Gui extends JFrame {
     private JPanel picture;
     private JPanel frame;
@@ -28,9 +30,6 @@ public class Gui extends JFrame {
         picture.setLayout(new CardLayout());
 
         header.setFont(ViewConstants.HEADER_FONT);
-        // JTextArea dummyPicture = new JTextArea("Hello World");
-        // dummyPicture.setPreferredSize(new Dimension(1000, 800));
-        // picture.add(dummyPicture);
 
         frame.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -77,6 +76,8 @@ public class Gui extends JFrame {
         Gui gui = new Gui();
         CustomerView custView = new CustomerView(gui);
         gui.setPanel("customerPanel");
+        Client.ViewController.CustomerController custCtrl = new Client.ViewController.CustomerController(custView,
+                new Client.ClientController.ClientController());
         gui.display();
     }
 

@@ -5,11 +5,7 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
 import javax.swing.*;
-
-import Client.ViewController.CustomerController.MenuListener;
-
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.*;
@@ -73,6 +69,7 @@ public class CustomerView extends SubView {
     }
 
     private void addFields() {
+        fields = new HashMap<String, JTextField>();
         this.fields.put("searchQueryField", searchQueryField);
         this.fields.put("customerIdField", customerIdField);
         this.fields.put("firstNameField", firstNameField);
@@ -366,7 +363,7 @@ public class CustomerView extends SubView {
         phoneField.setText("");
     }
 
-    public void registerGuiMenu(MenuListener menuListener) {
+    public void registerGuiMenu(ActionListener menuListener) {
         this.gui.registercustomerButton(menuListener);
     }
 
@@ -376,5 +373,9 @@ public class CustomerView extends SubView {
             JTextField field = (JTextField) iter.next();
             field.setText("");
         }
+    }
+
+    public void clearSearch() {
+        searchQueryField.setText("");
     }
 }
