@@ -1,5 +1,7 @@
 package Client.View;
 
+import javax.swing.JOptionPane;
+
 public abstract class SubView {
     Gui gui;
 
@@ -12,4 +14,8 @@ public abstract class SubView {
     }
 
     public abstract void display();
+
+    public abstract void flashErrorMessage(String string);
+
+    public abstract void flashSuccessMessage(String success);
 }

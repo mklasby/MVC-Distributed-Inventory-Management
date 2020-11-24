@@ -278,7 +278,7 @@ public class InventoryView extends SubView {
         inventoryInfoPanel.add(toolIdLabel, c);
 
         toolIdField = new JTextField(TEXT_FIELD_WIDTH);
-        toolIdField.setEditable(false);
+        // toolIdField.setEditable(false);
         c.gridx = 3;
         inventoryInfoPanel.add(toolIdField, c);
 
@@ -440,6 +440,13 @@ public class InventoryView extends SubView {
         return response;
     }
 
-    public void flashMessage(String string) {
+    @Override
+    public void flashErrorMessage(String string) {
     }
+
+    @Override
+    public void flashSuccessMessage(String success) {
+        JOptionPane.showMessageDialog(inventoryPanel, (Object)success, "Success!");
+        gui.flashMessage()
+	}
 }

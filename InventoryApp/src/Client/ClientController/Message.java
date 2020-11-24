@@ -8,7 +8,7 @@ public class Message extends JSONObject implements ClientServerConstants {
     public Message() {
     };
 
-    public Message(String messageType, String verb, String db, String data) throws JSONException {
+    public Message(String messageType, String verb, String db, Object data) throws JSONException {
         put(MESSAGE_TYPE, messageType);
         put(VERB, verb);
         put(DB, db);
@@ -18,5 +18,7 @@ public class Message extends JSONObject implements ClientServerConstants {
     public void addQueryType(String query) throws JSONException {
         put(QUERY, query);
     }
+
+    public void 
 
 }

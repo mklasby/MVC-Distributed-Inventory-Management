@@ -5,6 +5,8 @@ import java.awt.GridLayout;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.text.StringContent;
+
 import java.awt.event.*;
 import Client.View.*;
 import Client.ClientController.*;
@@ -43,45 +45,50 @@ public class InventoryController extends ViewController implements ClientServerC
     }
 
     public void searchInventory(String search) {
-        JSONObject query = new JSONObject();
-        try {
-        query.put(DATA, search);
-        query.put(REQUEST, GET);
-        query.put(DB, INVENTORY);
-        } catch (JSONException e) {
-        view.flashMessage("ERROR: We were unable to process your request, please try
-        again.");
-        e.printStackTrace();
-        }
-
         Message query = null;
         try {
             query = new Message(REQUEST, GET, INVENTORY, search);
         } catch (JSONException e) {
-            // TODO Auto-generated catch block
+            view.flashMessage("ERROR: We were unable to process your request, please try again.");
             e.printStackTrace();
         }
-
         System.out.println(query.toString());
 
+        // TODO: Send out to clientCtrl
         // clientCtrl.sendMessage(query);
         // JSONObject response = clientCtrl.getMessage();
+        // TODO: Reset searchResultsList
 
         return;
     }
 
-    public void clearSearch(ActionEvent e) {
+    public void clearSearch() {
         view.clearSearch();
     }
 
-    public void deleteRecord(ActionEvent e) {
+    public void deleteRecord(String fieldText) {
+        int toolId = Integer.parseInt(fieldText);
+        Message query = null;
+        try {
+            query = new Message(REQUEST, DELETE, INVENTORY, toolId);
+        } catch (JSONException e) {
+            view.flashErrorMessage("ERROR: We were unable to process your request, please try again.");
+            e.printStackTrace();
+        }
+        System.out.println(query.toString());
+        String success = String.format("Tool Id %d successfully deleted!", toolId);
+        view.flashSuccessMessage(success);
+
+        // TODO: Send out to clientCtrl
+        // clientCtrl.sendMessage(query);
+        // JSONObject response = clientCtrl.getMessage();
+        // TODO: flash message and reset info fields
     }
 
-    public void updateRecord(ActionEvent e) {
+    public void updateRecord() {
     }
 
     public class MenuListener implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent e) {
             view.display();
@@ -99,12 +106,12 @@ public class InventoryController extends ViewController implements ClientServerC
                 String search = view.getSearchField();
                 searchInventory(search);
             } else if (cmd == "clearSearch") {
-                System.out.println("clear search!");
-                clearSearch(e);
+                clearSearch();
             } else if (cmd == "update") {
-                updateRecord(e);
+                updateRecord();
             } else if (cmd == "delete") {
-                deleteRecord(e);
+                String toolIdFieldText = view.getFieldText("toolIdField");
+                deleteRecord(toolIdFieldText);
             } else if (cmd == "clear") {
                 view.clearInfoFields();
             }

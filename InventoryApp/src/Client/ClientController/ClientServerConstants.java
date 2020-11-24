@@ -31,4 +31,6 @@ public interface ClientServerConstants {
     // DATA
     static String DATA = "DATA"; // attribute type
 
+    static String QUIT = "QUIT";
+
 }
