@@ -76,7 +76,9 @@ public class Gui extends JFrame {
         Gui gui = new Gui();
         CustomerView custView = new CustomerView(gui);
         gui.setPanel("customerPanel");
-        CustomerController custCtrl = new CustomerController(custView, new Client.ClientController.ClientController());
+        CustomerController custCtrl = new CustomerController(custView, new ClientController());
+        InventoryView invView = new InventoryView(gui);
+        InventoryController invCtrl = new InventoryController(invView, new ClientController());
         gui.display();
     }
 
@@ -88,7 +90,7 @@ public class Gui extends JFrame {
         registerListener(listener, inventoryButton);
     }
 
-    public void registercustomerButton(ActionListener listener) {
+    public void registerCustomerButton(ActionListener listener) {
         registerListener(listener, customerButton);
     }
 
@@ -99,6 +101,5 @@ public class Gui extends JFrame {
     public void setPanel(String panelName) {
         CardLayout pictureLayout = (CardLayout) picture.getLayout();
         pictureLayout.show(picture, panelName);
-        picture.requestFocus();
     }
 }

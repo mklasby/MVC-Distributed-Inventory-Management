@@ -361,7 +361,7 @@ public class CustomerView extends SubView {
     }
 
     public void registerGuiMenu(ActionListener menuListener) {
-        super.gui.registercustomerButton(menuListener);
+        super.gui.registerCustomerButton(menuListener);
     }
 
     public void clearInfoFields() {
