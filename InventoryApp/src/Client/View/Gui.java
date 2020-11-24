@@ -4,8 +4,8 @@ import java.awt.event.ActionListener;
 import java.awt.Dimension;
 import java.awt.*;
 import javax.swing.*;
-
-import Client.ClientController.ClientController;
+import Client.ClientController.*;
+import Client.ViewController.*;
 
 public class Gui extends JFrame {
     private JPanel picture;
@@ -76,8 +76,7 @@ public class Gui extends JFrame {
         Gui gui = new Gui();
         CustomerView custView = new CustomerView(gui);
         gui.setPanel("customerPanel");
-        Client.ViewController.CustomerController custCtrl = new Client.ViewController.CustomerController(custView,
-                new Client.ClientController.ClientController());
+        CustomerController custCtrl = new CustomerController(custView, new Client.ClientController.ClientController());
         gui.display();
     }
 

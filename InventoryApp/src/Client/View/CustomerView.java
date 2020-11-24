@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import javax.swing.*;
+import javax.swing.event.*;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.*;
@@ -45,7 +46,8 @@ public class CustomerView extends SubView {
     public JButton updateButton;
     public JButton deleteButton;
     public JButton clearButton;
-    public JTextArea resultsArea;
+    public JList<String> resultsList;
+    public DefaultListModel<String> listModel;
     public HashMap<String, JTextField> fields;
 
     public CustomerView() {
@@ -65,6 +67,7 @@ public class CustomerView extends SubView {
         buildCustomerInfoPanel();
         buildCustomerPanel();
         addFields();
+        generateTestList();
 
     }
 
@@ -163,7 +166,7 @@ public class CustomerView extends SubView {
 
         c.insets = new Insets(0, 0, 10, 3); // top, right, bottom, left;
         clearSearchButton = new JButton("Clear Search");
-        searchButton.setActionCommand("clearSearch");
+        clearSearchButton.setActionCommand("clearSearch");
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         c.gridy = 7;
@@ -192,10 +195,12 @@ public class CustomerView extends SubView {
         c.insets = new Insets(0, 3, 10, 3); // top, right, bottom, left;
         c.gridy = 1;
         c.fill = GridBagConstraints.BOTH;
-        resultsArea = new JTextArea();
-        resultsArea.setEditable(false);
-        resultsArea.setPreferredSize(new Dimension(ViewConstants.X_DIMENSION / 2, ViewConstants.Y_DIMENSION / 2 - 10));
-        searchResultsPanel.add(resultsArea, c);
+        listModel = new DefaultListModel<String>();
+        resultsList = new JList<String>(listModel);
+        resultsList.setPreferredSize(new Dimension(ViewConstants.X_DIMENSION / 2, ViewConstants.Y_DIMENSION / 2 - 10));
+        resultsList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        resultsList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+        searchResultsPanel.add(resultsList, c);
     }
 
     private void buildCustomerInfoPanel() {
@@ -350,32 +355,27 @@ public class CustomerView extends SubView {
         button.addActionListener(listener);
     }
 
-    public void clearResults() {
-        // TODO: Wrap into collection and iterate?
-        searchQueryField.setText("");
-        resultsArea.setText("");
-        searchQueryField.setText("");
-        customerIdField.setText("");
-        firstNameField.setText("");
-        lastNameField.setText("");
-        addressField.setText("");
-        postalField.setText("");
-        phoneField.setText("");
+    public void registerResultsList(ListSelectionListener listener) {
+        resultsList.addListSelectionListener(listener);
     }
 
     public void registerGuiMenu(ActionListener menuListener) {
-        this.gui.registercustomerButton(menuListener);
+        super.gui.registercustomerButton(menuListener);
     }
 
     public void clearInfoFields() {
-        Iterator iter = fields.entrySet().iterator();
-        while (iter.hasNext()) {
-            JTextField field = (JTextField) iter.next();
-            field.setText("");
+        for (String key : fields.keySet()) {
+            fields.get(key).setText("");
         }
     }
 
     public void clearSearch() {
         searchQueryField.setText("");
+        listModel.clear();
+    }
+
+    public void generateTestList() {
+        listModel.addElement("Test1");
+        listModel.addElement("Test2");
     }
 }

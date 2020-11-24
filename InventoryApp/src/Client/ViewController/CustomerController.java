@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.event.*;
 import java.awt.event.*;
 import Client.View.*;
 import Client.ClientController.*;
@@ -19,6 +20,11 @@ public class CustomerController extends ViewController {
         registerGuiMenu();
         registerButtons();
         registerComboBox();
+        registerResultsList();
+    }
+
+    private void registerResultsList() {
+        view.registerResultsList(new ResultsListListener());
     }
 
     private void registerComboBox() {
@@ -60,22 +66,19 @@ public class CustomerController extends ViewController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            JButton button = (JButton) e.getSource();
-            String text = button.getText();
-            System.out.print(text);
             String cmd = e.getActionCommand();
             System.out.print(cmd);
 
-            if (e.getActionCommand() == "search") {
+            if (cmd == "search") {
                 searchCustomer(e);
-            } else if (e.getActionCommand() == "clearSearch") {
+            } else if (cmd == "clearSearch") {
                 System.out.println("clear search!");
                 clearSearch(e);
-            } else if (e.getActionCommand() == "update") {
+            } else if (cmd == "update") {
                 updateRecord(e);
-            } else if (e.getActionCommand() == "delete") {
+            } else if (cmd == "delete") {
                 deleteRecord(e);
-            } else if (e.getActionCommand() == "clear") {
+            } else if (cmd == "clear") {
                 view.clearInfoFields();
             }
         }
@@ -87,6 +90,22 @@ public class CustomerController extends ViewController {
         public void actionPerformed(ActionEvent e) {
             view.clearResults();
             searchBy = e.getActionCommand();
+        }
+    }
+
+    public class ResultsListListener implements ListSelectionListener {
+
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+            System.out.print("List Selection Event\n");
+
+            JList list = (JList) e.getSource();
+            String selected = (String) list.getSelectedValue();
+            populateFields(selected);
+        }
+
+        private void populateFields(String selected) {
+            System.out.print("Populate fields\n");
         }
     }
 }
