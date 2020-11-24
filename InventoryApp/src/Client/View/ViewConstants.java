@@ -10,4 +10,4 @@ public class ViewConstants {
     static public Font HEADER_FONT = new Font(Font.SERIF, Font.BOLD, 22);
     static public Font SUBTITLE_FONT = new Font(Font.SERIF, Font.BOLD, 18);
     static public Font TYPICAL_FONT = new Font(Font.SERIF, Font.PLAIN, 12);
-}1100
+}

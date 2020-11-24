@@ -15,4 +15,6 @@ public abstract class ViewController {
         this.clientCtrl = clientCtrl;
     }
 
+    protected abstract void registerGuiMenu();
+
 }

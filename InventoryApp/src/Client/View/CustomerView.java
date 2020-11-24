@@ -2,7 +2,14 @@ package Client.View;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 import javax.swing.*;
+
+import Client.ViewController.CustomerController.MenuListener;
+
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.*;
@@ -36,13 +43,14 @@ public class CustomerView extends SubView {
     public JTextField addressField;
     public JTextField postalField;
     public JTextField phoneField;
-    public JComboBox custTypeComboBox;
+    public JComboBox<String> custTypeComboBox;
     public JButton searchButton;
     public JButton clearSearchButton;
     public JButton updateButton;
     public JButton deleteButton;
     public JButton clearButton;
     public JTextArea resultsArea;
+    public HashMap<String, JTextField> fields;
 
     public CustomerView() {
         super();
@@ -60,6 +68,22 @@ public class CustomerView extends SubView {
         buildSearchResultsPanel();
         buildCustomerInfoPanel();
         buildCustomerPanel();
+        addFields();
+
+    }
+
+    private void addFields() {
+        this.fields.put("searchQueryField", searchQueryField);
+        this.fields.put("customerIdField", customerIdField);
+        this.fields.put("firstNameField", firstNameField);
+        this.fields.put("lastNameField", lastNameField);
+        this.fields.put("addressField", addressField);
+        this.fields.put("postalField", postalField);
+        this.fields.put("phoneField", phoneField);
+    }
+
+    public String getFieldText(String fieldName) {
+        return fields.get(fieldName).getText();
     }
 
     private void buildSearchQueryPanel() {
@@ -67,13 +91,12 @@ public class CustomerView extends SubView {
         searchQueryPanel.setLayout(new GridBagLayout());
         searchQueryPanel.setSize(new Dimension(ViewConstants.X_DIMENSION / 2, ViewConstants.Y_DIMENSION / 2));
         GridBagConstraints c = new GridBagConstraints();
+
         c.weightx = 0.5;
         c.weighty = 0.5;
         c.insets = new Insets(10, 3, 10, 3); // top, right, bottom, left;
 
         searchCustLabel = new JLabel("Search Customers");
-        searchCustLabel.setFont(ViewConstants.TYPICAL_FONT);
-        searchCustLabel.setFont(ViewConstants.SUBTITLE_FONT);
         searchCustLabel.setFont(ViewConstants.SUBTITLE_FONT);
         c.insets = new Insets(3, 3, 3, 3); // top, right, bottom, left;
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -308,5 +331,50 @@ public class CustomerView extends SubView {
     @Override
     public void display() {
         gui.setPanel("customerPanel");
+    }
+
+    public void registerButtons(ActionListener listener) {
+        registerListener(listener, searchButton);
+        registerListener(listener, clearSearchButton);
+        registerListener(listener, updateButton);
+        registerListener(listener, deleteButton);
+        registerListener(listener, clearButton);
+
+    }
+
+    public void registerComboBox(ActionListener listener) {
+        registerListener(listener, customerIdButton);
+        registerListener(listener, lastNameButton);
+        registerListener(listener, customerTypeButton);
+
+    }
+
+    private void registerListener(ActionListener listener, AbstractButton button) {
+        button.addActionListener(listener);
+    }
+
+    public void clearResults() {
+        // TODO: Wrap into collection and iterate?
+        searchQueryField.setText("");
+        resultsArea.setText("");
+        searchQueryField.setText("");
+        customerIdField.setText("");
+        firstNameField.setText("");
+        lastNameField.setText("");
+        addressField.setText("");
+        postalField.setText("");
+        phoneField.setText("");
+    }
+
+    public void registerGuiMenu(MenuListener menuListener) {
+        this.gui.registercustomerButton(menuListener);
+    }
+
+    public void clearInfoFields() {
+        Iterator iter = fields.entrySet().iterator();
+        while (iter.hasNext()) {
+            JTextField field = (JTextField) iter.next();
+            field.setText("");
+        }
     }
 }
