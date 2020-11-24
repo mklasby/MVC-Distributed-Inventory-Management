@@ -88,7 +88,8 @@ public class CustomerController extends ViewController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            view.clearResults();
+            view.clearSearch();
+            view.clearInfoFields();
             searchBy = e.getActionCommand();
         }
     }

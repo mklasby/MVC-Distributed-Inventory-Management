@@ -86,6 +86,7 @@ public class CustomerView extends SubView {
         return fields.get(fieldName).getText();
     }
 
+    // TODO: Ask Moshi about refactoring GUIs
     private void buildSearchQueryPanel() {
         searchQueryPanel = new JPanel();
         searchQueryPanel.setLayout(new GridBagLayout());

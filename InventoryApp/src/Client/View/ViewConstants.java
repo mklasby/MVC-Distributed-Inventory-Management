@@ -2,7 +2,7 @@ package Client.View;
 
 import java.awt.*;
 
-public class ViewConstants {
+public final class ViewConstants {
     public static final Dimension FRAME_DIMENSION = new Dimension(1000, 1000);
     static public int X_DIMENSION = 1000;
     static public int Y_DIMENSION = 800;
