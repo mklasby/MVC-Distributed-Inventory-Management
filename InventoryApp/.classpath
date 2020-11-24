@@ -6,9 +6,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<!-- Update path= "./lib/mysql-connector-java-8.0.22/mysql-connector-java-8.0.22.jar" -->
-	<!-- <classpathentry kind="lib" path="/Users/tongxu/Downloads/mysql-connector-java-8.0.22/mysql-connector-java-8.0.22.jar"/> -->
-	<!-- Update path= "./lib/java-json.jar" -->
-	<classpathentry kind="lib" path="./lib/java-json.jar"/>
+	<classpathentry kind="lib" path="lib/java-json.jar"/>
+	<classpathentry kind="lib" path="/Users/tongxu/UCalgary_Software_Master/ENSF607/ENSF607_608_Project/InventoryApp/lib/mysql-connector-java-8.0.22.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

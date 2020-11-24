@@ -28,7 +28,7 @@ public class InventoryController extends DBController {
 	/**
 	 * Search the database for a tool matching the id parameter and return that tool.
 	 * @param id tool id
-	 * @return ResultSet with data of the tool matching the given id or null otherwise.
+	 * @return ResultSet with data of the tool matching the given id or null if not found.
 	 */
 	public ResultSet searchToolbyID(int id) {
 		String sql = "SELECT * FROM TOOL LEFT JOIN ELECTRICAL ON TOOL.ToolID = ELECTRICAL.ToolID WHERE TOOL.ToolID=?;";
@@ -46,13 +46,31 @@ public class InventoryController extends DBController {
 	/**
 	 * Search the database for a tool matching the name parameter and return that tool.
 	 * @param name tool name in lower-case
-	 * @return ResultSet with data of the tool matching the given name or null otherwise.
+	 * @return ResultSet with data of the tool matching the given name or null if not found.
 	 */
 	public ResultSet searchToolbyName(String name) {
 		String sql = "SELECT * FROM TOOL LEFT JOIN ELECTRICAL ON TOOL.ToolID = ELECTRICAL.ToolID WHERE LOWER(Name)=?;";
 		try {
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, name);
+			rs = stmt.executeQuery();
+			if(rs.next()) return rs;
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
+	 * Search the database for tools based on tool type.
+	 * @param type tool type (either electrical or non-electrical)
+	 * @return ResultSet with data of tools of the given tool type or null if not found.
+	 */
+	public ResultSet searchToolbyType(String type) {
+		String sql = "SELECT * FROM TOOL LEFT JOIN ELECTRICAL ON TOOL.ToolID = ELECTRICAL.ToolID WHERE LOWER(Type)=?;";
+		try {
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, type);
 			rs = stmt.executeQuery();
 			if(rs.next()) return rs;
 		} catch(SQLException e) {
@@ -119,6 +137,11 @@ public class InventoryController extends DBController {
 		}
 	}
 	
+	/**
+	 * Add given order-line to the database. If no order exist, will also 
+	 * create an order.
+	 * @param orderline JSONObject containing the tool id, supplier id, and quantity ordered
+	 */
 	public void generateOrderLine(JSONObject orderline) {
 		Date date = Date.valueOf(LocalDate.now());
 		String sql = "SELECT * FROM ORDERS WHERE Date=?;";
@@ -151,9 +174,29 @@ public class InventoryController extends DBController {
 		}
 	}
 	
-	public static void main(String[] args) {
+	/**
+	 * Reduce tool quantity by quantitySold for tool with given id 
+	 * @param id tool id
+	 * @param quantitySold quantity sold
+	 * @throws SQLException
+	 */
+	public void reduceToolQuantity(int id, int quantitySold) throws SQLException {
+		String sql = "UPDATE TOOL SET Quantity=Quantity-? WHERE ToolID=?;";
 		try {
-			InventoryController c = new InventoryController();
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, quantitySold);
+			stmt.setInt(2, id);
+			stmt.executeUpdate();
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+//	public static void main(String[] args) {
+//		try {
+//			InventoryController c = new InventoryController();
+//			
+//			c.reduceToolQuantity(1001, 1);
 //			
 //			ResultSet rs = c.getInventory();
 //			do {
@@ -164,7 +207,7 @@ public class InventoryController extends DBController {
 //				System.out.println(rs.getInt("Quantity")); 
 //				System.out.println(rs.getDouble("Price")); 
 //				System.out.println(rs.getInt("SupplierID")); 
-//				if (type.equals("Electrical")) System.out.println(rs.getString("PowerType")); 
+//				if (type.equalsIgnoreCase("electrical")) System.out.println(rs.getString("PowerType")); 
 //			} while(rs.next());
 //
 //			ResultSet rs = c.searchToolbyID(1001);
@@ -175,7 +218,7 @@ public class InventoryController extends DBController {
 //			System.out.println(rs.getInt("Quantity")); 
 //			System.out.println(rs.getDouble("Price")); 
 //			System.out.println(rs.getInt("SupplierID")); 
-//			if (type.equals("Electrical")) System.out.println(rs.getString("PowerType")); 
+//			if (type.equalsIgnoreCase("electrical")) System.out.println(rs.getString("PowerType")); 
 //
 //			ResultSet rs = c.searchToolbyName("widgets");
 //			String type = rs.getString("Type");
@@ -185,7 +228,19 @@ public class InventoryController extends DBController {
 //			System.out.println(rs.getInt("Quantity")); 
 //			System.out.println(rs.getDouble("Price")); 
 //			System.out.println(rs.getInt("SupplierID")); 
-//			if (type.equals("Electrical")) System.out.println(rs.getString("PowerType")); 
+//			if (type.equalsIgnoreCase("electrical")) System.out.println(rs.getString("PowerType")); 
+//			
+//			ResultSet rs = c.searchToolbyType("electrical");
+//			do {
+//				String type = rs.getString("Type");
+//				System.out.println(rs.getInt("ToolID")); 
+//				System.out.println(rs.getString("Name")); 
+//				System.out.println(type); 
+//				System.out.println(rs.getInt("Quantity")); 
+//				System.out.println(rs.getDouble("Price")); 
+//				System.out.println(rs.getInt("SupplierID")); 
+//				if (type.equalsIgnoreCase("electrical")) System.out.println(rs.getString("PowerType")); 
+//			} while(rs.next());
 //			
 //			JSONObject obj = new JSONObject();
 //			obj.put("ToolID", Integer.parseInt("1043"));
@@ -207,12 +262,12 @@ public class InventoryController extends DBController {
 //			obj.put("SupplierID", 8004);
 //			obj.put("Quantity",  40);
 //			c.generateOrderLine(obj);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
+//
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//
+//	}
 	
 	
 }
