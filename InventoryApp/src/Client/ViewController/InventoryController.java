@@ -8,11 +8,13 @@ import javax.swing.event.*;
 import java.awt.event.*;
 import Client.View.*;
 import Client.ClientController.*;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
-public class InventoryController extends ViewController {
+public class InventoryController extends ViewController implements ClientServerConstants {
     public InventoryView view;
-    private String searchBy;
+    private String searchBy = "toolId";
 
     public InventoryController(InventoryView view, ClientController clientCtrl) {
         super(clientCtrl);
@@ -40,7 +42,31 @@ public class InventoryController extends ViewController {
         this.view.registerGuiMenu(new MenuListener());
     }
 
-    public void searchCustomer(ActionEvent e) {
+    public void searchInventory(String search) {
+        JSONObject query = new JSONObject();
+        try {
+        query.put(DATA, search);
+        query.put(REQUEST, GET);
+        query.put(DB, INVENTORY);
+        } catch (JSONException e) {
+        view.flashMessage("ERROR: We were unable to process your request, please try
+        again.");
+        e.printStackTrace();
+        }
+
+        Message query = null;
+        try {
+            query = new Message(REQUEST, GET, INVENTORY, search);
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        System.out.println(query.toString());
+
+        // clientCtrl.sendMessage(query);
+        // JSONObject response = clientCtrl.getMessage();
+
         return;
     }
 
@@ -70,7 +96,8 @@ public class InventoryController extends ViewController {
             System.out.print(cmd);
 
             if (cmd == "search") {
-                searchCustomer(e);
+                String search = view.getSearchField();
+                searchInventory(search);
             } else if (cmd == "clearSearch") {
                 System.out.println("clear search!");
                 clearSearch(e);

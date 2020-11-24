@@ -12,7 +12,7 @@ import org.json.JSONObject;
 
 public class CustomerController extends ViewController {
     public CustomerView view;
-    private String searchBy;
+    private String searchBy = "customerId";
 
     public CustomerController(CustomerView view, ClientController clientCtrl) {
         super(clientCtrl);

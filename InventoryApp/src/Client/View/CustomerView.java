@@ -232,6 +232,7 @@ public class CustomerView extends SubView {
         customerInfoPanel.add(customerIdLabel, c);
 
         customerIdField = new JTextField(TEXT_FIELD_WIDTH);
+        customerIdField.setEditable(false);
         c.gridx = 3;
         customerInfoPanel.add(customerIdField, c);
 

@@ -1,25 +1,34 @@
 package Client.ClientController;
 
-public final class ClientServerConstants {
-    // MESSAGE_TYPE
-    static String ERROR_TYPE = "ERROR";
-    static String QUERY_TYPE = "QUERY";
-    static String RESPONSE_TYPE = "RESPONSE";
-    static String INSERT_TYPE = "INSERT";
-    static String DELETE_TYPE = "DELETE";
-    static String UPDATE_TYPE = "UPDATE";
+public interface ClientServerConstants {
+    // Message Type
+    static String MESSAGE_TYPE = "MESSAGE_TYPE";
+    static String REQUEST = "REQUEST";
+    static String RESPONSE = "RESPONSE";
 
-    // DB_TARGET
-    static String TOOL_DB = "TOOL_DB";
-    static String CLIENT_DB = "CLIENT_DB";
+    // REQUEST options
+    static String VERB = "VERB";
+    static String POST = "POST"; // Add new record
+    static String GET = "GET"; // get record(s)
+    static String PUT = "PUT"; // modify record
+    static String DELETE = "DELETE"; // delete record
 
-    // QUERY_TYPE
-    static String SEARCH_BY_ID = "SEARCH_BY_ID";
-    static String SEARCH_BY_NAME = "SEARCH_BY_NAME";
-    static String SEARCH_BY_TYPE = "SEARCH_BY_TYPE";
+    // RESPONSE options
+    static String ERROR = "ERROR";
+    static String OK = "OK";
 
-    // RESPONSE_TYPE
-    static String SINGLE = "SINGLE";
-    static String MULTI = "MULTI";
-    static String MESSAGE = "MESSAGE";
+    // DB
+    static String DB = "DB"; // attribute type
+    static String INVENTORY = "INVENTORY";
+    static String CUSTOMER = "CUSTOMER";
+
+    // QUERY
+    static String QUERY = "QUERY"; // attribute type
+    static String BY_ID = "BY_ID";
+    static String BY_NAME = "BY_NAME";
+    static String BY_TYPE = "BY_TYPE";
+
+    // DATA
+    static String DATA = "DATA"; // attribute type
+
 }

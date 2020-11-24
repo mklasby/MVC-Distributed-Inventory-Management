@@ -126,7 +126,6 @@ public class InventoryView extends SubView {
         this.fields.put("stockField", stockField);
         this.fields.put("priceField", priceField);
         this.fields.put("supplierIdField", supplierIdField);
-        this.fields.put("toolTypeField", toolTypeField);
     }
 
     public String getFieldText(String fieldName) {
@@ -279,6 +278,7 @@ public class InventoryView extends SubView {
         inventoryInfoPanel.add(toolIdLabel, c);
 
         toolIdField = new JTextField(TEXT_FIELD_WIDTH);
+        toolIdField.setEditable(false);
         c.gridx = 3;
         inventoryInfoPanel.add(toolIdField, c);
 
@@ -424,5 +424,22 @@ public class InventoryView extends SubView {
     public void generateTestList() {
         listModel.addElement("Test1");
         listModel.addElement("Test2");
+    }
+
+    public String getSearchField() {
+        return searchQueryField.getText();
+    }
+
+    public HashMap<String, String> getInfoFields() {
+        HashMap<String, String> response = new HashMap<String, String>();
+
+        for (String key : fields.keySet()) {
+            response.put(key, fields.get(key).getText());
+        }
+        response.put("toolTypeComboBox", (String) toolTypeComboBox.getSelectedItem());
+        return response;
+    }
+
+    public void flashMessage(String string) {
     }
 }

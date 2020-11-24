@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ClientController {
+public class ClientController implements ClientServerConstants {
     private Socket socket;
     private ObjectOutputStream messageOut;
     private ObjectInputStream messageIn;
@@ -46,11 +46,15 @@ public class ClientController {
     private JSONObject createErrorJSON(Exception e) {
         JSONObject error = new JSONObject();
         try {
-            error.put("MESSAGE_TYPE", ClientServerConstants.ERROR_TYPE);
-            error.put("DATA", e.getMessage());
+            error.put("RESPONSE", "ERROR");
+            error.put("DATA", e.getMessage().toString());
         } catch (JSONException e1) {
             e1.printStackTrace();
         }
         return error;
+    }
+
+    public JSONObject getMessage() {
+        return null;
     }
 }
