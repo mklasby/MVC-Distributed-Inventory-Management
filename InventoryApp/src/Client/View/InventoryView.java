@@ -62,7 +62,7 @@ public class InventoryView extends SubView {
     public InventoryView(Gui gui) {
         super(gui);
         this.buildGui();
-        gui.addCard(inventoryPanel, "inventoryPanel");
+        super.gui.addCard(inventoryPanel, "inventoryPanel");
     }
 
     private void buildGui() {
@@ -83,14 +83,14 @@ public class InventoryView extends SubView {
 
         c.weightx = 0.5;
         c.weighty = 0.5;
-        c.insets = new Insets(10, 3, 10, 3); // top, right, bottom, left;
+        c.insets = new Insets(10, 100, 0, 3); // top, right, bottom, left;
 
         posLabel = new JLabel("Point of Sale");
         posLabel.setFont(ViewConstants.SUBTITLE_FONT);
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.gridy = 0;
-        c.gridwidth = 3;
+        c.gridwidth = 1;
         c.anchor = GridBagConstraints.CENTER;
         posPanel.add(posLabel, c);
 
@@ -104,18 +104,18 @@ public class InventoryView extends SubView {
 
         returnTool = new JButton("Return Tool");
         returnTool.setActionCommand("returnTool");
-        c.gridx = 1;
+        c.gridy = 2;
         posPanel.add(returnTool, c);
 
         generateOrder = new JButton("Generate Order");
         generateOrder.setActionCommand("generateOrder");
-        c.gridx = 2;
-        posPanel.add(returnTool, c);
+        c.gridy = 3;
+        posPanel.add(generateOrder, c);
     }
 
     @Override
     public void display() {
-        gui.setPanel("inventoryPanel");
+        super.gui.setPanel("inventoryPanel");
     }
 
     private void addFields() {
@@ -323,9 +323,9 @@ public class InventoryView extends SubView {
         c.gridy = 6;
         inventoryInfoPanel.add(toolTypeLabel, c);
 
-        toolTypeField = new JTextField(TEXT_FIELD_WIDTH);
-        c.gridx = 3;
-        inventoryInfoPanel.add(toolTypeField, c);
+        // toolTypeField = new JTextField(TEXT_FIELD_WIDTH);
+        // c.gridx = 3;
+        // inventoryInfoPanel.add(toolTypeField, c);
 
         // custTypeLabel = new JLabel("Customer Type: ");
         // c.gridx = 0;
@@ -337,6 +337,7 @@ public class InventoryView extends SubView {
         c.gridx = 3;
         inventoryInfoPanel.add(toolTypeComboBox, c);
 
+        c.insets = new Insets(3, 0, 3, 0);
         updateButton = new JButton("Update");
         updateButton.setActionCommand("update");
         c.gridx = 0;
@@ -374,11 +375,11 @@ public class InventoryView extends SubView {
 
         c.gridx = 1;
         c.gridy = 0;
-        inventoryPanel.add(inventoryInfoPanel);
+        inventoryPanel.add(inventoryInfoPanel, c);
 
         c.gridx = 1;
         c.gridy = 1;
-        inventoryPanel.add(posPanel);
+        inventoryPanel.add(posPanel, c);
     }
 
     public void registerButtons(ActionListener listener) {

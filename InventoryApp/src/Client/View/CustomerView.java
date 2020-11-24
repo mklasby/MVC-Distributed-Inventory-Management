@@ -58,7 +58,7 @@ public class CustomerView extends SubView {
     public CustomerView(Gui gui) {
         super(gui);
         this.buildGui();
-        gui.addCard(customerPanel, "customerPanel");
+        super.gui.addCard(customerPanel, "customerPanel");
     }
 
     private void buildGui() {
@@ -290,6 +290,7 @@ public class CustomerView extends SubView {
         c.gridx = 3;
         customerInfoPanel.add(custTypeComboBox, c);
 
+        c.insets = new Insets(3, 0, 3, 0);
         updateButton = new JButton("Update");
         updateButton.setActionCommand("update");
         c.gridx = 0;
@@ -333,7 +334,7 @@ public class CustomerView extends SubView {
 
     @Override
     public void display() {
-        gui.setPanel("customerPanel");
+        super.gui.setPanel("customerPanel");
     }
 
     public void registerButtons(ActionListener listener) {
