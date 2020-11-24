@@ -26,6 +26,8 @@ public interface ClientServerConstants {
     static String BY_ID = "BY_ID";
     static String BY_NAME = "BY_NAME";
     static String BY_TYPE = "BY_TYPE";
+    static String ALL = "*";
+    
 
     // DATA
     static String DATA = "DATA"; // attribute type

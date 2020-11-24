@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.json.JSONObject;
 
-public class CustomerController extends DBController {
+public class CustomerDBController extends DBController {
 
 	/**
 	 * Add client encoded as JSONObject to the database.

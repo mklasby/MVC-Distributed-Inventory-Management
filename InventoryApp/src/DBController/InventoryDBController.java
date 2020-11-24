@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.Random;
 import java.sql.Date;
 
-public class InventoryController extends DBController {
+public class InventoryDBController extends DBController {
 
 	/**
 	 * Return tools in the database.
@@ -182,14 +182,10 @@ public class InventoryController extends DBController {
 	 */
 	public void reduceToolQuantity(int id, int quantitySold) throws SQLException {
 		String sql = "UPDATE TOOL SET Quantity=Quantity-? WHERE ToolID=?;";
-		try {
-			stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, quantitySold);
-			stmt.setInt(2, id);
-			stmt.executeUpdate();
-		} catch(SQLException e) {
-			e.printStackTrace();
-		}
+		stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, quantitySold);
+		stmt.setInt(2, id);
+		stmt.executeUpdate();
 	}
 	
 //	public static void main(String[] args) {
