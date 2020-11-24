@@ -8,6 +8,8 @@ import javax.swing.event.*;
 import javax.swing.text.StringContent;
 
 import java.awt.event.*;
+import java.util.HashMap;
+
 import Client.View.*;
 import Client.ClientController.*;
 
@@ -49,7 +51,7 @@ public class InventoryController extends ViewController implements ClientServerC
         try {
             query = new Message(REQUEST, GET, INVENTORY, search);
         } catch (JSONException e) {
-            view.flashMessage("ERROR: We were unable to process your request, please try again.");
+            view.flashErrorMessage("ERROR: We were unable to process your request, please try again.");
             e.printStackTrace();
         }
         System.out.println(query.toString());
@@ -86,6 +88,10 @@ public class InventoryController extends ViewController implements ClientServerC
     }
 
     public void updateRecord() {
+        if (areFieldsEmpty()) {
+            view.flashErrorMessage("ERROR! Please input data into all info fields");
+            return;
+        }
     }
 
     public class MenuListener implements ActionListener {
@@ -142,5 +148,22 @@ public class InventoryController extends ViewController implements ClientServerC
         private void populateFields(String selected) {
             System.out.print("Populate fields\n");
         }
+    }
+
+    @Override
+    protected boolean areFieldsEmpty() {
+        HashMap<String, JTextField> fields = view.getFields();
+        for (String key : fields.keySet()) {
+            if (fields.get(key).getText() == "" | fields.get(key).getText() == " ") {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    protected void clearInfoFields() {
+        // TODO Auto-generated method stub
+
     }
 }

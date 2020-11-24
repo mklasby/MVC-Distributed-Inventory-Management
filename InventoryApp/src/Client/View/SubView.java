@@ -1,6 +1,7 @@
 package Client.View;
 
-import javax.swing.JOptionPane;
+import java.util.HashMap;
+import javax.swing.*;
 
 public abstract class SubView {
     Gui gui;
@@ -18,4 +19,10 @@ public abstract class SubView {
     public abstract void flashErrorMessage(String string);
 
     public abstract void flashSuccessMessage(String success);
+
+    public abstract HashMap<String, JTextField> getFields();
+
+    public abstract DefaultListModel<String> getListModel();
+
+    public abstract JTextField getField(String fieldName);
 }

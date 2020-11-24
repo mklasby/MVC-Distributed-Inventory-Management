@@ -7,14 +7,13 @@ public interface ClientServerConstants {
     static String RESPONSE = "RESPONSE";
 
     // REQUEST options
-    static String VERB = "VERB";
+    static String VERB = "VERB";// attribute type
     static String POST = "POST"; // Add new record
     static String GET = "GET"; // get record(s)
     static String PUT = "PUT"; // modify record
     static String DELETE = "DELETE"; // delete record
-
     // RESPONSE options
-    static String ERROR = "ERROR";
+    static String ERROR = "ERROR"; // Error in
     static String OK = "OK";
 
     // DB

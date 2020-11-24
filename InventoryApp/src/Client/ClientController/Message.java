@@ -15,10 +15,16 @@ public class Message extends JSONObject implements ClientServerConstants {
         put(DATA, data);
     }
 
+    public Message(String messageType, String verb, Object data) throws JSONException {
+        put(MESSAGE_TYPE, messageType);
+        put(DATA, data);
+    }
+
     public void addQueryType(String query) throws JSONException {
         put(QUERY, query);
     }
 
-    public void 
-
+    public void quitMessage() throws JSONException {
+        put(QUIT, true);
+    }
 }

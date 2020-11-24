@@ -17,4 +17,9 @@ public abstract class ViewController {
 
     protected abstract void registerGuiMenu();
 
+    protected abstract boolean areFieldsEmpty();
+
+    protected abstract void clearInfoFields();
+
+    public abstract void clearSearch();
 }

@@ -366,19 +366,39 @@ public class CustomerView extends SubView {
         super.gui.registerCustomerButton(menuListener);
     }
 
-    public void clearInfoFields() {
-        for (String key : fields.keySet()) {
-            fields.get(key).setText("");
-        }
-    }
-
-    public void clearSearch() {
-        searchQueryField.setText("");
-        listModel.clear();
-    }
-
     public void generateTestList() {
         listModel.addElement("Test1");
         listModel.addElement("Test2");
     }
+
+    @Override
+    public void flashErrorMessage(String error) {
+        JOptionPane.showMessageDialog(customerPanel, error, "ERROR!", JOptionPane.ERROR_MESSAGE);
+    }
+
+    @Override
+    public void flashSuccessMessage(String success) {
+        JOptionPane.showMessageDialog(customerPanel, success, "Success!", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    @Override
+    public HashMap<String, JTextField> getFields() {
+        return this.fields;
+    }
+
+    @Override
+    public DefaultListModel<String> getListModel() {
+        return listModel;
+    }
+
+    @Override
+    public JTextField getField(String fieldName) {
+        for (String key : fields.keySet()) {
+            if (key.equals(fieldName)) {
+                return fields.get(key);
+            }
+        }
+        return null;
+    }
+
 }

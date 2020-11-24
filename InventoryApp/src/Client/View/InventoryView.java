@@ -441,12 +441,32 @@ public class InventoryView extends SubView {
     }
 
     @Override
-    public void flashErrorMessage(String string) {
+    public void flashErrorMessage(String error) {
+        JOptionPane.showMessageDialog(inventoryPanel, error, "ERROR!", JOptionPane.ERROR_MESSAGE);
     }
 
     @Override
     public void flashSuccessMessage(String success) {
-        JOptionPane.showMessageDialog(inventoryPanel, (Object)success, "Success!");
-        gui.flashMessage()
-	}
+        JOptionPane.showMessageDialog(inventoryPanel, success, "Success!", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    @Override
+    public HashMap<String, JTextField> getFields() {
+        return fields;
+    }
+
+    @Override
+    public DefaultListModel<String> getListModel() {
+        return listModel;
+    }
+
+    @Override
+    public JTextField getField(String fieldName) {
+        for (String key : fields.keySet()) {
+            if (key.equals(fieldName)) {
+                return fields.get(key);
+            }
+        }
+        return null;
+    }
 }
