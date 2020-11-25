@@ -56,6 +56,9 @@ public class CustomerController extends ViewController {
     public void updateRecord(ActionEvent e) {
     }
 
+    public void searchAll() {
+    }
+
     public class MenuListener implements ActionListener {
 
         @Override
@@ -82,6 +85,8 @@ public class CustomerController extends ViewController {
                 deleteRecord(e);
             } else if (cmd == "clear") {
                 clearInfoFields();
+            } else if (cmd == "searchAll") {
+                searchAll();
             }
         }
     }

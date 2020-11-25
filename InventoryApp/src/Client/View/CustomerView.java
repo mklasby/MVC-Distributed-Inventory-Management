@@ -46,6 +46,7 @@ public class CustomerView extends SubView {
     public JButton updateButton;
     public JButton deleteButton;
     public JButton clearButton;
+    public JButton searchAllButton;
     public JList<String> resultsList;
     public DefaultListModel<String> listModel;
     public HashMap<String, JTextField> fields;
@@ -103,7 +104,7 @@ public class CustomerView extends SubView {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.gridy = 0;
-        c.gridwidth = 2;
+        c.gridwidth = 3;
         c.anchor = GridBagConstraints.CENTER;
         searchQueryPanel.add(searchCustLabel, c);
 
@@ -112,7 +113,7 @@ public class CustomerView extends SubView {
         c.gridx = 0;
         c.gridy = 1;
         c.anchor = GridBagConstraints.LINE_START;
-        c.gridwidth = 2;
+        c.gridwidth = 3;
         searchQueryPanel.add(searchTypeLabel, c);
 
         customerIdButton = new JRadioButton("Customer ID");
@@ -129,7 +130,7 @@ public class CustomerView extends SubView {
         c.gridx = 0;
         c.gridy = 2;
         c.anchor = GridBagConstraints.LINE_START;
-        c.gridwidth = 2;
+        c.gridwidth = 3;
         searchQueryPanel.add(customerIdButton, c);
         c.gridy = 3;
         searchQueryPanel.add(lastNameButton, c);
@@ -142,7 +143,7 @@ public class CustomerView extends SubView {
         c.gridx = 0;
         c.gridy = 5;
         c.anchor = GridBagConstraints.LINE_START;
-        c.gridwidth = 2;
+        c.gridwidth = 3;
         searchQueryPanel.add(searchQueryLabel, c);
 
         c.insets = new Insets(0, 3, 0, 3); // top, right, bottom, left;
@@ -152,7 +153,7 @@ public class CustomerView extends SubView {
         c.gridx = 0;
         c.gridy = 6;
         c.anchor = GridBagConstraints.CENTER;
-        c.gridwidth = 2;
+        c.gridwidth = 3;
         searchQueryPanel.add(searchQueryField, c);
 
         c.insets = new Insets(0, 3, 10, 0); // top, right, bottom, left;
@@ -165,11 +166,21 @@ public class CustomerView extends SubView {
         c.gridwidth = 1;
         searchQueryPanel.add(searchButton, c);
 
+        c.insets = new Insets(0, 0, 10, 0); // top, right, bottom, left;
+        searchAllButton = new JButton("Search All");
+        searchAllButton.setActionCommand("searchAll");
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 7;
+        c.anchor = GridBagConstraints.CENTER;
+        c.gridwidth = 1;
+        searchQueryPanel.add(searchAllButton, c);
+
         c.insets = new Insets(0, 0, 10, 3); // top, right, bottom, left;
         clearSearchButton = new JButton("Clear Search");
         clearSearchButton.setActionCommand("clearSearch");
         c.fill = GridBagConstraints.HORIZONTAL;
-        c.gridx = 1;
+        c.gridx = 2;
         c.gridy = 7;
         c.anchor = GridBagConstraints.CENTER;
         c.gridwidth = 1;
@@ -351,6 +362,7 @@ public class CustomerView extends SubView {
         registerListener(listener, customerIdButton);
         registerListener(listener, lastNameButton);
         registerListener(listener, customerTypeButton);
+        registerListener(listener, searchAllButton);
 
     }
 
