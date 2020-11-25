@@ -75,9 +75,10 @@ public class Gui extends JFrame {
     public static void main(String[] args) {
         Gui gui = new Gui();
         CustomerView custView = new CustomerView(gui);
-        CustomerController custCtrl = new CustomerController(custView, new ClientController());
+        ClientController clientCtrl = new ClientController("localhost", 4444);
+        CustomerController custCtrl = new CustomerController(custView, clientCtrl);
         InventoryView invView = new InventoryView(gui);
-        InventoryController invCtrl = new InventoryController(invView, new ClientController());
+        InventoryController invCtrl = new InventoryController(invView, clientCtrl);
         gui.display();
     }
 
