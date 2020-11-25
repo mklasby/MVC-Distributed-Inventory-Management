@@ -45,6 +45,7 @@ public class ServerController implements Runnable, ClientServerConstants {
 		while (true) {
 			try {
 				String rawData = (String) messageIn.readObject();
+				System.out.println(rawData);
 				Message data = new Message(rawData);
 				System.out.print(data.toString());
 
@@ -59,5 +60,6 @@ public class ServerController implements Runnable, ClientServerConstants {
 		}
 
 	}
+
 
 }

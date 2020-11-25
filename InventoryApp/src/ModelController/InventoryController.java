@@ -62,13 +62,13 @@ public class InventoryController extends ModelController implements ClientServer
 			ResultSet rs = null;
 			switch(query) {
 				case BY_ID:
-					rs = inventoryDB.searchToolbyID(data.getJSONObject(DATA).getInt("ToolID"));
+					rs = inventoryDB.searchToolbyID(data.getInt(DATA));
 					break;
 				case BY_NAME:
-					rs = inventoryDB.searchToolbyName(data.getJSONObject(DATA).getString("Name"));
+					rs = inventoryDB.searchToolbyName(data.getString(DATA));
 					break;
 				case BY_TYPE:
-					rs = inventoryDB.searchToolbyType(data.getJSONObject(DATA).getString("Type"));
+					rs = inventoryDB.searchToolbyType(data.getString(DATA));
 					break;
 				case ALL:
 					rs = inventoryDB.getInventory();
@@ -77,6 +77,7 @@ public class InventoryController extends ModelController implements ClientServer
 			if (rs == null) {
 				String errorMessage = "Tool(s) not found!";
 				response = new Message(RESPONSE, ERROR, errorMessage);
+				return response;
 			} else {
 				// TODO: send ResultSet to Model to encode as JSONObject and return Message back to client
 			}
