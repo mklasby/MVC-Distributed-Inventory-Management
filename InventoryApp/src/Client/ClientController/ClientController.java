@@ -32,10 +32,11 @@ public class ClientController implements ClientServerConstants {
         }
     }
 
-    public Message sendMessage(Message message) {
+    public Message sendMessage(Message message) throws JSONException {
         try {
             messageOut.writeObject(message.toString());
-            return (Message) messageIn.readObject();
+            String rawData = (String) messageIn.readObject();
+            return new Message(rawData);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
             Message error = createErrorMessage(e);

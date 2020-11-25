@@ -72,8 +72,9 @@ public class InventoryController extends ViewController implements ClientServerC
         }
         System.out.println(query.toString());
 
-        Message response = clientCtrl.sendMessage(query);
+        Message response = null;
         try {
+            response = clientCtrl.sendMessage(query);
             if (response.get(VERB).equals(ERROR)) {
                 view.flashErrorMessage((String) response.get(DATA));
                 return;
