@@ -6,11 +6,13 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import org.json.JSONObject;
-
 import Client.ClientController.Message;
 import Client.ClientController.ClientServerConstants;
+import DBController.InventoryDBController;
+import DBController.CustomerDBController;
 import ModelController.ModelController;
+import ModelController.InventoryController;
+import ModelController.CustomerController;
 
 public class ServerController implements Runnable, ClientServerConstants {
 
@@ -22,6 +24,13 @@ public class ServerController implements Runnable, ClientServerConstants {
 		try {
 			messageOut = new ObjectOutputStream(socket.getOutputStream());
 			messageIn = new ObjectInputStream(socket.getInputStream());
+			models = new ArrayList<>();
+			
+			InventoryController inv = new InventoryController(new InventoryDBController());
+			registerModel(inv);
+			CustomerController customer = new CustomerController(new CustomerDBController());
+			registerModel(customer);
+
 		} catch (IOException ioe) {
 			ioe.getStackTrace();
 		}

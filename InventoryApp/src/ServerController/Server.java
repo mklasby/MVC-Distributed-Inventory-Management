@@ -45,8 +45,6 @@ public class Server {
 
 	public static void main(String[] args) {
 		Server myServer = new Server();
-
-	registerModel(ModelController model) {
 		myServer.serve();
 	}
 
