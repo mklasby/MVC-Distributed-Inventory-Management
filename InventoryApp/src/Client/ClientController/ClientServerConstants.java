@@ -7,7 +7,7 @@ public interface ClientServerConstants {
     static String RESPONSE = "RESPONSE";
 
     // REQUEST options
-    static String VERB = "VERB";// attribute type
+    static String VERB = "VERB";// key type
     static String POST = "POST"; // Add new record
     static String GET = "GET"; // get record(s)
     static String PUT = "PUT"; // modify record
@@ -17,21 +17,20 @@ public interface ClientServerConstants {
     static String OK = "OK";
 
     // DB
-    static String DB = "DB"; // attribute type
+    static String DB = "DB"; // key type
     static String INVENTORY = "INVENTORY";
     static String CUSTOMER = "CUSTOMER";
 
     // QUERY
-    static String QUERY = "QUERY"; // attribute type
+    static String QUERY = "QUERY"; // key type
     static String BY_ID = "BY_ID";
     static String BY_NAME = "BY_NAME";
     static String BY_TYPE = "BY_TYPE";
     static String ALL = "*";
-    
 
     // DATA
-    static String DATA = "DATA"; // attribute type
+    static String DATA = "DATA"; // key type
 
-    static String QUIT = "QUIT";
+    static String QUIT = "QUIT"; // key type
 
 }
