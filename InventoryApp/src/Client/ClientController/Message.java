@@ -5,7 +5,13 @@ import org.json.JSONObject;
 
 public class Message extends JSONObject implements ClientServerConstants {
 
-    public Message() {
+    public Message() throws JSONException {
+        put(QUIT, false);
+    };
+
+    public Message(String rawData) throws JSONException {
+        super(rawData);
+        put(QUIT, false);
     };
 
     public Message(String messageType, String verb, String db, Object data) throws JSONException {
@@ -13,11 +19,13 @@ public class Message extends JSONObject implements ClientServerConstants {
         put(VERB, verb);
         put(DB, db);
         put(DATA, data);
+        put(QUIT, false);
     }
 
     public Message(String messageType, String verb, Object data) throws JSONException {
         put(MESSAGE_TYPE, messageType);
         put(DATA, data);
+        put(QUIT, false);
     }
 
     public void addQueryType(String query) throws JSONException {

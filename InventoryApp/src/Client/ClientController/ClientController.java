@@ -34,7 +34,7 @@ public class ClientController implements ClientServerConstants {
 
     public Message sendMessage(Message message) {
         try {
-            messageOut.writeObject(message);
+            messageOut.writeObject(message.toString());
             return (Message) messageIn.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
