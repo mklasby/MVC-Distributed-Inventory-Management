@@ -42,7 +42,7 @@ public class InventoryView extends SubView {
     public JTextField priceField;
     public JTextField supplierIdField;
     public JTextField toolTypeField;
-    public JTextField saleQuantityField;
+    public JTextField quantityField;
     public JComboBox<String> toolTypeComboBox;
     public JButton searchButton;
     public JButton clearSearchButton;
@@ -103,10 +103,11 @@ public class InventoryView extends SubView {
         c.gridwidth = 1;
         posPanel.add(quantityLabel, c);
 
-        saleQuantityField = new JTextField(15);
+        quantityField = new JTextField(15);
+        quantityField.setActionCommand("quantityField");
         c.gridx = 1;
         c.gridy = 1;
-        posPanel.add(saleQuantityField, c);
+        posPanel.add(quantityField, c);
 
         sellTool = new JButton("Sell Tool");
         sellTool.setActionCommand("sellTool");
@@ -140,10 +141,11 @@ public class InventoryView extends SubView {
         this.fields.put("stockField", stockField);
         this.fields.put("priceField", priceField);
         this.fields.put("supplierIdField", supplierIdField);
+        this.fields.put("quantity", quantityField);
     }
 
-    public String getSaleQuantityFieldText() {
-        return saleQuantityField.getText();
+    public String getquantityFieldText() {
+        return quantityField.getText();
     }
 
     public String getFieldText(String fieldName) {

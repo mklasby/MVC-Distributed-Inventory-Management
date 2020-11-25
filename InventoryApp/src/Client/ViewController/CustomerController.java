@@ -57,6 +57,7 @@ public class CustomerController extends ViewController {
     }
 
     public void searchAll() {
+
     }
 
     public class MenuListener implements ActionListener {

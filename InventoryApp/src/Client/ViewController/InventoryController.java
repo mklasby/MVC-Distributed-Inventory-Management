@@ -16,11 +16,13 @@ import Client.ClientController.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONArray;
+import Client.CommonModel.*;
 
 public class InventoryController extends ViewController implements ClientServerConstants {
     public InventoryView view;
     public HashMap<Integer, JSONObject> searchResults;
     private String searchBy = "id";
+    private int selectedIdx = 0;
 
     public InventoryController(InventoryView view, ClientController clientCtrl) {
         super(clientCtrl);
@@ -48,16 +50,37 @@ public class InventoryController extends ViewController implements ClientServerC
         this.view.registerGuiMenu(new MenuListener());
     }
 
-    public void search(String search) {
-        Message query = null;
-        // todo: make setQueryType();
-        String queryType;
+    private String getQueryType() {
+        String queryType = null;
         if (searchBy.equals("id")) {
             queryType = BY_ID;
         } else if (searchBy.equals("name")) {
             queryType = BY_NAME;
         } else {
             queryType = BY_TYPE;
+        }
+        return queryType;
+    }
+
+    public void searchAll() {
+        Message query;
+        try {
+            query = new Message(REQUEST, GET, INVENTORY, ALL);
+            Message response = clientCtrl.sendMessage(query);
+            populateSearchResults(response);
+        } catch (JSONException e) {
+            view.flashErrorMessage("...got lost in the game...");
+            e.printStackTrace();
+        }
+    }
+
+    public void search() {
+        String search = view.getField("searchQueryField").getText();
+        if (search.equals("") | search.equals(" ")) {
+            searchAll();
+        }
+        Message query = null;
+        if (searchBy.equals("type")) {
             String typeField = view.getField("searchQueryField").getText().toLowerCase();
             if (!typeField.equals("hand") && !typeField.equals("electrical")) {
                 view.flashErrorMessage("ERROR: Please enter \"Hand\" or \"Electrical\" for Tool Type");
@@ -66,12 +89,12 @@ public class InventoryController extends ViewController implements ClientServerC
         }
         try {
             query = new Message(REQUEST, GET, INVENTORY, search);
-            query.addQueryType(queryType);
+            query.addQueryType(getQueryType());
         } catch (JSONException e) {
             view.flashErrorMessage("ERROR: We were unable to process your request, please try again.");
             e.printStackTrace();
         }
-        System.out.println(query.toString());
+        System.out.println("MESSAGE RECEIVED: " + query.toString());
 
         Message response = null;
         try {
@@ -80,21 +103,16 @@ public class InventoryController extends ViewController implements ClientServerC
                 view.flashErrorMessage((String) response.get(DATA));
                 return;
             }
+            populateSearchResults(response);
         } catch (Exception e) {
             e.printStackTrace();
-        }
-
-        searchResults = new HashMap<Integer, JSONObject>();
-        try {
-            populateSearchResults(response);
-        } catch (JSONException e) {
             view.flashErrorMessage("Something went wrong...Please try again.");
-            return;
         }
         return;
     }
 
     private void populateSearchResults(Message response) throws JSONException {
+        searchResults = new HashMap<Integer, JSONObject>();
         JSONArray data = new JSONArray(response.get(DATA));
         for (int i = 0; i < data.length(); i++) {
             searchResults.put(i, (JSONObject) data.get(i));
@@ -121,11 +139,49 @@ public class InventoryController extends ViewController implements ClientServerC
                 toolId, name, quantity, price, supplierID, toolType);
     }
 
+    public JSONObject getToolJSON() throws JSONException {
+        HashMap<String, String> fields = view.getInfoFields();
+        try {
+            int toolId = Integer.parseInt(fields.get("toolIdField"));
+            String name = fields.get("toolNameField");
+            int stock = Integer.parseInt(fields.get("stockField"));
+            double price = Double.parseDouble(fields.get("priceField"));
+            int supplierId = Integer.parseInt(fields.get("supplierIdField"));
+            String toolType = fields.get("toolTypeComboBox");
+            Tool tool = new Tool(toolId, name, stock, price, supplierId, toolType);
+            return tool.encode();
+        } catch (Exception e) {
+            view.flashErrorMessage("ERROR: Bad Input! Please check input field types!");
+            return null;
+        }
+    }
+
     public void clearSearch() {
         view.clearSearch();
     }
 
     public void deleteRecord(String fieldText) {
+        if (searchResults == null) {
+            view.flashErrorMessage("Silly goose, select a tool from the menu on the left before deleting!");
+            return;
+        }
+        JSONObject delete = searchResults.get(selectedIdx);
+        try {
+            Message message = new Message(REQUEST, DELETE, INVENTORY, delete);
+            Message response = clientCtrl.sendMessage(message);
+            isErrorMessage(response); // will return if true
+            if (response.get(VERB).equals(OK)) {
+                view.flashSuccessMessage((String) response.get(DATA));
+                return;
+            } else {
+                view.flashErrorMessage((String) response.get(DATA));
+                return;
+            }
+        } catch (JSONException e) {
+            view.flashErrorMessage("...I played with your heart, ...");
+            e.printStackTrace();
+        }
+
         int toolId = Integer.parseInt(fieldText);
         Message query = null;
         try {
@@ -149,15 +205,84 @@ public class InventoryController extends ViewController implements ClientServerC
             view.flashErrorMessage("ERROR! Please input data into all info fields");
             return;
         }
+        try {
+            JSONObject newItem = getToolJSON();
+            Message put = new Message(REQUEST, PUT, INVENTORY, newItem);
+            clientCtrl.sendMessage(put);
+        } catch (JSONException e) {
+            view.flashErrorMessage("Oops, I did it again...");
+            e.printStackTrace();
+        }
     }
 
     private void returnTool() {
+        view.flashErrorMessage("All Sales Final! No Soup For You!");
     }
 
     private void sellTool() {
+        if (searchResults == null) {
+            view.flashErrorMessage("Please select a tool from the menu on the left before buying!");
+            return;
+        }
+        JSONObject sale = searchResults.get(selectedIdx);
+        int stock = 0;
+        int quantity = 0;
+        try {
+            stock = sale.getInt("Stock");
+        } catch (JSONException e1) {
+            // logically impossible to throw, thanks java
+            e1.printStackTrace();
+            return;
+        }
+        try {
+            quantity = Integer.parseInt(view.getFieldText("quantity"));
+        } catch (Exception e) {
+            view.flashErrorMessage("ERROR: Please enter a number of items to buy!");
+            return;
+        }
+        if (quantity <= 0) {
+            view.flashErrorMessage("ERROR: Buying nothing is not an option in this store!");
+            return;
+        }
+        try {
+            sale.put("stock", stock - quantity);
+            Message message = new Message(REQUEST, PUT, INVENTORY, sale);
+            Message response = clientCtrl.sendMessage(message);
+            if (response.get(VERB).equals(OK)) {
+                view.flashSuccessMessage((String) response.get(DATA));
+                return;
+            } else {
+                view.flashErrorMessage((String) response.get(DATA));
+                return;
+            }
+        } catch (JSONException e) {
+            view.flashErrorMessage("...I played with your heart, ...");
+            e.printStackTrace();
+        }
     }
 
     private void generateOrder() {
+        Message message;
+        Message response = null;
+        try {
+            message = new Message(REQUEST, "ORDER", INVENTORY);
+            response = clientCtrl.sendMessage(message);
+            isErrorMessage(response);
+            view.flashSuccessMessage(((String) response.get(DATA)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void isErrorMessage(Message response) {
+        try {
+            if (response.get(VERB).equals(ERROR)) {
+                view.flashErrorMessage((String) response.get(DATA));
+                return;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void addEntry() {
@@ -175,8 +300,7 @@ public class InventoryController extends ViewController implements ClientServerC
             System.out.print(cmd);
 
             if (cmd == "search") {
-                String search = view.getField("searchQueryField").getText();
-                search(search);
+                search();
             } else if (cmd == "clearSearch") {
                 clearSearch();
             } else if (cmd == "update") {
@@ -194,6 +318,8 @@ public class InventoryController extends ViewController implements ClientServerC
                 generateOrder();
             } else if (cmd == "addTool") {
                 addEntry();
+            } else if (cmd == "searchAll") {
+                searchAll();
             }
         }
 
@@ -223,6 +349,7 @@ public class InventoryController extends ViewController implements ClientServerC
             System.out.print("List Selection Event\n");
 
             JList list = (JList) e.getSource();
+            selectedIdx = e.getLastIndex();
             String selected = (String) list.getSelectedValue();
             populateFields(selected);
         }

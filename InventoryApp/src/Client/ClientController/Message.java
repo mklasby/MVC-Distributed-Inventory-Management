@@ -22,9 +22,6 @@ public class Message extends JSONObject implements ClientServerConstants {
         put(QUIT, false);
     }
 
-    /**
-     * ERROR MESSAGE
-     */
     public Message(String messageType, String verb, Object data) throws JSONException {
         put(MESSAGE_TYPE, messageType);
         put(DATA, data);
