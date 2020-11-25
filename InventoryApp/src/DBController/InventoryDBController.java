@@ -1,6 +1,8 @@
 package DBController;
 
 import java.sql.ResultSet;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -103,7 +105,7 @@ public class InventoryDBController extends DBController {
 	 * Add tool encoded as JSONObject to the database.
 	 * @param tool tool encoded as JSONObject
 	 */
-	public void addTool(JSONObject tool) {
+	public void addTool(JSONObject tool) throws SQLException {
 		String sql = "INSERT INTO TOOL VALUES(?,?,?,?,?,?);";
 		try {
 			stmt = conn.prepareStatement(sql);
@@ -122,7 +124,7 @@ public class InventoryDBController extends DBController {
 				stmt.setString(2, tool.getString("PowerType"));
 				stmt.executeUpdate();
 			}
-		} catch(Exception e) {
+		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 	}

@@ -1,19 +1,22 @@
 package ModelController;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import org.json.JSONException;
 
 import Client.ClientController.Message;
 import Client.ClientController.ClientServerConstants;
 import DBController.InventoryDBController;
+import InventoryModel.Inventory;
 
 public class InventoryController extends ModelController implements ClientServerConstants {
 
 	private InventoryDBController inventoryDB;
-//	private InvMgmt model;
+	private Inventory model;
 	
 	public InventoryController(InventoryDBController inventoryDB) {
 		this.inventoryDB = inventoryDB;
+		model = new Inventory();
 	}
 
 	@Override
@@ -50,12 +53,20 @@ public class InventoryController extends ModelController implements ClientServer
 	}
 
 	private Message addTool(Message data) {
+		Message response = null;
 		try {
-			inventoryDB.addTool(data.getJSONObject(DATA));
-		} catch (JSONException e) {
-			e.printStackTrace();
+			try {
+				inventoryDB.addTool(data.getJSONObject(DATA));
+				String successMessage = "Tool added successfully.";
+				response = new Message(RESPONSE, OK, successMessage);
+			} catch (SQLException sqlE) {
+				String errorMessage = "Invalid ToolID, use " + inventoryDB.generateNewID() + ".";
+				response = new Message(RESPONSE, ERROR, errorMessage);
+			} 
+		} catch (JSONException jsonE) {
+			jsonE.printStackTrace();
 		}
-		return null;
+		return response;
 	}
 
 	private Message searchTool(Message data) {

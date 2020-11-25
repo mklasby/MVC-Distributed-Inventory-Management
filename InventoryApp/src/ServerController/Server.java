@@ -28,7 +28,6 @@ public class Server {
 
 	private void serve() {
 		try {
-
 			System.out.println("Server is running...");
 			while (true) {
 				Socket clientSocket = serverSocket.accept();
