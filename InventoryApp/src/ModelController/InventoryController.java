@@ -19,6 +19,7 @@ public class InventoryController extends ModelController implements ClientServer
 	@Override
 	public Message notify(Message data) {
 		try {
+			if (! data.getString(DB).equals(INVENTORY)) return null;
 			if (data.getString(MESSAGE_TYPE).equals(REQUEST)) {
 				return processMessage(data);
 			}

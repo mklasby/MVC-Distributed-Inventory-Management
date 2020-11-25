@@ -51,7 +51,9 @@ public class ServerController implements Runnable, ClientServerConstants {
 				if (data.getBoolean(QUIT))
 					break;
 				for (ModelController model : models) {
-					model.notify(data);
+					Message response = model.notify(data);
+					System.out.println(response);
+					if (response != null) messageOut.writeObject(response.toString());
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
