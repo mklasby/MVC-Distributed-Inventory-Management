@@ -50,6 +50,7 @@ public class InventoryController extends ViewController implements ClientServerC
 
     public void search(String search) {
         Message query = null;
+        // todo: make setQueryType();
         String queryType;
         if (searchBy.equals("id")) {
             queryType = BY_ID;
