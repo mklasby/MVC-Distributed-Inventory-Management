@@ -32,29 +32,24 @@ public class ClientController implements ClientServerConstants {
         }
     }
 
-    public JSONObject sendMessage(JSONObject message) {
+    public Message sendMessage(Message message) {
         try {
             messageOut.writeObject(message);
-            return (JSONObject) messageIn.readObject();
+            return (Message) messageIn.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
-            JSONObject error = createErrorJSON(e);
+            Message error = createErrorMessage(e);
             return error;
         }
     }
 
-    private JSONObject createErrorJSON(Exception e) {
-        JSONObject error = new JSONObject();
+    private Message createErrorMessage(Exception e) {
+        Message error = null;
         try {
-            error.put("RESPONSE", "ERROR");
-            error.put("DATA", e.getMessage().toString());
+            error = new Message(RESPONSE, ERROR, e.toString());
         } catch (JSONException e1) {
             e1.printStackTrace();
         }
         return error;
-    }
-
-    public JSONObject getMessage() {
-        return null;
     }
 }
