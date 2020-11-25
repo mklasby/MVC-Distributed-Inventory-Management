@@ -199,13 +199,13 @@ public class InventoryDBController extends DBController {
 	/**
 	 * Reduce tool quantity by quantitySold for tool with given id 
 	 * @param id tool id
-	 * @param quantitySold quantity sold
+	 * @param qtyInStock new quantity in stock
 	 * @throws SQLException
 	 */
-	public void reduceToolQuantity(int id, int quantitySold) throws SQLException {
-		String sql = "UPDATE TOOL SET Quantity=Quantity-? WHERE ToolID=?;";
+	public void reduceToolQuantity(int id, int qtyInStock) throws SQLException {
+		String sql = "UPDATE TOOL SET Quantity=? WHERE ToolID=?;";
 		stmt = conn.prepareStatement(sql);
-		stmt.setInt(1, quantitySold);
+		stmt.setInt(1, qtyInStock);
 		stmt.setInt(2, id);
 		stmt.executeUpdate();
 	}

@@ -43,6 +43,8 @@ public class InventoryController extends ModelController implements ClientServer
 					response = searchTool(data);
 					break;
 				case PUT:
+					response = makeSale(data);
+					break;
 				case DELETE:
 			}
 			return response;
@@ -50,6 +52,25 @@ public class InventoryController extends ModelController implements ClientServer
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private Message makeSale(Message data) {
+		Message response = null;
+		try {
+			try {
+				int id = data.getJSONObject(DATA).getInt("ToolID");
+				int qtyInStock = data.getJSONObject(DATA).getInt("ToolID");
+				inventoryDB.reduceToolQuantity(id, qtyInStock);
+				String successMessage = "Tool added successfully.";
+				response = new Message(RESPONSE, OK, successMessage);
+			} catch (SQLException sqlE) {
+				String errorMessage = "Invalid ToolID, use " + inventoryDB.generateNewID() + ".";
+				response = new Message(RESPONSE, ERROR, errorMessage);
+			} 
+		} catch (JSONException jsonE) {
+			jsonE.printStackTrace();
+		}
+		return response;
 	}
 
 	private Message addTool(Message data) {
@@ -90,9 +111,7 @@ public class InventoryController extends ModelController implements ClientServer
 			if (rs == null) {
 				String errorMessage = "Tool(s) not found!";
 				response = new Message(RESPONSE, ERROR, errorMessage);
-				return response;
 			} else {
-				// TODO: send ResultSet to Model to encode as JSONObject and return Message back to client
 				response = new Message(RESPONSE, OK, model.encodeSearchQuery(rs));
 			}
 			return response;
