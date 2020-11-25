@@ -1,17 +1,19 @@
 package Client.ClientController;
 
 public interface ClientServerConstants {
-    // Message Type
+    // Message Types
     static String MESSAGE_TYPE = "MESSAGE_TYPE";
     static String REQUEST = "REQUEST";
     static String RESPONSE = "RESPONSE";
 
+    // VERBS
     // REQUEST options
     static String VERB = "VERB";// key type
     static String POST = "POST"; // Add new record
     static String GET = "GET"; // get record(s)
     static String PUT = "PUT"; // modify record
     static String DELETE = "DELETE"; // delete record
+
     // RESPONSE options
     static String ERROR = "ERROR"; // Error in
     static String OK = "OK";

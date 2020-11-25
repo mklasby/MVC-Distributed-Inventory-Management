@@ -130,13 +130,14 @@ public class InventoryController extends ViewController implements ClientServerC
     public String getToolString(JSONObject jsonTool) throws JSONException {
         int toolId = jsonTool.getInt("ToolID");
         String name = jsonTool.getString("Name");
-        int quantity = jsonTool.getInt("Quantity");
+        // TODO: What are we calling stock?
+        int stock = jsonTool.getInt("Stock");
         Double price = jsonTool.getDouble("Price");
         int supplierID = jsonTool.getInt("SupplierID");
         String toolType = jsonTool.getString("Type");
 
         return String.format("ToolID: %d, Name: %14s, Stock: %4d, Price: %6.2f, SupplierID: %5d, Tool Type: %10s",
-                toolId, name, quantity, price, supplierID, toolType);
+                toolId, name, stock, price, supplierID, toolType);
     }
 
     public JSONObject getToolJSON() throws JSONException {
@@ -225,10 +226,13 @@ public class InventoryController extends ViewController implements ClientServerC
             return;
         }
         JSONObject sale = searchResults.get(selectedIdx);
-        int stock = 0;
+        int stock = -1;
+        // used in the event of db failure
+        int existingStock = -1;
         int quantity = 0;
         try {
             stock = sale.getInt("Stock");
+            existingStock = stock;
         } catch (JSONException e1) {
             // logically impossible to throw, thanks java
             e1.printStackTrace();
@@ -250,8 +254,12 @@ public class InventoryController extends ViewController implements ClientServerC
             Message response = clientCtrl.sendMessage(message);
             if (response.get(VERB).equals(OK)) {
                 view.flashSuccessMessage((String) response.get(DATA));
+                populateResultsList();
+
                 return;
             } else {
+                // reset sale object to original state
+                sale.put("stock", existingStock);
                 view.flashErrorMessage((String) response.get(DATA));
                 return;
             }
@@ -289,6 +297,44 @@ public class InventoryController extends ViewController implements ClientServerC
         if (areFieldsEmpty()) {
             view.flashErrorMessage("ERROR! Please input data into all info fields");
             return;
+        }
+    }
+
+    private void populateFields(int idxSelected) {
+        JSONObject jsonTool = searchResults.get(idxSelected);
+        try {
+            int toolId = jsonTool.getInt("ToolID");
+            String name = jsonTool.getString("Name");
+            // TODO: What are we calling stock?
+            int stock = jsonTool.getInt("stockField");
+            Double price = jsonTool.getDouble("Price");
+            int supplierID = jsonTool.getInt("SupplierID");
+            String toolType = jsonTool.getString("Type");
+
+            HashMap<String, JTextField> fields = view.getFields();
+            for (String key : fields.keySet()) {
+                JTextField thisField = fields.get(key);
+                if (key.equals("toolIdField")) {
+                    thisField.setText(Integer.toString(toolId));
+                } else if ((key.equals("toolNameField"))) {
+                    thisField.setText(name);
+                } else if ((key.equals("stockField"))) {
+                    thisField.setText(Integer.toString(stock));
+                } else if ((key.equals("priceField"))) {
+                    thisField.setText(Double.toString(price));
+                } else if ((key.equals("supplierIdField"))) {
+                    thisField.setText(Integer.toString(supplierID));
+                }
+            }
+            JComboBox comboBox = view.getComboBox();
+            if (toolType.equals("Electrical")) {
+                comboBox.setSelectedIndex(0);
+            } else {
+                comboBox.setSelectedIndex(1);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
@@ -350,13 +396,9 @@ public class InventoryController extends ViewController implements ClientServerC
 
             JList list = (JList) e.getSource();
             selectedIdx = e.getLastIndex();
-            String selected = (String) list.getSelectedValue();
-            populateFields(selected);
+            populateFields(selectedIdx);
         }
 
-        private void populateFields(String selected) {
-            System.out.print("Populate fields\n");
-        }
     }
 
     @Override

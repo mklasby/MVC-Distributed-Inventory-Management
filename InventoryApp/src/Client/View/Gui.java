@@ -24,6 +24,7 @@ public class Gui extends JFrame {
 
         // picture is content, frame is menu buttons and header
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setPreferredSize(ViewConstants.FRAME_DIMENSION);
 
         picture.setPreferredSize(ViewConstants.PICTURE_DIMENSION);

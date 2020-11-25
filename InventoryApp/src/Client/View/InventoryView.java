@@ -501,4 +501,8 @@ public class InventoryView extends SubView {
         }
         return null;
     }
+
+    public JComboBox getComboBox() {
+        return this.toolTypeComboBox;
+    }
 }
