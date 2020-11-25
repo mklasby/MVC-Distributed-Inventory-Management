@@ -230,7 +230,7 @@ public class CustomerView extends SubView {
         customerInfoLabel = new JLabel("Customer Information:");
         customerInfoLabel.setFont(ViewConstants.SUBTITLE_FONT);
         customerInfoPanel.add(customerInfoLabel, c);
-        int TEXT_FIELD_WIDTH = 25;
+        int TEXT_FIELD_WIDTH = 5;
 
         c.insets = new Insets(3, 3, 3, 3); // top, right, bottom, left;
         customerIdLabel = new JLabel("Customer ID: ");

@@ -11,24 +11,7 @@ import org.json.JSONObject;
  * @version 1.0
  * @since Nov 26, 2020
  */
-public class Tool {
-	/** tool id */
-	private int id;
-		
-	/** description or name of tool */
-	private String name;
-	
-	/** description or name of tool */
-	private String type;
-	
-	/** tool quantity in stock */
-	private int qty;
-	
-	/** tool price */
-	private double price;
-	
-	/** supplier id */
-	private int supplierID;
+public class Tool extends JSONObject {
 	
 	/**
 	 * Construct a Tool object with the specified information
@@ -40,27 +23,19 @@ public class Tool {
 	 * @param supplier Supplier object
 	 */
 	public Tool (int id, String name, String type, int qty, double price, int supplier) {
-		this.id = id;
-		this.name = name;
-		this.type = type;
-		this.qty = qty;
-		this.price = price;
-		this.supplierID = supplier;
-	}
-
-	public JSONObject encode() {
-		JSONObject obj = new JSONObject();
 		try {
-			obj.put("ToolID", id);		
-			obj.put("Name", name);
-			obj.put("Type", type);
-			obj.put("Quantity",  qty);
-			obj.put("Price", price);
-			obj.put("SupplierID", supplierID);
-			return obj;
+			put("ToolID", id);		
+			put("Name", name);
+			put("Type", type);
+			put("Quantity",  qty);
+			put("Price", price);
+			put("SupplierID", supplier);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		return null;
+	}
+
+	public JSONObject encode() {
+		return this;
 	}
 }
