@@ -87,7 +87,6 @@ public class CustomerView extends SubView {
         return fields.get(fieldName).getText();
     }
 
-    // TODO: Ask Moshi about refactoring GUIs
     private void buildSearchQueryPanel() {
         searchQueryPanel = new JPanel();
         searchQueryPanel.setLayout(new GridBagLayout());
@@ -231,7 +230,7 @@ public class CustomerView extends SubView {
         customerInfoLabel = new JLabel("Customer Information:");
         customerInfoLabel.setFont(ViewConstants.SUBTITLE_FONT);
         customerInfoPanel.add(customerInfoLabel, c);
-        int TEXT_FIELD_WIDTH = 15;
+        int TEXT_FIELD_WIDTH = 25;
 
         c.insets = new Insets(3, 3, 3, 3); // top, right, bottom, left;
         customerIdLabel = new JLabel("Customer ID: ");
@@ -244,6 +243,7 @@ public class CustomerView extends SubView {
 
         customerIdField = new JTextField(TEXT_FIELD_WIDTH);
         customerIdField.setEditable(false);
+        // customerIdField.setPreferredSize(preferredSize);
         c.gridx = 3;
         customerInfoPanel.add(customerIdField, c);
 
@@ -412,5 +412,4 @@ public class CustomerView extends SubView {
         }
         return null;
     }
-
 }
