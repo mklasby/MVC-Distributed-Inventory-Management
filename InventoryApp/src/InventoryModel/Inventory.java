@@ -27,6 +27,7 @@ public class Inventory {
 					jsonArray.put((JSONObject) tool.encode());
 				}
 			} while(rs.next());
+			return jsonArray;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

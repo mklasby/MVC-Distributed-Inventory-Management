@@ -75,7 +75,7 @@ public class InventoryController extends ModelController implements ClientServer
 			ResultSet rs = null;
 			switch(query) {
 				case BY_ID:
-					rs = inventoryDB.searchToolbyID(data.getInt(DATA));
+					rs = inventoryDB.searchToolbyID(Integer.parseInt(data.getString(DATA)));
 					break;
 				case BY_NAME:
 					rs = inventoryDB.searchToolbyName(data.getString(DATA));
@@ -93,8 +93,9 @@ public class InventoryController extends ModelController implements ClientServer
 				return response;
 			} else {
 				// TODO: send ResultSet to Model to encode as JSONObject and return Message back to client
+				response = new Message(RESPONSE, OK, model.encodeSearchQuery(rs));
 			}
-			
+			return response;
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
