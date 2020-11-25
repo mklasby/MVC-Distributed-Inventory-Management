@@ -20,7 +20,7 @@ public class InventoryController extends ModelController implements ClientServer
 	public Message notify(Message data) {
 		try {
 			if (data.getString(MESSAGE_TYPE).equals(REQUEST)) {
-				processMessage(data);
+				return processMessage(data);
 			}
 		} catch (JSONException jse) {
 			jse.printStackTrace();
@@ -30,30 +30,31 @@ public class InventoryController extends ModelController implements ClientServer
 
 	public Message processMessage(Message data) {
 		try {
-			Message response;
+			Message response = null;
 			switch(data.getString(VERB)) {
 				case POST:
-					addTool(data);
+					response = addTool(data);
 					break;
 				case GET:
-					searchTool(data);
+					response = searchTool(data);
 					break;
 				case PUT:
 				case DELETE:
 			}
+			return response;
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 
-	private void addTool(Message data) {
+	private Message addTool(Message data) {
 		try {
 			inventoryDB.addTool(data.getJSONObject(DATA));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		
+		return null;
 	}
 
 	private Message searchTool(Message data) {

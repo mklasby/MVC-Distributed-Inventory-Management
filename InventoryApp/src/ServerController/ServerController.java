@@ -47,7 +47,6 @@ public class ServerController implements Runnable, ClientServerConstants {
 				String rawData = (String) messageIn.readObject();
 				System.out.println(rawData);
 				Message data = new Message(rawData);
-				System.out.print(data.toString());
 
 				if (data.getBoolean(QUIT))
 					break;
