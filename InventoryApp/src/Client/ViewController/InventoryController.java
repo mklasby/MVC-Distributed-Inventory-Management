@@ -414,7 +414,10 @@ public class InventoryController extends ViewController implements ClientServerC
 
     @Override
     protected void clearInfoFields() {
-        // TODO Auto-generated method stub
+        HashMap<String, JTextField> fields = view.getFields();
+        for (String key : fields.keySet()) {
+            fields.get(key).setText("");
+        }
 
     }
 }

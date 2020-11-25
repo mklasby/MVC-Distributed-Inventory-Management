@@ -233,7 +233,7 @@ public class CustomerView extends SubView {
         customerInfoPanel.add(customerInfoLabel, c);
         int TEXT_FIELD_WIDTH = 15;
 
-        c.insets = new Insets(10, 3, 3, 3); // top, right, bottom, left;
+        c.insets = new Insets(3, 3, 3, 3); // top, right, bottom, left;
         customerIdLabel = new JLabel("Customer ID: ");
         c.gridx = 0;
         c.gridy = 1;
@@ -330,7 +330,7 @@ public class CustomerView extends SubView {
         customerPanel.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
-        c.insets = new Insets(3, 20, 20, 20); // top, right, bottom, left;
+        c.insets = new Insets(3, 3, 3, 3); // top, right, bottom, left;
         c.gridx = 0;
         c.gridy = 0;
         customerPanel.add(searchQueryPanel, c);
