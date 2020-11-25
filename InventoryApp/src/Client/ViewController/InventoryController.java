@@ -75,6 +75,7 @@ public class InventoryController extends ViewController implements ClientServerC
     }
 
     public void search() {
+
         String search = view.getField("searchQueryField").getText();
         if (search.equals("") | search.equals(" ")) {
             searchAll();
@@ -113,7 +114,8 @@ public class InventoryController extends ViewController implements ClientServerC
 
     private void populateSearchResults(Message response) throws JSONException {
         searchResults = new HashMap<Integer, JSONObject>();
-        JSONArray data = new JSONArray(response.get(DATA));
+        String rawData = (String) response.get(DATA);
+        JSONArray data = new JSONArray(rawData);
         for (int i = 0; i < data.length(); i++) {
             searchResults.put(i, (JSONObject) data.get(i));
         }
@@ -145,11 +147,11 @@ public class InventoryController extends ViewController implements ClientServerC
         try {
             int toolId = Integer.parseInt(fields.get("toolIdField"));
             String name = fields.get("toolNameField");
-            int stock = Integer.parseInt(fields.get("stockField"));
+            int quantity = Integer.parseInt(fields.get("stockField"));
             double price = Double.parseDouble(fields.get("priceField"));
             int supplierId = Integer.parseInt(fields.get("supplierIdField"));
             String toolType = fields.get("toolTypeComboBox");
-            Tool tool = new Tool(toolId, name, stock, price, supplierId, toolType);
+            Tool tool = new Tool(toolId, name, toolType, quantity, price, supplierId);
             return tool.encode();
         } catch (Exception e) {
             view.flashErrorMessage("ERROR: Bad Input! Please check input field types!");
