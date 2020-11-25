@@ -80,6 +80,26 @@ public class InventoryDBController extends DBController {
 	}
 	
 	/**
+	 * Return id for a new tool.
+	 * @return new tool id
+	 */
+	public Integer generateNewID() {
+		// generate unique tool id for new tool
+		String queryMaxID = "SELECT MAX(ToolID) FROM TOOL;";
+		try {
+			stmt = conn.prepareStatement(queryMaxID);
+			rs = stmt.executeQuery();
+			
+			if (rs.next()) return rs.getInt("MAX(ToolID)") + 1;
+			else return 1000;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
 	 * Add tool encoded as JSONObject to the database.
 	 * @param tool tool encoded as JSONObject
 	 */
@@ -190,7 +210,7 @@ public class InventoryDBController extends DBController {
 	
 //	public static void main(String[] args) {
 //		try {
-//			InventoryController c = new InventoryController();
+//			InventoryDBController c = new InventoryDBController();
 //			
 //			c.reduceToolQuantity(1001, 1);
 //			

@@ -31,7 +31,7 @@ CREATE TABLE TOOL (
   ToolID				int(15),
   Name         			varchar(50),
   Type      			varchar(15),
-  Quantity     			int(5), 
+  Quantity     			int(5) check (Quantity>=0),
   Price					double(5,2),
   SupplierID			int(15),
   primary key (ToolID),

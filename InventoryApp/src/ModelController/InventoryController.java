@@ -1,17 +1,16 @@
 package ModelController;
 
-import Client.ClientController.Message;
-
 import java.sql.ResultSet;
-
 import org.json.JSONException;
 
+import Client.ClientController.Message;
 import Client.ClientController.ClientServerConstants;
 import DBController.InventoryDBController;
 
 public class InventoryController extends ModelController implements ClientServerConstants {
 
 	private InventoryDBController inventoryDB;
+//	private InvMgmt model;
 	
 	public InventoryController(InventoryDBController inventoryDB) {
 		this.inventoryDB = inventoryDB;
@@ -31,9 +30,10 @@ public class InventoryController extends ModelController implements ClientServer
 
 	public Message processMessage(Message data) {
 		try {
+			Message response;
 			switch(data.getString(VERB)) {
 				case POST:
-					inventoryDB.addTool(data.getJSONObject(DATA));
+					addTool(data);
 					break;
 				case GET:
 					searchTool(data);
@@ -45,6 +45,15 @@ public class InventoryController extends ModelController implements ClientServer
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private void addTool(Message data) {
+		try {
+			inventoryDB.addTool(data.getJSONObject(DATA));
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	private Message searchTool(Message data) {
@@ -63,6 +72,13 @@ public class InventoryController extends ModelController implements ClientServer
 					break;
 				case ALL:
 					rs = inventoryDB.getInventory();
+			}
+			Message response;
+			if (rs == null) {
+				String errorMessage = "Tool(s) not found!";
+				response = new Message(RESPONSE, ERROR, errorMessage);
+			} else {
+				// TODO: send ResultSet to Model to encode as JSONObject and return Message back to client
 			}
 			
 		} catch (JSONException e) {

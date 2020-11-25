@@ -148,7 +148,7 @@ public class CustomerDBController extends DBController {
 	
 //	public static void main(String[] args) {
 //		try {
-//			CustomerController c = new CustomerController();
+//			CustomerDBController c = new CustomerDBController();
 //			
 //			JSONObject obj = new JSONObject();
 //			obj.put("ClientID", 2005);
