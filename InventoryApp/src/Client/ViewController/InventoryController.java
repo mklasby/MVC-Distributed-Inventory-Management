@@ -8,6 +8,7 @@ import javax.swing.event.*;
 import javax.swing.text.StringContent;
 
 import java.awt.event.*;
+import java.security.Key;
 import java.util.HashMap;
 
 import Client.View.*;
@@ -18,36 +19,20 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 import Client.CommonModel.*;
 
-public class InventoryController extends ViewController implements ClientServerConstants {
-    public InventoryView view;
+public class InventoryController extends ViewController {
     public HashMap<Integer, JSONObject> searchResults;
     private String searchBy = "id";
     private int selectedIdx = 0;
+    private String[] infoKeys;
 
-    public InventoryController(InventoryView view, ClientController clientCtrl) {
-        super(clientCtrl);
-        this.view = view;
-        registerGuiMenu();
-        registerButtons();
-        registerComboBox();
-        registerResultsList();
-    }
-
-    private void registerResultsList() {
-        view.registerResultsList(new ResultsListListener());
-    }
-
-    private void registerComboBox() {
-        view.registerComboBox(new ComboBoxListener());
-    }
-
-    private void registerButtons() {
-        view.registerButtons(new ButtonListener());
-    }
-
-    @Override
-    protected void registerGuiMenu() {
-        this.view.registerGuiMenu(new MenuListener());
+    public InventoryController(SubView view, ClientController clientCtrl) {
+        super(clientCtrl, view);
+        view.registerGuiMenuButton(new MenuListener(), "inventoryPanelButton");
+        view.registerButtonListener(new ButtonListener());
+        view.registerRadioButtonListener(new RadioButtonListener());
+        view.registerListListener(new ResultsListListener());
+        infoKeys = new String[] { "toolIdField", "toolNameField", "stockField", "priceField", "supplierIdField",
+                "quantityField" };
     }
 
     private String getQueryType() {
@@ -63,7 +48,8 @@ public class InventoryController extends ViewController implements ClientServerC
     }
 
     public void searchAll() {
-        DefaultListModel listModel = view.getListModel();
+        HashMap<String, JList> lists = view.getLists();
+        DefaultListModel listModel = (DefaultListModel) lists.get("resultsList").getModel();
         listModel.clear();
         Message query;
         try {
@@ -78,7 +64,8 @@ public class InventoryController extends ViewController implements ClientServerC
     }
 
     public void search() {
-        DefaultListModel listModel = view.getListModel();
+        HashMap<String, JList> lists = view.getLists();
+        DefaultListModel listModel = (DefaultListModel) lists.get("resultsList").getModel();
         listModel.clear();
         String search = view.getField("searchQueryField").getText();
         if (search.equals("") | search.equals(" ")) {
@@ -127,7 +114,8 @@ public class InventoryController extends ViewController implements ClientServerC
     }
 
     private void populateResultsList() throws JSONException {
-        DefaultListModel<String> listModel = view.getListModel();
+        HashMap<String, JList> lists = view.getLists();
+        DefaultListModel listModel = (DefaultListModel) lists.get("resultsList").getModel();
         for (int key : searchResults.keySet()) {
             listModel.add(key, getToolString(searchResults.get(key)));
         }
@@ -146,14 +134,14 @@ public class InventoryController extends ViewController implements ClientServerC
     }
 
     public JSONObject getToolJSON() throws JSONException {
-        HashMap<String, JTextField> fields = view.getInfoFields();
+        HashMap<String, JTextField> fields = getInfoFields();
         try {
             int toolId = Integer.parseInt(fields.get("toolIdField").getText());
             String name = fields.get("toolNameField").getText();
             int quantity = Integer.parseInt(fields.get("stockField").getText());
             double price = Double.parseDouble(fields.get("priceField").getText());
             int supplierId = Integer.parseInt(fields.get("supplierIdField").getText());
-            String toolType = view.getComboBox().getSelectedItem().toString();
+            String toolType = view.getComboBox("toolTypeComboBox").getSelectedItem().toString();
             Tool tool = new Tool(toolId, name, toolType, quantity, price, supplierId);
             return tool.encode();
         } catch (Exception e) {
@@ -163,7 +151,10 @@ public class InventoryController extends ViewController implements ClientServerC
     }
 
     public void clearSearch() {
-        view.clearSearch();
+        view.getField("searchQueryField").setText("");
+        HashMap<String, JList> lists = view.getLists();
+        DefaultListModel listModel = (DefaultListModel) lists.get("resultsList").getModel();
+        listModel.clear();
     }
 
     public void deleteRecord(String fieldText) {
@@ -287,17 +278,6 @@ public class InventoryController extends ViewController implements ClientServerC
         }
     }
 
-    private void isErrorMessage(Message response) {
-        try {
-            if (response.get(VERB).equals(ERROR)) {
-                view.flashErrorMessage((String) response.get(DATA));
-                return;
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void addEntry() {
         if (areFieldsEmpty()) {
             view.flashErrorMessage("ERROR! Please input data into all info fields");
@@ -331,7 +311,7 @@ public class InventoryController extends ViewController implements ClientServerC
                     thisField.setText(Integer.toString(supplierID));
                 }
             }
-            JComboBox comboBox = view.getComboBox();
+            JComboBox comboBox = view.getComboBox("toolTypeComboBox");
             System.out.print(comboBox.getSelectedItem());
 
             if (toolType.equals("Electrical")) {
@@ -362,7 +342,7 @@ public class InventoryController extends ViewController implements ClientServerC
                 String toolIdFieldText = view.getFieldText("toolIdField");
                 deleteRecord(toolIdFieldText);
             } else if (cmd == "clear") {
-                view.clearInfoFields();
+                clearInfoFields();
             } else if (cmd == "sellTool") {
                 sellTool();
             } else if (cmd == "returnTool") {
@@ -385,12 +365,12 @@ public class InventoryController extends ViewController implements ClientServerC
         }
     }
 
-    public class ComboBoxListener implements ActionListener {
+    public class RadioButtonListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            view.clearSearch();
-            view.clearInfoFields();
+            clearSearch();
+            clearInfoFields();
             searchBy = e.getActionCommand();
         }
     }
@@ -412,7 +392,7 @@ public class InventoryController extends ViewController implements ClientServerC
 
     @Override
     protected boolean areFieldsEmpty() {
-        HashMap<String, JTextField> fields = view.getInfoFields();
+        HashMap<String, JTextField> fields = getInfoFields();
         for (String key : fields.keySet()) {
             if (fields.get(key).getText().equals("") | fields.get(key).getText().equals(" ")) {
                 return true;
@@ -428,5 +408,31 @@ public class InventoryController extends ViewController implements ClientServerC
             fields.get(key).setText("");
         }
 
+    }
+
+    @Override
+    protected boolean areInfoFieldsEmpty() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    protected void registerListeners() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    protected HashMap<String, JTextField> getInfoFields() {
+        HashMap<String, JTextField> infoFields = new HashMap<String, JTextField>();
+        HashMap<String, JTextField> fields = view.getFields();
+        for (String key : fields.keySet()) {
+            for (String info : infoKeys) {
+                if (info.equals(key)) {
+                    infoFields.put(key, fields.get(key));
+                }
+            }
+        }
+        return infoFields;
     }
 }

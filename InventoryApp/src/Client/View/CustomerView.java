@@ -13,7 +13,6 @@ import java.awt.*;
 
 public class CustomerView extends SubView {
     public Gui gui;
-    public JPanel customerPanel;
     public JPanel searchQueryPanel;
     public JPanel customerInfoPanel;
     public JPanel searchResultsPanel;
@@ -29,9 +28,9 @@ public class CustomerView extends SubView {
     public JLabel postalLabel;
     public JLabel phoneLabel;
     public JLabel custTypeLabel;
-    public JRadioButton customerIdButton;
-    public JRadioButton lastNameButton;
-    public JRadioButton customerTypeButton;
+    public JRadioButton idButton;
+    public JRadioButton nameButton;
+    public JRadioButton typeButton;
     public ButtonGroup buttonGroup;
     public JTextField searchQueryField;
     public JTextField customerIdField;
@@ -47,29 +46,21 @@ public class CustomerView extends SubView {
     public JButton deleteButton;
     public JButton clearButton;
     public JButton searchAllButton;
+    public JButton addButton;
     public JList<String> resultsList;
     public DefaultListModel<String> listModel;
-    public HashMap<String, JTextField> fields;
 
-    public CustomerView() {
-        super();
-        this.buildGui();
-    }
-
-    public CustomerView(Gui gui) {
-        super(gui);
-        this.buildGui();
-        super.gui.addCard(customerPanel, "customerPanel");
-    }
-
-    private void buildGui() {
+    public CustomerView(Gui gui, String mainPanelKey) {
+        super(gui, mainPanelKey);
+        buildCustomerInfoPanel();
         buildSearchQueryPanel();
         buildSearchResultsPanel();
-        buildCustomerInfoPanel();
-        buildCustomerPanel();
-        addFields();
-        generateTestList();
-
+        buildMainPanel();
+        registerFields();
+        registerButtons();
+        registerRadioButtons();
+        registerLists();
+        gui.addCard(mainPanel, mainPanelKey);
     }
 
     private void addFields() {
@@ -115,26 +106,26 @@ public class CustomerView extends SubView {
         c.gridwidth = 3;
         searchQueryPanel.add(searchTypeLabel, c);
 
-        customerIdButton = new JRadioButton("Customer ID");
-        customerIdButton.setSelected(true);
-        customerIdButton.setActionCommand("customerId");
-        lastNameButton = new JRadioButton("Last Name");
-        lastNameButton.setActionCommand("lastName");
-        customerTypeButton = new JRadioButton("Customer Type");
-        customerTypeButton.setActionCommand("customerType");
+        idButton = new JRadioButton("Customer ID");
+        idButton.setSelected(true);
+        idButton.setActionCommand("customerId");
+        nameButton = new JRadioButton("Last Name");
+        nameButton.setActionCommand("lastName");
+        typeButton = new JRadioButton("Customer Type");
+        typeButton.setActionCommand("customerType");
         buttonGroup = new ButtonGroup();
-        buttonGroup.add(customerIdButton);
-        buttonGroup.add(lastNameButton);
-        buttonGroup.add(customerTypeButton);
+        buttonGroup.add(idButton);
+        buttonGroup.add(nameButton);
+        buttonGroup.add(typeButton);
         c.gridx = 0;
         c.gridy = 2;
         c.anchor = GridBagConstraints.LINE_START;
         c.gridwidth = 3;
-        searchQueryPanel.add(customerIdButton, c);
+        searchQueryPanel.add(idButton, c);
         c.gridy = 3;
-        searchQueryPanel.add(lastNameButton, c);
+        searchQueryPanel.add(nameButton, c);
         c.gridy = 4;
-        searchQueryPanel.add(customerTypeButton, c);
+        searchQueryPanel.add(typeButton, c);
 
         c.insets = new Insets(10, 3, 0, 3); // top, right, bottom, left;
         searchQueryLabel = new JLabel("Enter Search Parameter below:");
@@ -226,11 +217,11 @@ public class CustomerView extends SubView {
         c.gridy = 0;
         c.anchor = GridBagConstraints.CENTER;
         c.fill = GridBagConstraints.BOTH;
-        c.gridwidth = 6;
+        c.gridwidth = 4;
         customerInfoLabel = new JLabel("Customer Information:");
         customerInfoLabel.setFont(ViewConstants.SUBTITLE_FONT);
         customerInfoPanel.add(customerInfoLabel, c);
-        int TEXT_FIELD_WIDTH = 5;
+        int TEXT_FIELD_WIDTH = 15;
 
         c.insets = new Insets(3, 3, 3, 3); // top, right, bottom, left;
         customerIdLabel = new JLabel("Customer ID: ");
@@ -238,13 +229,12 @@ public class CustomerView extends SubView {
         c.gridy = 1;
         c.anchor = GridBagConstraints.CENTER;
         c.fill = GridBagConstraints.NONE;
-        c.gridwidth = 3;
+        c.gridwidth = 2;
         customerInfoPanel.add(customerIdLabel, c);
 
         customerIdField = new JTextField(TEXT_FIELD_WIDTH);
-        customerIdField.setEditable(false);
-        // customerIdField.setPreferredSize(preferredSize);
-        c.gridx = 3;
+        customerIdField.setEditable(true);
+        c.gridx = 2;
         customerInfoPanel.add(customerIdField, c);
 
         firstNameLabel = new JLabel("First Name: ");
@@ -253,7 +243,7 @@ public class CustomerView extends SubView {
         customerInfoPanel.add(firstNameLabel, c);
 
         firstNameField = new JTextField(TEXT_FIELD_WIDTH);
-        c.gridx = 3;
+        c.gridx = 2;
         customerInfoPanel.add(firstNameField, c);
 
         lastNameLabel = new JLabel("Last Name: ");
@@ -262,7 +252,7 @@ public class CustomerView extends SubView {
         customerInfoPanel.add(lastNameLabel, c);
 
         lastNameField = new JTextField(TEXT_FIELD_WIDTH);
-        c.gridx = 3;
+        c.gridx = 2;
         customerInfoPanel.add(lastNameField, c);
 
         addressLabel = new JLabel("Customer ID: ");
@@ -271,7 +261,7 @@ public class CustomerView extends SubView {
         customerInfoPanel.add(addressLabel, c);
 
         addressField = new JTextField(TEXT_FIELD_WIDTH);
-        c.gridx = 3;
+        c.gridx = 2;
         customerInfoPanel.add(addressField, c);
 
         postalLabel = new JLabel("Postal Code: ");
@@ -280,7 +270,7 @@ public class CustomerView extends SubView {
         customerInfoPanel.add(postalLabel, c);
 
         postalField = new JTextField(TEXT_FIELD_WIDTH);
-        c.gridx = 3;
+        c.gridx = 2;
         customerInfoPanel.add(postalField, c);
 
         phoneLabel = new JLabel("Phone Number: ");
@@ -289,7 +279,7 @@ public class CustomerView extends SubView {
         customerInfoPanel.add(phoneLabel, c);
 
         phoneField = new JTextField(TEXT_FIELD_WIDTH);
-        c.gridx = 3;
+        c.gridx = 2;
         customerInfoPanel.add(phoneField, c);
 
         custTypeLabel = new JLabel("Customer Type: ");
@@ -299,117 +289,110 @@ public class CustomerView extends SubView {
 
         String[] custTypes = { "Commercial", "Residential" };
         custTypeComboBox = new JComboBox<String>(custTypes);
-        c.gridx = 3;
+        c.gridx = 2;
         customerInfoPanel.add(custTypeComboBox, c);
 
         c.insets = new Insets(3, 0, 3, 0);
-        updateButton = new JButton("Update");
-        updateButton.setActionCommand("update");
+        addButton = new JButton("Add");
+        addButton.setActionCommand("add");
         c.gridx = 0;
         c.gridy = 8;
-        c.gridwidth = 2;
+        c.gridwidth = 1;
         c.fill = GridBagConstraints.BOTH;
         c.anchor = GridBagConstraints.CENTER;
+        customerInfoPanel.add(addButton, c);
+
+        updateButton = new JButton("Update");
+        updateButton.setActionCommand("update");
+        c.gridx = 1;
         customerInfoPanel.add(updateButton, c);
 
         deleteButton = new JButton("Delete");
         deleteButton.setActionCommand("delete");
-        c.gridx = 2;
-        c.gridwidth = 2;
+        c.gridx = 3;
+        c.gridwidth = 1;
         customerInfoPanel.add(deleteButton, c);
 
         clearButton = new JButton("Clear");
         clearButton.setActionCommand("clear");
         c.gridx = 4;
-        c.gridwidth = 2;
+        c.gridwidth = 1;
         customerInfoPanel.add(clearButton, c);
     }
 
-    private void buildCustomerPanel() {
-        customerPanel = new JPanel();
-        customerPanel.setLayout(new GridBagLayout());
+    @Override
+    protected void buildMainPanel() {
+        mainPanel = new JPanel();
+        mainPanel.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
         c.insets = new Insets(3, 3, 3, 3); // top, right, bottom, left;
         c.gridx = 0;
         c.gridy = 0;
-        customerPanel.add(searchQueryPanel, c);
+        mainPanel.add(searchQueryPanel, c);
 
         c.gridy = 1;
-        customerPanel.add(searchResultsPanel, c);
+        mainPanel.add(searchResultsPanel, c);
 
         c.gridx = 1;
         c.gridy = 0;
         c.gridheight = 2;
-        customerPanel.add(customerInfoPanel);
+        mainPanel.add(customerInfoPanel);
     }
 
     @Override
-    public void display() {
-        super.gui.setPanel("customerPanel");
-    }
-
-    public void registerButtons(ActionListener listener) {
-        registerListener(listener, searchButton);
-        registerListener(listener, clearSearchButton);
-        registerListener(listener, updateButton);
-        registerListener(listener, deleteButton);
-        registerListener(listener, clearButton);
-
-    }
-
-    public void registerComboBox(ActionListener listener) {
-        registerListener(listener, customerIdButton);
-        registerListener(listener, lastNameButton);
-        registerListener(listener, customerTypeButton);
-        registerListener(listener, searchAllButton);
-
-    }
-
-    private void registerListener(ActionListener listener, AbstractButton button) {
-        button.addActionListener(listener);
-    }
-
-    public void registerResultsList(ListSelectionListener listener) {
-        resultsList.addListSelectionListener(listener);
-    }
-
-    public void registerGuiMenu(ActionListener menuListener) {
-        super.gui.registerCustomerButton(menuListener);
-    }
-
-    public void generateTestList() {
-        listModel.addElement("Test1");
-        listModel.addElement("Test2");
+    protected void registerFields() {
+        fields = new HashMap<String, JTextField>();
+        fields.put("searchQueryField", searchQueryField);
+        fields.put("customerIdField", customerIdField);
+        fields.put("firstNameField", firstNameField);
+        fields.put("lastNameField", lastNameField);
+        fields.put("addressField", addressField);
+        fields.put("postalField", postalField);
+        fields.put("phoneField", phoneField);
     }
 
     @Override
-    public void flashErrorMessage(String error) {
-        JOptionPane.showMessageDialog(customerPanel, error, "ERROR!", JOptionPane.ERROR_MESSAGE);
+    protected void registerButtons() {
+        buttons = new HashMap<String, JButton>();
+        buttons.put("searchButton", searchButton);
+        buttons.put("clearSearchButton", clearSearchButton);
+        buttons.put("updateButton", updateButton);
+        buttons.put("deleteButton", deleteButton);
+        buttons.put("clearButton", clearButton);
+        buttons.put("searchAllButton", searchAllButton);
+        buttons.put("addButton", addButton);
     }
 
     @Override
-    public void flashSuccessMessage(String success) {
-        JOptionPane.showMessageDialog(customerPanel, success, "Success!", JOptionPane.PLAIN_MESSAGE);
+    protected void registerRadioButtons() {
+        radioButtons = new HashMap<String, JRadioButton>();
+        radioButtons.put("idButton", idButton);
+        radioButtons.put("nameButton", nameButton);
+        radioButtons.put("typeButton", typeButton);
     }
 
     @Override
-    public HashMap<String, JTextField> getFields() {
-        return this.fields;
+    protected void registerButtonGroups() {
+        // TODO Auto-generated method stub
+
     }
 
     @Override
-    public DefaultListModel<String> getListModel() {
-        return listModel;
+    protected void registerLists() {
+        lists = new HashMap<String, JList>();
+        lists.put("resultsList", resultsList);
     }
 
     @Override
-    public JTextField getField(String fieldName) {
-        for (String key : fields.keySet()) {
-            if (key.equals(fieldName)) {
-                return fields.get(key);
-            }
-        }
-        return null;
+    protected void registerLabels() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    protected void registerComboBoxes() {
+        comboBoxes = new HashMap<String, JComboBox>();
+        comboBoxes.put("custTypeComboBox", custTypeComboBox);
     }
 }

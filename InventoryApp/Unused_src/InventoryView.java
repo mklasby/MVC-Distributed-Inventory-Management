@@ -11,8 +11,9 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.*;
 
-public class InventoryView_v1 extends SubView_v1 {
+public class  extends SubView {
     public Gui gui;
+    public JPanel inventoryPanel;
     public JPanel searchQueryPanel;
     public JPanel inventoryInfoPanel;
     public JPanel searchResultsPanel;
@@ -54,43 +55,27 @@ public class InventoryView_v1 extends SubView_v1 {
     public JButton addTool;
     public JList<String> resultsList;
     public DefaultListModel<String> listModel;
+    public HashMap<String, JTextField> fields;
 
-    public InventoryView_v1(Gui gui, String mainPanelKey) {
-        super(gui, mainPanelKey);
+    public () {
+        super();
+        this.buildMainPanel();
+    }
+
+    public (Gui gui) {
+        super(gui);
+        this.buildMainPanel();
+        super.gui.addCard(inventoryPanel, "inventoryPanel");
+    }
+
+    private void buildMainPanel() {
         buildSearchQueryPanel();
         buildSearchResultsPanel();
         buildInventoryInfoPanel();
         buildPosPanel();
+        buildInventoryPanel();
+        addFields();
         generateTestList();
-        buildMainPanel();
-        registerFields();
-        registerButtons();
-        registerRadioButtons();
-        registerLists();
-        gui.addCard(mainPanel, mainPanelKey);
-    }
-
-    @Override
-    protected void buildMainPanel() {
-        mainPanel = new JPanel();
-        mainPanel.setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.BOTH;
-        c.insets = new Insets(3, 20, 20, 20); // top, right, bottom, left;
-        c.gridx = 0;
-        c.gridy = 0;
-        mainPanel.add(searchQueryPanel, c);
-
-        c.gridy = 1;
-        mainPanel.add(searchResultsPanel, c);
-
-        c.gridx = 1;
-        c.gridy = 0;
-        mainPanel.add(inventoryInfoPanel, c);
-
-        c.gridx = 1;
-        c.gridy = 1;
-        mainPanel.add(posPanel, c);
     }
 
     private void buildPosPanel() {
@@ -142,6 +127,30 @@ public class InventoryView_v1 extends SubView_v1 {
         posPanel.add(generateOrder, c);
     }
 
+    @Override
+    public void display() {
+        super.gui.setPanel("inventoryPanel");
+    }
+
+    private void addFields() {
+        fields = new HashMap<String, JTextField>();
+        this.fields.put("searchQueryField", searchQueryField);
+        this.fields.put("toolIdField", toolIdField);
+        this.fields.put("toolNameField", toolNameField);
+        this.fields.put("stockField", stockField);
+        this.fields.put("priceField", priceField);
+        this.fields.put("supplierIdField", supplierIdField);
+        this.fields.put("quantity", quantityField);
+    }
+
+    public String getquantityFieldText() {
+        return quantityField.getText();
+    }
+
+    public String getFieldText(String fieldName) {
+        return fields.get(fieldName).getText();
+    }
+
     private void buildSearchQueryPanel() {
         searchQueryPanel = new JPanel();
         searchQueryPanel.setLayout(new GridBagLayout());
@@ -172,11 +181,11 @@ public class InventoryView_v1 extends SubView_v1 {
 
         idButton = new JRadioButton("Tool ID");
         idButton.setSelected(true);
-        idButton.setActionCommand("idButton");
+        idButton.setActionCommand("id");
         nameButton = new JRadioButton("Tool Name / Description");
-        nameButton.setActionCommand("nameButton");
+        nameButton.setActionCommand("name");
         typeButton = new JRadioButton("Tool Type");
-        typeButton.setActionCommand("typeButton");
+        typeButton.setActionCommand("type");
         buttonGroup = new ButtonGroup();
         buttonGroup.add(idButton);
         buttonGroup.add(nameButton);
@@ -379,41 +388,56 @@ public class InventoryView_v1 extends SubView_v1 {
         inventoryInfoPanel.add(clearButton, c);
     }
 
-    @Override
-    protected void registerFields() {
-        fields = new HashMap<String, JTextField>();
-        this.fields.put("searchQueryField", searchQueryField);
-        this.fields.put("toolIdField", toolIdField);
-        this.fields.put("toolNameField", toolNameField);
-        this.fields.put("stockField", stockField);
-        this.fields.put("priceField", priceField);
-        this.fields.put("supplierIdField", supplierIdField);
-        this.fields.put("quantity", quantityField);
-        return;
+    private void buildInventoryPanel() {
+        inventoryPanel = new JPanel();
+        inventoryPanel.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.BOTH;
+        c.insets = new Insets(3, 20, 20, 20); // top, right, bottom, left;
+        c.gridx = 0;
+        c.gridy = 0;
+        inventoryPanel.add(searchQueryPanel, c);
+
+        c.gridy = 1;
+        inventoryPanel.add(searchResultsPanel, c);
+
+        c.gridx = 1;
+        c.gridy = 0;
+        inventoryPanel.add(inventoryInfoPanel, c);
+
+        c.gridx = 1;
+        c.gridy = 1;
+        inventoryPanel.add(posPanel, c);
     }
 
-    @Override
-    protected void registerButtons() {
-        buttons = new HashMap<String, JButton>();
-        buttons.put("searchButton", searchButton);
-        buttons.put("clearSearchButton", clearSearchButton);
-        buttons.put("updateButton", updateButton);
-        buttons.put("deleteButton", deleteButton);
-        buttons.put("clearButton", clearButton);
-        buttons.put("searchAllButton", searchAllButton);
-        buttons.put("addTool", addTool);
-        buttons.put("sellTool", sellTool);
-        buttons.put("returnTool", returnTool);
-        buttons.put("generateOrder", generateOrder);
-        return;
+    public void registerButtons(ActionListener listener) {
+        registerListener(listener, searchButton);
+        registerListener(listener, clearSearchButton);
+        registerListener(listener, updateButton);
+        registerListener(listener, deleteButton);
+        registerListener(listener, clearButton);
+        registerListener(listener, searchAllButton);
+        registerListener(listener, addTool);
+
     }
 
-    @Override
-    public void registerRadioButtons() {
-        radioButtons = new HashMap<String, JRadioButton>();
-        radioButtons.put("idButton", idButton);
-        radioButtons.put("nameButton", nameButton);
-        radioButtons.put("typeButton", typeButton);
+    public void registerComboBox(ActionListener listener) {
+        registerListener(listener, idButton);
+        registerListener(listener, nameButton);
+        registerListener(listener, typeButton);
+
+    }
+
+    private void registerListener(ActionListener listener, AbstractButton button) {
+        button.addActionListener(listener);
+    }
+
+    public void registerResultsList(ListSelectionListener listener) {
+        resultsList.addListSelectionListener(listener);
+    }
+
+    public void registerGuiMenu(ActionListener menuListener) {
+        super.gui.registerInventoryButton(menuListener);
     }
 
     public void clearInfoFields() {
@@ -447,26 +471,36 @@ public class InventoryView_v1 extends SubView_v1 {
     }
 
     @Override
-    protected void registerButtonGroups() {
-        // TODO Auto-generated method stub
-
+    public void flashErrorMessage(String error) {
+        JOptionPane.showMessageDialog(inventoryPanel, error, "ERROR!", JOptionPane.ERROR_MESSAGE);
     }
 
     @Override
-    protected void registerLists() {
-        lists = new HashMap<String, JList>();
-        lists.put("resultsList", resultsList);
+    public void flashSuccessMessage(String success) {
+        JOptionPane.showMessageDialog(inventoryPanel, success, "Success!", JOptionPane.PLAIN_MESSAGE);
     }
 
     @Override
-    protected void registerLabels() {
-        // TODO Auto-generated method stub
-
+    public HashMap<String, JTextField> getFields() {
+        return fields;
     }
 
     @Override
-    protected void registerComboBoxes() {
-        // TODO Auto-generated method stub
+    public DefaultListModel<String> getListModel() {
+        return listModel;
+    }
 
+    @Override
+    public JTextField getField(String fieldName) {
+        for (String key : fields.keySet()) {
+            if (key.equals(fieldName)) {
+                return fields.get(key);
+            }
+        }
+        return null;
+    }
+
+    public JComboBox getComboBox() {
+        return this.toolTypeComboBox;
     }
 }

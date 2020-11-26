@@ -7,7 +7,7 @@
 ./src/Client/View/ViewConstants.java
 ./src/Client/View/CustomerView.java
 ./src/Client/View/Gui.java
-./src/Client/View/InventoryView.java
+./src/Client/View/.java
 ./src/Client/ViewController/InventoryControl.java
 ./src/Client/ViewController/ViewController.java
 ./src/Client/ViewController/CustomerController.java
