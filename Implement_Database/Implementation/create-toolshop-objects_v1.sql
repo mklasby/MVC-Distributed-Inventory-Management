@@ -195,6 +195,14 @@ INSERT INTO CLIENT VALUES
     (2003,'Jones','Dennis','Residential','519-727-7920','801 Fallon Drive, Emeryville, ON','N0R 1C0'),
     (2004,'Eldridge','Ray','Residential','613-938-8344','4609 Pitt St, Cornwall, ON','K6J 3R2');
     
+    
+INSERT INTO CLIENT VALUES 
+	(2000,'Ken','Graves','Residential','403-866-9319','4555 Craven Place, Medicine Hat, AB', 'T1A 0N1'),
+    (2001,'Stewart','Steven','Commercial','514-803-7810','1759 René-Lévesque Blvd, Montreal, QC','H3B 4W8'),
+    (2002,'Wells','Darrel','Commercial','780-681-5901','156 Venture Place, Flatbush, AB','T0G 0Z0'),
+    (2003,'Jones','Dennis','Residential','519-727-7920','801 Fallon Drive, Emeryville, ON','N0R 1C0'),
+    (2004,'Eldridge','Ray','Residential','613-938-8344','4609 Pitt St, Cornwall, ON','K6J 3R2');
+    
 
 -- 	Basic Retrieval Query (Retrieve all non-electrical tools)
 --     SELECT * FROM TOOL WHERE Type='Non-Electrical';
