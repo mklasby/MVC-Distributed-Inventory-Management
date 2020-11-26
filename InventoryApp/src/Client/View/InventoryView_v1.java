@@ -66,6 +66,7 @@ public class InventoryView_v1 extends SubView_v1 {
         registerFields();
         registerButtons();
         registerRadioButtons();
+        registerLists();
         gui.addCard(mainPanel, mainPanelKey);
     }
 
@@ -453,8 +454,8 @@ public class InventoryView_v1 extends SubView_v1 {
 
     @Override
     protected void registerLists() {
-        // TODO Auto-generated method stub
-
+        lists = new HashMap<String, JList>();
+        lists.put("resultsList", resultsList);
     }
 
     @Override

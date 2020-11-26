@@ -160,7 +160,7 @@ public abstract class SubView_v1 {
 
     public void registerRadioButtonListener(ActionListener listener) {
         for (String key : radioButtons.keySet()) {
-            registerButtonActionListener(listener, buttons.get(key));
+            registerButtonActionListener(listener, radioButtons.get(key));
         }
     }
 
