@@ -35,7 +35,7 @@ public class DomesticSupplier extends Supplier {
         return this;
     }
 
-    public String toDescriptionString() {
+    public String prettyPrint() {
         // TODO: Add type info?
         return super.toDescriptionString();
     }

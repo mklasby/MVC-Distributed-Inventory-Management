@@ -13,7 +13,7 @@ public interface ClientServerConstants {
     static String GET = "GET"; // get record(s)
     static String PUT = "PUT"; // modify record
     static String DELETE = "DELETE"; // delete record
-
+    static String ORDER = "ORDER"; // Generate order
     // RESPONSE options
     static String ERROR = "ERROR"; // Error in
     static String OK = "OK";

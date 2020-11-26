@@ -16,7 +16,6 @@ import org.json.JSONObject;
 public class Supplier extends JSONObject {
     private int supplierID;
     private String name;
-    private String type;
     private String address;
     private String cName;
     private String phone;

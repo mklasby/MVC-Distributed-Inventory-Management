@@ -194,14 +194,21 @@ INSERT INTO CLIENT VALUES
     (2002,'Wells','Darrel','Commercial','780-681-5901','156 Venture Place, Flatbush, AB','T0G 0Z0'),
     (2003,'Jones','Dennis','Residential','519-727-7920','801 Fallon Drive, Emeryville, ON','N0R 1C0'),
     (2004,'Eldridge','Ray','Residential','613-938-8344','4609 Pitt St, Cornwall, ON','K6J 3R2');
+
+INSERT INTO ORDERS VALUES
+	(00000, '2020-11-25'),
+    (00001, '2020-11-26');
     
+INSERT INTO ORDERLINE VALUES
+	(00000, 1000, 8015, 5),
+    (00000, 1001, 8004, 5),
+    (00001, 1002, 8001, 6),
+    (00001, 1000, 8015, 10);
     
-INSERT INTO CLIENT VALUES 
-	(2000,'Ken','Graves','Residential','403-866-9319','4555 Craven Place, Medicine Hat, AB', 'T1A 0N1'),
-    (2001,'Stewart','Steven','Commercial','514-803-7810','1759 René-Lévesque Blvd, Montreal, QC','H3B 4W8'),
-    (2002,'Wells','Darrel','Commercial','780-681-5901','156 Venture Place, Flatbush, AB','T0G 0Z0'),
-    (2003,'Jones','Dennis','Residential','519-727-7920','801 Fallon Drive, Emeryville, ON','N0R 1C0'),
-    (2004,'Eldridge','Ray','Residential','613-938-8344','4609 Pitt St, Cornwall, ON','K6J 3R2');
+INSERT INTO PURCHASES VALUES
+	(2000, 1000, '2020-11-25'),
+    (2001, 1001, '2020-11-25');
+
     
 
 -- 	Basic Retrieval Query (Retrieve all non-electrical tools)
@@ -227,3 +234,5 @@ INSERT INTO CLIENT VALUES
 -- SELECT * FROM TOOL WHERE SupplierId = 8001;
 
 -- UPDATE SUPPLIER SET SupplierId = 9999 WHERE SUPPLIERId = 8002;
+
+-- SELECT * FROM TOOL JOIN ORDERLINE ON TOOL.ToolID = ORDERLINE.ToolID;

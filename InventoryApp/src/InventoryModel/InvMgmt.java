@@ -62,7 +62,7 @@ public class InvMgmt {
      * @param orderId  (orderId) today's orderId
      * @return (JSONObjet)
      */
-    public JSONObject restock(JSONObject tool, int quantity, int orderId) {
+    public JSONObject restock(JSONObject tool) {
         try {
             int toolId = tool.getInt("ToolID");
             int supplierId = tool.getInt("SupplierID");
@@ -72,6 +72,18 @@ public class InvMgmt {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * Increment orderLine quantity by increment
+     * 
+     * @param existingLine (OrderLine) to increment
+     * @param increment    (int) amount to increment by
+     * @return (OrderLine)
+     */
+    public OrderLine incrementOrderLine(JSONObject tool, ResultSet orderLine) {
+        existingLine.incrementOrderLine(increment);
+        return existingLine;
     }
 
     // /**
