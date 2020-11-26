@@ -1,7 +1,6 @@
 package InventoryModel;
 
 import java.sql.ResultSet;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 

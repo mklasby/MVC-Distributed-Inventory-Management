@@ -1,7 +1,6 @@
 package InventoryModel;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 /**
  * Class to control function of back end. Conducts back end modules as directed by app. Returns primitive data types to app to reduce coupling of lower level classes. 
@@ -17,9 +16,9 @@ public class InvMgmt {
     private Inventory inventory;
     private Procurement procurement;
 
-    InvMgmt() {
-        Inventory inventory = new Inventory();
-        Procurement procurement = new Procurement();
+    public InvMgmt() {
+        inventory = new Inventory();
+        procurement = new Procurement();
     }
 
     public Inventory getInventory() {
@@ -90,4 +89,12 @@ public class InvMgmt {
     // this.inventory.setPendingOrders(new ArrayList<OrderLine>());
     // return result;
     // }
+    public JSONArray encodeToolSearchQuery(ResultSet rs) {
+        return inventory.encodeSearchQuery(rs);
+    }
+
+    public Object encodeCustomerSearchQuery(ResultSet rs) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
