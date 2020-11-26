@@ -46,48 +46,14 @@ public class InventoryController extends ModelController implements ClientServer
 					response = makeSale(data);
 					break;
 				case DELETE:
+					response = deleteTool(data);
+					break;
 			}
 			return response;
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 		return null;
-	}
-
-	private Message makeSale(Message data) {
-		Message response = null;
-		try {
-			try {
-				int id = data.getJSONObject(DATA).getInt("ToolID");
-				int qtyInStock = data.getJSONObject(DATA).getInt("ToolID");
-				inventoryDB.reduceToolQuantity(id, qtyInStock);
-				String successMessage = "Tool added successfully.";
-				response = new Message(RESPONSE, OK, successMessage);
-			} catch (SQLException sqlE) {
-				String errorMessage = "Invalid ToolID, use " + inventoryDB.generateNewID() + ".";
-				response = new Message(RESPONSE, ERROR, errorMessage);
-			} 
-		} catch (JSONException jsonE) {
-			jsonE.printStackTrace();
-		}
-		return response;
-	}
-
-	private Message addTool(Message data) {
-		Message response = null;
-		try {
-			try {
-				inventoryDB.addTool(data.getJSONObject(DATA));
-				String successMessage = "Tool added successfully.";
-				response = new Message(RESPONSE, OK, successMessage);
-			} catch (SQLException sqlE) {
-				String errorMessage = "Invalid ToolID, use " + inventoryDB.generateNewID() + ".";
-				response = new Message(RESPONSE, ERROR, errorMessage);
-			} 
-		} catch (JSONException jsonE) {
-			jsonE.printStackTrace();
-		}
-		return response;
 	}
 
 	private Message searchTool(Message data) {
@@ -120,6 +86,55 @@ public class InventoryController extends ModelController implements ClientServer
 		}
 		return null;
 	}
+	
+	private Message makeSale(Message data) {
+		// TODO: Generate orderline
+		Message response = null;
+		try {
+			try {
+				int id = data.getJSONObject(DATA).getInt("ToolID");
+				int qtyInStock = data.getJSONObject(DATA).getInt("ToolID");
+				inventoryDB.reduceToolQuantity(id, qtyInStock);
+				String successMessage = "Quantity updated successfully.";
+				response = new Message(RESPONSE, OK, successMessage);
+			} catch (SQLException sqlE) {
+				String errorMessage = "Exceeded quantity in stock. Please try with smaller quantity.";
+				response = new Message(RESPONSE, ERROR, errorMessage);
+			} 
+		} catch (JSONException jsonE) {
+			jsonE.printStackTrace();
+		}
+		return response;
+	}
 
+	private Message addTool(Message data) {
+		Message response = null;
+		try {
+			try {
+				inventoryDB.addTool(data.getJSONObject(DATA));
+				String successMessage = "Tool added successfully.";
+				response = new Message(RESPONSE, OK, successMessage);
+			} catch (SQLException sqlE) {
+				String errorMessage = "Invalid ToolID, use " + inventoryDB.generateNewID() + ".";
+				response = new Message(RESPONSE, ERROR, errorMessage);
+			} 
+		} catch (JSONException jsonE) {
+			jsonE.printStackTrace();
+		}
+		return response;
+	}
+
+
+	private Message deleteTool(Message data) {
+		Message response = null;
+		try {
+			inventoryDB.deleteToolbyID(data.getJSONObject(DATA).getInt("ToolId"));
+			String successMessage = "Tool deleted successfully.";
+			response = new Message(RESPONSE, OK, successMessage);
+		} catch (JSONException jsonE) {
+			jsonE.printStackTrace();
+		}
+		return response;
+	}
 	
 }
