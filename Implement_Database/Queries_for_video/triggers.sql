@@ -1,2 +1,5 @@
 --     Delete Operation with Necessary Triggers (delete an electrical tool)
-    DELETE FROM TOOL WHERE Name = "Widgets";
+	
+    SELECT * FROM ORDERLINE;
+    DELETE FROM ORDERS WHERE OrderID = 10000;
+	SELECT * FROM ORDERLINE;

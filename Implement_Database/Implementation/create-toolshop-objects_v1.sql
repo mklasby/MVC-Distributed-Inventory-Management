@@ -227,15 +227,8 @@ INSERT INTO PURCHASES VALUES
 -- 	Update Operation with Necessary Triggers (Update contact for supplier)
 -- 	UPDATE SUPPLIER SET CName='Billy' WHERE SupplierID=8003;
 
---     Delete Operation with Necessary Triggers (delete an electrical tool)
---     DELETE FROM TOOL WHERE Name = "Widgets";
-
--- DELETE FROM SUPPLIER WHERE SupplierId = 8001;
-
--- SELECT * FROM TOOL WHERE SupplierId = 8001;
-
--- UPDATE SUPPLIER SET SupplierId = 9999 WHERE SUPPLIERId = 8002;
--- DELETE FROM TOOL WHERE ToolID = 1000;
+-- 	Retrieval Query using Joined Tables (Retrieve all info for all tools in OrderLine)
 -- SELECT * FROM TOOL AS t JOIN ORDERLINE AS o ON t.ToolID = o.ToolID;
 
--- SELECT * FROM ORDERS
+--     Delete Operation with Necessary Triggers (delete an Order and update OrderLine)
+ --    DELETE FROM ORDERS WHERE OrderID = 10000;
