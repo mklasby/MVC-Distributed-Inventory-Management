@@ -38,12 +38,6 @@ public class InvMgmt {
         this.procurement = p;
     }
 
-    // TODO: Move Inv controller logic to this class?
-    // TODO: MOVE whole class to inv controller?
-    // public JSONObject searchInventory(ResultSet query){
-
-    // }
-
     /**
      * Get JSON object representation of Order
      * 
@@ -63,16 +57,15 @@ public class InvMgmt {
      * @param orderId  (orderId) today's orderId
      * @return (JSONObjet)
      */
-    public JSONObject restock(JSONObject tool) {
+    public JSONObject restock(JSONObject tool, JSONObject order) {
         try {
+            int orderId = order.getInt("OrderID");
             int toolId = tool.getInt("ToolID");
             int supplierId = tool.getInt("SupplierID");
             int toolQuantity = tool.getInt("Quantity");
             int quantity = TARGET_STOCK_QUANTITY - toolQuantity;
-            OrderLine orderLine = new OrderLine(toolId, supplierId, quantity);
+            OrderLine orderLine = new OrderLine(toolId, supplierId, quantity, orderId);
             return orderLine.encode();
-
-            TARGET_STOCK_QUANTITY
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -80,32 +73,23 @@ public class InvMgmt {
     }
 
     /**
-     * Increment orderLine quantity by increment
+     * Increment existing orderLine
      * 
-     * @param existingLine (OrderLine) to increment
-     * @param increment    (int) amount to increment by
-     * @return (OrderLine)
+     * @param existingLine (ResultSet) exiting orderLine from db
+     * @param tool         (JSONObject) Tool to be incremented
+     * @return (JSONObject) orderLine to put in db
      */
-    public OrderLine incrementOrderLine(JSONObject tool, ResultSet orderLine) {
-        existingLine.incrementOrderLine(increment);
-        return existingLine;
+    public JSONObject incrementOrderLine(JSONObject tool, ResultSet rs) {
+        try {
+            int existingQuantity = tool.getInt("Quantity");
+            int newQuantity = TARGET_STOCK_QUANTITY - existingQuantity;
+            return procurement.incrementOrderLine(newQuantity, rs);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    // /**
-    // * Generates order from inventory.pendingOrders and clears pendingOrders once
-    // * order has been generated.
-    // *
-    // * @return: String - success/fail message
-    // */
-    // public String generateOrder() {
-    // String result =
-    // this.procurement.generateOrder(this.inventory.getPendingOrders());
-    // // clear pending orders in Inventory now that we have collected and issued
-    // into
-    // // an order
-    // this.inventory.setPendingOrders(new ArrayList<OrderLine>());
-    // return result;
-    // }
     public JSONArray encodeToolSearchQuery(ResultSet rs) {
         return inventory.encodeSearchQuery(rs);
     }
@@ -114,4 +98,12 @@ public class InvMgmt {
         // TODO Auto-generated method stub
         return null;
     }
+
+    public JSONObject getNewOrderLine(JSONObject tool){
+        inventory.makeToolFromJSON(tool);
+        try{
+            int toolId = tool.get
+            
+        }
+}
 }

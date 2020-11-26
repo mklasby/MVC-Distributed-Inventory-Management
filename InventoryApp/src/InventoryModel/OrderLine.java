@@ -1,6 +1,8 @@
 package InventoryModel;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,6 +27,26 @@ public class OrderLine extends JSONObject {
         this.toolId = toolId;
         this.supplierId = supplierId;
         this.quantity = quantity;
+    }
+
+    public OrderLine(int toolId, int supplierId, int quantity, int orderId) {
+        super();
+        this.toolId = toolId;
+        this.supplierId = supplierId;
+        this.orderId = orderId;
+        this.quantity = quantity;
+    }
+
+    public OrderLine(ResultSet rs) {
+        super();
+        try {
+            toolId = rs.getInt("ToolID");
+            supplierId = rs.getInt("ToolID");
+            quantity = rs.getInt("ToolID");
+            orderId = rs.getInt("ToolID");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void putFields() {
@@ -68,5 +90,9 @@ public class OrderLine extends JSONObject {
     public JSONObject encode() {
         putFields();
         return this;
+    }
+
+    public void setQuantity(int newQuantity) {
+        this.quantity = newQuantity;
     }
 }

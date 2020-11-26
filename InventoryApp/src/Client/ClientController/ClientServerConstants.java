@@ -34,5 +34,4 @@ public interface ClientServerConstants {
     static String DATA = "DATA"; // key type
 
     static String QUIT = "QUIT"; // key type
-
 }
