@@ -34,8 +34,4 @@ public class Inventory {
 		return null;
 	}
 
-	public void makeToolFromJSON(JSONObject tool) {
-		return new Tool(tool);
-	}
-
 }

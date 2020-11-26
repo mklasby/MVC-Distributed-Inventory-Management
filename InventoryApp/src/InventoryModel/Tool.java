@@ -36,22 +36,6 @@ public class Tool extends JSONObject {
 		}
 	}
 
-	/**
-	 * must be overridden in children
-	 */
-	public Tool(JSONObject tool) {
-		super();
-		try{
-			id = tool.get("ToolID");
-			name = tool.get("Name");
-			qty = tool.get("Quantity");
-			price = tool.get("Price");
-			supplierId = tool.get("SupplierID");
-		} catch (JSONException e){
-			e.printStackTrace();
-		}
-	}
-
 	public JSONObject encode() {
 		return this;
 	}
