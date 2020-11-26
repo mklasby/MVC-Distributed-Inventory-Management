@@ -7,16 +7,16 @@ import org.json.JSONException;
 import Client.ClientController.Message;
 import Client.ClientController.ClientServerConstants;
 import DBController.InventoryDBController;
-import InventoryModel.Inventory;
+import InventoryModel.InvMgmt;
 
 public class InventoryController extends ModelController implements ClientServerConstants {
 
 	private InventoryDBController inventoryDB;
-	private Inventory model;
+	private InvMgmt model;
 	
 	public InventoryController(InventoryDBController inventoryDB) {
 		this.inventoryDB = inventoryDB;
-		model = new Inventory();
+		model = new InvMgmt();
 	}
 
 	@Override
@@ -36,14 +36,14 @@ public class InventoryController extends ModelController implements ClientServer
 		try {
 			Message response = null;
 			switch(data.getString(VERB)) {
-				case POST:
-					response = addTool(data);
-					break;
 				case GET:
 					response = searchTool(data);
 					break;
 				case PUT:
 					response = makeSale(data);
+					break;
+				case POST:
+					response = addTool(data);
 					break;
 				case DELETE:
 					response = deleteTool(data);
@@ -78,7 +78,7 @@ public class InventoryController extends ModelController implements ClientServer
 				String errorMessage = "Tool(s) not found!";
 				response = new Message(RESPONSE, ERROR, errorMessage);
 			} else {
-				response = new Message(RESPONSE, OK, model.encodeSearchQuery(rs));
+				response = new Message(RESPONSE, OK, model.encodeToolSearchQuery(rs));
 			}
 			return response;
 		} catch (JSONException e) {

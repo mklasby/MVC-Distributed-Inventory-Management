@@ -10,7 +10,7 @@ public class CustomerDBController extends DBController {
 	 * Add client encoded as JSONObject to the database.
 	 * @param newCustomer new client info
 	 */
-	public void addCustomer(JSONObject newCustomer) {
+	public void addCustomer(JSONObject newCustomer) throws SQLException {
 		String sql = "INSERT INTO CLIENT VALUES(?,?,?,?,?,?,?);";
 		try {
 			stmt = conn.prepareStatement(sql);
@@ -26,6 +26,26 @@ public class CustomerDBController extends DBController {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Return id for a new client.
+	 * @return new tool id
+	 */
+	public Integer generateNewID() {
+		// generate unique tool id for new tool
+		String queryMaxID = "SELECT MAX(ClientID) FROM CLIENT;";
+		try {
+			stmt = conn.prepareStatement(queryMaxID);
+			rs = stmt.executeQuery();
+			
+			if (rs.next()) return rs.getInt("MAX(ClientID)") + 1;
+			else return 2000;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	/**
