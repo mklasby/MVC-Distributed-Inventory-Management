@@ -3,6 +3,7 @@ package ModelController;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import Client.ClientController.Message;
 import Client.ClientController.ClientServerConstants;
@@ -97,6 +98,19 @@ public class InventoryController extends ModelController implements ClientServer
 				inventoryDB.reduceToolQuantity(id, qtyInStock);
 				String successMessage = "Quantity updated successfully.";
 				response = new Message(RESPONSE, OK, successMessage);
+				if (qtyInStock < 40) {
+					ResultSet hasOrderline = inventoryDB.hasOrderLine(id);
+					JSONObject orderline;
+					if (hasOrderline == null) {
+						orderline = model.restock(data.getJSONObject(DATA));
+						inventoryDB.generateOrderLine(orderline);
+					}
+					else {
+						orderline = model.incrementOrderLine(data.getJSONObject(DATA), hasOrderline);
+						inventoryDB.updateOrderLine(orderline);
+					}
+
+				}
 			} catch (SQLException sqlE) {
 				String errorMessage = "Exceeded quantity in stock. Please try with smaller quantity.";
 				response = new Message(RESPONSE, ERROR, errorMessage);
