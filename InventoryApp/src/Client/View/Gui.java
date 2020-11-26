@@ -15,6 +15,16 @@ public class Gui extends JFrame {
     private JButton customerButton;
     private JLabel header;
 
+    public static void main(String[] args) {
+        Gui gui = new Gui();
+        CustomerView custView = new CustomerView(gui);
+        ClientController clientCtrl = new ClientController("localhost", 4444);
+        CustomerController custCtrl = new CustomerController(custView, clientCtrl);
+        InventoryView_v1 invView = new InventoryView_v1(gui, "inventoryPanel");
+        InventoryController_v1 invCtrl = new InventoryController_v1(invView, clientCtrl);
+        gui.display();
+    }
+
     public Gui() {
         picture = new JPanel();
         frame = new JPanel();
@@ -73,16 +83,6 @@ public class Gui extends JFrame {
         this.picture.add(card, cardName);
     }
 
-    public static void main(String[] args) {
-        Gui gui = new Gui();
-        CustomerView custView = new CustomerView(gui);
-        ClientController clientCtrl = new ClientController("localhost", 4444);
-        CustomerController custCtrl = new CustomerController(custView, clientCtrl);
-        InventoryView invView = new InventoryView(gui);
-        InventoryController invCtrl = new InventoryController(invView, clientCtrl);
-        gui.display();
-    }
-
     public JPanel getPicture() {
         return this.picture;
     }
@@ -102,5 +102,13 @@ public class Gui extends JFrame {
     public void setPanel(String panelName) {
         CardLayout pictureLayout = (CardLayout) picture.getLayout();
         pictureLayout.show(picture, panelName);
+    }
+
+    public JButton getButton(String key) {
+        if (key.equals("inventoryPanelButton")) {
+            return inventoryButton;
+        } else {
+            return customerButton;
+        }
     }
 }

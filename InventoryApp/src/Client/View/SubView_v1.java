@@ -2,64 +2,215 @@ package Client.View;
 
 import java.util.HashMap;
 import javax.swing.*;
+import javax.swing.event.*;
+import java.awt.event.*;
+import java.awt.*;
 
+/**
+ * Base class for JPanel window sub views
+ * 
+ * @author Mike Lasby && Tong Xu
+ * @since Nov. 25, 2020
+ * @version 1.1
+ */
 public abstract class SubView_v1 {
     public Gui gui;
     public JPanel mainPanel;
-    public JPanel searchQueryPanel;
-    public JPanel infoPanel;
-    public JPanel resultsPanel;
-    public JLabel searchLabel;
-    public JLabel searchTypeLabel;
-    public JLabel searchQueryLabel;
-    public JLabel searchResultsLabel;
-    public JLabel infoLabel;
-    public JLabel idLabel;
-    public JLabel nameLabel;
-    public JRadioButton idButton;
-    public JRadioButton nameButton;
-    public JRadioButton typeButton;
-    public ButtonGroup buttonGroup;
-    public JTextField searchQueryField;
-    public JTextField idField;
-    public JTextField nameField;
-    public JTextField stockField;
-    public JTextField priceField;
-    public JTextField supplierIdField;
-    public JTextField toolTypeField;
-    public JTextField saleQuantityField;
-    public JComboBox<String> toolTypeComboBox;
-    public JButton searchButton;
-    public JButton clearSearchButton;
-    public JButton searchAllButton;
-    public JButton updateButton;
-    public JButton deleteButton;
-    public JButton clearButton;
-    public JButton sellTool;
-    public JButton returnTool;
-    public JButton generateOrder;
-    public JButton addTool;
-    public JList<String> resultsList;
-    public DefaultListModel<String> listModel;
+    public String mainPanelKey;
     public HashMap<String, JTextField> fields;
+    public HashMap<String, JButton> buttons;
+    public HashMap<String, JList> lists;
+    public HashMap<String, JRadioButton> radioButtons;
+    public HashMap<String, ButtonGroup> buttonGroups;
+    public HashMap<String, JLabel> labels;
+    public HashMap<String, JComboBox> comboBoxes;
+    public HashMap<String, DefaultListModel> listModels;
 
-    SubView_v1(Gui gui) {
+    SubView_v1(Gui gui, String mainPanelKey) {
         this.gui = gui;
+        this.mainPanelKey = mainPanelKey;
     }
 
     SubView_v1() {
 
     }
 
-    public abstract void display();
+    public Gui getGui() {
+        return this.gui;
+    }
 
-    public abstract void flashErrorMessage(String string);
+    public void setGui(Gui gui) {
+        this.gui = gui;
+    }
 
-    public abstract void flashSuccessMessage(String success);
+    public JPanel getMainPanel() {
+        return this.mainPanel;
+    }
 
-    public abstract HashMap<String, JTextField> getFields();
+    public void setMainPanel(JPanel mainPanel) {
+        this.mainPanel = mainPanel;
+    }
 
-    public abstract DefaultListModel<String> getListModel();
+    public String getMainPanelKey() {
+        return this.mainPanelKey;
+    }
 
-    public abstract JTextField getField(String fieldName);
+    public void setMainPanelKey(String mainPanelKey) {
+        this.mainPanelKey = mainPanelKey;
+    }
+
+    public HashMap<String, JTextField> getFields() {
+        return this.fields;
+    }
+
+    public void setFields(HashMap<String, JTextField> fields) {
+        this.fields = fields;
+    }
+
+    public HashMap<String, JButton> getButtons() {
+        return this.buttons;
+    }
+
+    public void setButtons(HashMap<String, JButton> buttons) {
+        this.buttons = buttons;
+    }
+
+    public HashMap<String, JList> getLists() {
+        return this.lists;
+    }
+
+    public void setLists(HashMap<String, JList> lists) {
+        this.lists = lists;
+    }
+
+    public HashMap<String, JRadioButton> getRadioButtons() {
+        return this.radioButtons;
+    }
+
+    public void setRadioButtons(HashMap<String, JRadioButton> radioButtons) {
+        this.radioButtons = radioButtons;
+    }
+
+    public HashMap<String, ButtonGroup> getButtonGroups() {
+        return this.buttonGroups;
+    }
+
+    public void setButtonGroups(HashMap<String, ButtonGroup> buttonGroups) {
+        this.buttonGroups = buttonGroups;
+    }
+
+    public HashMap<String, JLabel> getLabels() {
+        return this.labels;
+    }
+
+    public void setLabels(HashMap<String, JLabel> labels) {
+        this.labels = labels;
+    }
+
+    public HashMap<String, JComboBox> getComboBoxes() {
+        return this.comboBoxes;
+    }
+
+    public void setComboBoxes(HashMap<String, JComboBox> comboBoxes) {
+        this.comboBoxes = comboBoxes;
+    }
+
+    public void display() {
+        gui.setPanel(mainPanelKey);
+    }
+
+    public void flashErrorMessage(String error) {
+        JOptionPane.showMessageDialog(mainPanel, error, "ERROR!", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void flashSuccessMessage(String success) {
+        JOptionPane.showMessageDialog(mainPanel, success, "Success!", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    public HashMap<String, DefaultListModel> getListModels() {
+        return this.listModels;
+    }
+
+    public void setListModels(HashMap<String, DefaultListModel> listModels) {
+        this.listModels = listModels;
+    }
+
+    public String getFieldText(String fieldName) {
+        return fields.get(fieldName).getText();
+    }
+
+    public JTextField getField(String fieldName) {
+        for (String key : fields.keySet()) {
+            if (key.equals(fieldName)) {
+                return fields.get(key);
+            }
+        }
+        return null;
+    }
+
+    public JComboBox getComboBox(String key) {
+        return comboBoxes.get(key);
+    }
+
+    public void registerButtonListener(ActionListener listener) {
+        for (String key : buttons.keySet()) {
+            registerButtonActionListener(listener, buttons.get(key));
+        }
+    }
+
+    public void registerRadioButtonListener(ActionListener listener) {
+        for (String key : radioButtons.keySet()) {
+            registerButtonActionListener(listener, buttons.get(key));
+        }
+    }
+
+    public void registerComboBoxListeners(ActionListener listener) {
+        for (String key : comboBoxes.keySet()) {
+            comboBoxes.get(key).addActionListener(listener);
+        }
+    }
+
+    public void registerButtonActionListener(ActionListener listener, AbstractButton button) {
+        button.addActionListener(listener);
+    }
+
+    public void registerListListener(ListSelectionListener listener) {
+        for (String key : lists.keySet()) {
+            lists.get(key).addListSelectionListener(listener);
+        }
+    }
+
+    public void registerGuiMenuButton(ActionListener menuListener, String key) {
+        JButton target = gui.getButton(key);
+        target.addActionListener(menuListener);
+    }
+
+    public void clearFields() {
+        for (String key : fields.keySet()) {
+            fields.get(key).setText("");
+        }
+    }
+
+    public SubView_v1(HashMap<String, JTextField> fields) {
+        this.fields = fields;
+    }
+
+    // Use this method to build main pasnel
+    protected abstract void buildMainPanel();
+
+    // Use these methods to register each sub views components with SubView
+    // container HashMaps, don't forget to init container
+    protected abstract void registerFields();
+
+    protected abstract void registerButtons();
+
+    protected abstract void registerRadioButtons();
+
+    protected abstract void registerButtonGroups();
+
+    protected abstract void registerLists();
+
+    protected abstract void registerLabels();
+
+    protected abstract void registerComboBoxes();
 }
