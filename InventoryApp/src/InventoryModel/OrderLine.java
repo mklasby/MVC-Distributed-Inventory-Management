@@ -22,13 +22,6 @@ public class OrderLine extends JSONObject {
     private int quantity;
     private int orderId;
 
-    public OrderLine(int toolId, int supplierId, int quantity) {
-        super();
-        this.toolId = toolId;
-        this.supplierId = supplierId;
-        this.quantity = quantity;
-    }
-
     public OrderLine(int toolId, int supplierId, int quantity, int orderId) {
         super();
         this.toolId = toolId;

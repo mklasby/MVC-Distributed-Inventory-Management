@@ -1,6 +1,7 @@
 package InventoryModel;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * Class to control function of back end. Conducts back end modules as directed by app. Returns primitive data types to app to reduce coupling of lower level classes. 
@@ -76,7 +77,8 @@ public class InvMgmt {
      * Increment existing orderLine
      * 
      * @param existingLine (ResultSet) exiting orderLine from db
-     * @param tool         (JSONObject) Tool to be incremented
+     * @param tool         (JSONObject) Tool to be incremented. required to
+     *                     calculate new quantity
      * @return (JSONObject) orderLine to put in db
      */
     public JSONObject incrementOrderLine(JSONObject tool, ResultSet rs) {
@@ -99,11 +101,24 @@ public class InvMgmt {
         return null;
     }
 
-    public JSONObject getNewOrderLine(JSONObject tool){
-        inventory.makeToolFromJSON(tool);
-        try{
-            int toolId = tool.get
-            
+    /**
+     * Get new orderline in form of JSON Object
+     * 
+     * @param tool         (JSONObject) tool to create orderLine for
+     * @param forThisOrder (ResultSet) order from db where IsOrdered==false
+     * @return (JSONObject)
+     */
+    public JSONObject getNewOrderLine(JSONObject tool, ResultSet forThisOrder) {
+        try {
+            int toolId = tool.getInt("ToolID");
+            int supplierId = tool.getInt("SupplierID");
+            int quantity = tool.getInt("Quantity");
+            int orderId = forThisOrder.getInt("OrderID");
+            int newQuantity = TARGET_STOCK_QUANTITY - quantity;
+            return new OrderLine(toolId, supplierId, newQuantity, orderId).encode();
+        } catch (JSONException | SQLException e) {
+            e.printStackTrace();
         }
-}
+        return null;
+    }
 }

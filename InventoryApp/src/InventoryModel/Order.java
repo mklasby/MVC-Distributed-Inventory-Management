@@ -18,6 +18,7 @@ public class Order extends JSONObject {
     private ArrayList<OrderLine> orderLines;
     private String date;
     private int orderID;
+    private boolean isOrdered = false;
 
     public Order(ArrayList<OrderLine> orderLines, String date, int orderID) {
         super();
@@ -40,7 +41,13 @@ public class Order extends JSONObject {
         }
     }
 
-    public Order encode() {
+    /**
+     * Prepare order for ordering and recording details
+     * 
+     * @return (JSONObject) representation of order
+     */
+    public JSONObject encode() {
+        this.isOrdered = true;
         this.putFields();
         return this;
     }
