@@ -19,22 +19,14 @@ public class OrderLine extends JSONObject {
     private int toolId;
     private int supplierId;
     private int quantity;
+    private int orderId;
 
-    OrderLine(int toolId, int supplierId, int quantity) {
+    public OrderLine(int toolId, int supplierId, int quantity, int orderId) {
         super();
         this.toolId = toolId;
         this.supplierId = supplierId;
         this.quantity = quantity;
-        putFields();
-    }
-
-    OrderLine(ResultSet result) {
-        // TODO
-        super();
-        // this.toolId = toolId;
-        // this.supplierId = supplierId;
-        // this.quantity = quantity;
-        // putFields();
+        this.orderId = orderId;
     }
 
     private void putFields() {
@@ -42,16 +34,24 @@ public class OrderLine extends JSONObject {
             put("ToolID", toolId);
             put("SupplierID", supplierId);
             put("Quantity", quantity);
+            put("OrderID", orderId);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * Add one to the this.amount
+     * Add one to the this.quantity
      */
     public void incrementOrderLine() {
         this.quantity++;
+    }
+
+    /**
+     * Adds quant to the this.quantity
+     */
+    public void incrementOrderLine(int quant) {
+        this.quantity = quantity + quant;
     }
 
     public String toDescriptionString() {
@@ -60,6 +60,7 @@ public class OrderLine extends JSONObject {
     }
 
     public JSONObject encode() {
+        putFields();
         return this;
     }
 }

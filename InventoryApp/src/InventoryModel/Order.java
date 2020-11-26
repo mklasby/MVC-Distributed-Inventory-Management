@@ -3,44 +3,46 @@ package InventoryModel;
 /**
  * Data container class for Orders. 
  * 
- * @author: Mike Lasby
- * @since: Oct. 11, 2020
- * @version: 1.0 
+ * @author Mike Lasby & Tong Xu
+ * @since  Nov 29, 2020
+ * @version  2.0 
  */
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Order extends JSONObject {
-    private ArrayList<OrderLine> items;
+    private ArrayList<OrderLine> orderLines;
     private String date;
     private int orderID;
 
-    // TODO: is ordered?
-    // public Order(ResultSet orderLines, ResultSet order) {
-    // super();
-    // this.items = orderLines;
-    // this.setDate(date);
-    // this.setOrderID(orderID);
-    // }
-
     public Order(ArrayList<OrderLine> orderLines, String date, int orderID) {
         super();
-        this.items = orderLines;
+        this.orderLines = orderLines;
         this.setDate(date);
         this.setOrderID(orderID);
     }
 
     public void putFields() {
+        JSONArray JSONOrderLines = new JSONArray();
+        for (OrderLine line : orderLines) {
+            JSONOrderLines.put(line.encode());
+        }
         try {
-            this.put("OrderLines", items);
+            this.put("OrderLines", JSONOrderLines);
             this.put("Date", date);
             this.put("OrderID", orderID);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public Order encode() {
+        this.putFields();
+        return this;
     }
 
     public void setOrderID(int orderID) {
@@ -59,12 +61,12 @@ public class Order extends JSONObject {
         return this.date;
     }
 
-    public ArrayList<OrderLine> getItems() {
-        return this.items;
+    public ArrayList<OrderLine> getOrderLines() {
+        return this.orderLines;
     }
 
-    public void setItems(ArrayList<OrderLine> items) {
-        this.items = items;
+    public void setOrderLine(ArrayList<OrderLine> orderLines) {
+        this.orderLines = orderLines;
     }
 
 }

@@ -21,17 +21,12 @@ public class Supplier extends JSONObject {
     private String cName;
     private String phone;
 
-    public Supplier(ResultSet supplier) {
-        // TODO:
-        super();
-    }
-
-    public Supplier(int supplierID, String name, String type, String address, String cName, String phone) {
-        this.setSupplierID(supplierID);
-        this.setName(name);
-        this.setAddress(address);
-        this.setCName(cName);
-        this.putFields();
+    public Supplier(int supplierID, String name, String address, String cName, String phone) {
+        setSupplierID(supplierID);
+        setName(name);
+        setAddress(address);
+        setCName(cName);
+        setPhone(phone);
     }
 
     public String toDescriptionString() {
@@ -43,7 +38,6 @@ public class Supplier extends JSONObject {
         try {
             this.put("SupplierID", supplierID);
             this.put("Name", name);
-            this.put("Type", type);
             this.put("Address", address);
             this.put("CName", cName);
             this.put("Phone", phone);
@@ -66,14 +60,6 @@ public class Supplier extends JSONObject {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getType() {
-        return this.type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getAddress() {
@@ -101,6 +87,7 @@ public class Supplier extends JSONObject {
     }
 
     public JSONObject encode() {
+        this.putFields();
         return this;
     }
 
