@@ -160,43 +160,6 @@ public class InventoryDBController extends DBController {
 	}
 	
 	/**
-	 * Add given order-line to the database. If no order exist, will also 
-	 * create an order.
-	 * @param orderline JSONObject containing the tool id, supplier id, and quantity ordered
-	 */
-	public void generateOrderLine(JSONObject orderline) {
-		Date date = Date.valueOf(LocalDate.now());
-		String sql = "SELECT * FROM ORDERS WHERE Date=?;";
-		try {
-			stmt = conn.prepareStatement(sql);
-			stmt.setDate(1, date);
-			rs = stmt.executeQuery(); 
-			
-			int orderID;
-			if (rs.next()) {			
-				orderID = rs.getInt("OrderID");
-			// create order if it does not exist
-			} else {
-				sql = "INSERT INTO ORDERS VALUES(?,?);";
-				orderID = 10000 + new Random().nextInt(90000);
-				stmt = conn.prepareStatement(sql);
-				stmt.setInt(1,orderID);
-				stmt.setDate(2, date);
-				stmt.executeUpdate();
-			}
-			sql = "INSERT INTO ORDERLINE VALUES(?,?,?,?);";
-			stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, orderID);
-			stmt.setInt(2, orderline.getInt("ToolID"));
-			stmt.setInt(3, orderline.getInt("SupplierID"));
-			stmt.setInt(4, orderline.getInt("Quantity"));
-			stmt.executeUpdate();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	/**
 	 * Reduce tool quantity by quantitySold for tool with given id 
 	 * @param id tool id
 	 * @param qtyInStock new quantity in stock
@@ -209,6 +172,103 @@ public class InventoryDBController extends DBController {
 		stmt.setInt(2, id);
 		stmt.executeUpdate();
 	}
+
+	/**
+	 * Check if an order existing for current date.
+	 * @return order id for current date, or null if there is no order
+	 */
+	private Integer checkOrder() {
+		// check if order exist
+		Date date = Date.valueOf(LocalDate.now());
+		String sql = "SELECT * FROM ORDERS WHERE Date=?;";
+		try {
+			stmt = conn.prepareStatement(sql);
+			stmt.setDate(1, date);
+			rs = stmt.executeQuery(); 
+				
+			if (rs.next()) return rs.getInt("OrderID");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
+	 * Check if there is an existing orderline for tool with given id
+	 * @param id tool id
+	 * @return ResultSet with data of orderline for tool with given id or null if not found
+	 */
+	public ResultSet hasOrderLine(int id) {
+		if (checkOrder() != null) {
+			try {
+				// check if orderline exist
+				int orderID = rs.getInt("OrderID");
+				String sql = "SELECT * FROM ORDERLINE WHERE OrderID=? AND ToolID=?;";
+				stmt = conn.prepareStatement(sql);
+				stmt.setInt(1, orderID);
+				stmt.setInt(2, id);
+				rs = stmt.executeQuery(); 
+				if (rs.next()) return rs;	
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Add given order-line to the database. If no order exist, will also 
+	 * create an order.
+	 * @param orderline JSONObject containing the tool id, supplier id, and quantity ordered
+	 */
+	public void generateOrderLine(JSONObject orderline) {
+		try {
+			String sql = "INSERT INTO ORDERLINE VALUES(?,?,?,?);";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, checkOrder());
+			stmt.setInt(2, orderline.getInt("ToolID"));
+			stmt.setInt(3, orderline.getInt("SupplierID"));
+			stmt.setInt(4, orderline.getInt("Quantity"));
+			stmt.executeUpdate();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Update quantity for an existing orderline.
+	 * @param orderline
+	 */
+	public void updateOrderLine(JSONObject orderline) {
+		String sql = "UPDATE ORDERLINE SET Quantity=? WHERE OrderID=? AND ToolID=?;";
+		try {
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, orderline.getInt("Quantity"));
+			stmt.setInt(2, orderline.getInt("OrderID"));
+			stmt.setInt(3, orderline.getInt("ToolID"));
+			stmt.executeUpdate();
+		} catch (SQLException | JSONException e) {
+			e.printStackTrace();
+		}		
+	}
+	
+	/**
+	 * Return order and order line info for current date.
+	 * @return ResultSet with data for order and orderlines for current date
+	 */
+	public ResultSet returnOrder() {
+		String sql = "SELECT * FROM ORDERS AS O JOIN ORDERLINE AS OL ON O.OrderID = OL.OrderID WHERE O.OrderID=?;";
+		try {
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, checkOrder());
+			rs = stmt.executeQuery();
+			if(rs.next()) return rs;
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	
 //	public static void main(String[] args) {
 //		try {

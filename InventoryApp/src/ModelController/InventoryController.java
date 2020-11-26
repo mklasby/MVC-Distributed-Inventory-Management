@@ -49,6 +49,9 @@ public class InventoryController extends ModelController implements ClientServer
 				case DELETE:
 					response = deleteTool(data);
 					break;
+				case ORDER:
+					response = generateOrder();
+					break;
 			}
 			return response;
 		} catch (JSONException e) {
@@ -89,26 +92,20 @@ public class InventoryController extends ModelController implements ClientServer
 	}
 	
 	private Message makeSale(Message data) {
-		// TODO: Generate orderline
 		Message response = null;
 		try {
 			try {
-				int id = data.getJSONObject(DATA).getInt("ToolID");
-				int qtyInStock = data.getJSONObject(DATA).getInt("ToolID");
+				// make sale
+				JSONObject tool = data.getJSONObject(DATA);
+				int id = tool.getInt("ToolID");
+				int qtyInStock = tool.getInt("ToolID");
 				inventoryDB.reduceToolQuantity(id, qtyInStock);
 				String successMessage = "Quantity updated successfully.";
 				response = new Message(RESPONSE, OK, successMessage);
+				
+				// check quantity and generate orderline and order if low in stock
 				if (qtyInStock < 40) {
-					ResultSet hasOrderline = inventoryDB.hasOrderLine(id);
-					JSONObject orderline;
-					if (hasOrderline == null) {
-						orderline = model.restock(data.getJSONObject(DATA));
-						inventoryDB.generateOrderLine(orderline);
-					}
-					else {
-						orderline = model.incrementOrderLine(data.getJSONObject(DATA), hasOrderline);
-						inventoryDB.updateOrderLine(orderline);
-					}
+					createOrderLine(tool);
 
 				}
 			} catch (SQLException sqlE) {
@@ -121,6 +118,28 @@ public class InventoryController extends ModelController implements ClientServer
 		return response;
 	}
 
+	private void createOrderLine(JSONObject data) {
+		try {
+			ResultSet hasOrderline = inventoryDB.hasOrderLine(data.getInt("ToolID"));
+			JSONObject orderline;
+			if (hasOrderline == null) {
+				orderline = model.restock(data, hasOrderline);
+				inventoryDB.generateOrderLine(orderline);
+			} else {
+				orderline = model.incrementOrderLine(data, hasOrderline);
+				inventoryDB.updateOrderLine(orderline);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private Message generateOrder() {
+		ResultSet order = inventoryDB.returnOrder();
+		// TODO
+		return null;
+	}
+	
 	private Message addTool(Message data) {
 		Message response = null;
 		try {

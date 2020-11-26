@@ -221,14 +221,11 @@ INSERT INTO PURCHASES VALUES
 -- 	Nested retrieval query (Retrieve all tools where supplier is domestic
 --     SELECT * FROM TOOL WHERE SupplierID IN (SELECT SupplierID FROM SUPPLIER WHERE Type='Domestic');
 --     
--- 	Retrieval Query using Joined Tables (Retrieve all info for an electrical tool)
---     SELECT * FROM TOOL LEFT JOIN ELECTRICAL ON TOOL.ToolID = ELECTRICAL.ToolID WHERE TOOL.ToolID=1001;
+-- 	Retrieval Query using Joined Tables (Retrieve all info for all tools in Orderline)
+--     SELECT * FROM TOOL AS t JOIN ORDERLINE AS o ON t.ToolID = o.ToolID;
 --     
 -- 	Update Operation with Necessary Triggers (Update contact for supplier)
 -- 	UPDATE SUPPLIER SET CName='Billy' WHERE SupplierID=8003;
 
--- 	Retrieval Query using Joined Tables (Retrieve all info for all tools in OrderLine)
--- SELECT * FROM TOOL AS t JOIN ORDERLINE AS o ON t.ToolID = o.ToolID;
-
---     Delete Operation with Necessary Triggers (delete an Order and update OrderLine)
- --    DELETE FROM ORDERS WHERE OrderID = 10000;
+--     Delete Operation with Necessary Triggers (delete an Order which cascade to OrderLine)
+-- 	DELETE FROM ORDERS WHERE OrderID = 10000;
