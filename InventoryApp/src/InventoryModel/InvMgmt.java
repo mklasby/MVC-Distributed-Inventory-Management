@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class InvMgmt {
+    public final static int TARGET_STOCK_QUANTITY = 50;
     private Inventory inventory;
     private Procurement procurement;
 
@@ -66,8 +67,12 @@ public class InvMgmt {
         try {
             int toolId = tool.getInt("ToolID");
             int supplierId = tool.getInt("SupplierID");
-            OrderLine orderLine = new OrderLine(toolId, supplierId, quantity, orderId);
+            int toolQuantity = tool.getInt("Quantity");
+            int quantity = TARGET_STOCK_QUANTITY - toolQuantity;
+            OrderLine orderLine = new OrderLine(toolId, supplierId, quantity);
             return orderLine.encode();
+
+            TARGET_STOCK_QUANTITY
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -20,12 +20,11 @@ public class OrderLine extends JSONObject {
     private int quantity;
     private int orderId;
 
-    public OrderLine(int toolId, int supplierId, int quantity, int orderId) {
+    public OrderLine(int toolId, int supplierId, int quantity) {
         super();
         this.toolId = toolId;
         this.supplierId = supplierId;
         this.quantity = quantity;
-        this.orderId = orderId;
     }
 
     private void putFields() {
@@ -37,6 +36,14 @@ public class OrderLine extends JSONObject {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setOrderId(int id) {
+        this.orderId = id;
+    }
+
+    public int getOrderId() {
+        return orderId;
     }
 
     /**
