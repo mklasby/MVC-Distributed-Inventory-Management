@@ -122,11 +122,11 @@ public class InventoryDBController extends DBController {
 	 * 
 	 * @param tool tool encoded as JSONObject
 	 */
-	public void addTool(JSONObject tool) throws SQLException {
+	public void addTool(JSONObject tool) {
 		String sql = "INSERT INTO TOOL VALUES(?,?,?,?,?,?);";
 		try {
 			stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, tool.getInt("ToolID"));
+			stmt.setInt(1, generateNewID());
 			stmt.setString(2, tool.getString("Name"));
 			stmt.setString(3, tool.getString("Type"));
 			stmt.setInt(4, tool.getInt("Quantity"));
@@ -141,7 +141,7 @@ public class InventoryDBController extends DBController {
 				stmt.setString(2, tool.getString("PowerType"));
 				stmt.executeUpdate();
 			}
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
