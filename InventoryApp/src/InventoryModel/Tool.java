@@ -39,4 +39,18 @@ public class Tool extends JSONObject {
 	public JSONObject encode() {
 		return this;
 	}
+
+	// // TODO: Move to tool
+	// public String getToolString(JSONObject jsonTool) throws JSONException {
+	// int toolId = jsonTool.getInt("ToolID");
+	// String name = jsonTool.getString("Name");
+	// int stock = jsonTool.getInt("Quantity");
+	// Double price = jsonTool.getDouble("Price");
+	// int supplierID = jsonTool.getInt("SupplierID");
+	// String toolType = jsonTool.getString("Type");
+	// return String.format("ToolID: %d, Name: %14s, Stock: %4d, Price: %6.2f,
+	// SupplierID: %5d, Tool Type: %10s\n",
+	// toolId, name, stock, price, supplierID, toolType);
+
+	// }
 }

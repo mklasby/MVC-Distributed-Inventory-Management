@@ -8,7 +8,7 @@ public interface DBCredentials {
 
 	// Database credentials
 	static final String USERNAME = "root";
-	static final String PASSWORD = "Hikehigh00";
+	static final String PASSWORD = "";
 	// TODO: fill in password
 
 }
