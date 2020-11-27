@@ -195,7 +195,7 @@ public class CustomerView extends SubView {
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setViewportView(resultsList);
         scrollPane.setPreferredSize(
-                new Dimension(ViewConstants.X_DIMENSION / 2 + 100, 250));
+                new Dimension(ViewConstants.X_DIMENSION / 2 + 100, 200));
         searchResultsPanel.add(scrollPane, c);
     }
 
