@@ -173,11 +173,11 @@ public class InventoryView extends SubView {
 
         idButton = new JRadioButton("Tool ID");
         idButton.setSelected(true);
-        idButton.setActionCommand("idButton");
+        idButton.setActionCommand("id");
         nameButton = new JRadioButton("Tool Name / Description");
-        nameButton.setActionCommand("nameButton");
+        nameButton.setActionCommand("name");
         typeButton = new JRadioButton("Tool Type");
-        typeButton.setActionCommand("typeButton");
+        typeButton.setActionCommand("type");
         buttonGroup = new ButtonGroup();
         buttonGroup.add(idButton);
         buttonGroup.add(nameButton);

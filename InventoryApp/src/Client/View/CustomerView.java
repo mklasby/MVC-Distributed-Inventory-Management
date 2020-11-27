@@ -248,7 +248,7 @@ public class CustomerView extends SubView {
         c.gridx = 2;
         customerInfoPanel.add(lastNameField, c);
 
-        addressLabel = new JLabel("Customer ID: ");
+        addressLabel = new JLabel("Address: ");
         c.gridx = 0;
         c.gridy = 4;
         customerInfoPanel.add(addressLabel, c);
