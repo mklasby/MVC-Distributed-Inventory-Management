@@ -71,7 +71,7 @@ public class CommercialCustomer extends Customer {
     @Override
     public String toDescriptionString() {
         String superString = super.toDescriptionString();
-        return superString + ",  " + String.format("%15s", type);
+        return superString + ", Type: " + String.format("%-15s", type);
     }
 
 }

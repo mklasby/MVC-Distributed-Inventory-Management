@@ -70,7 +70,7 @@ public class Customer extends JSONObject {
 
 	public String toDescriptionString() {
 		return String.format(
-				"ClientID: %4d, Last Name: %10s, First Name: %10s, Phone: %20s, Address: %50s, Postal Code: %10s\n",
+				"ClientID: %-4d, Last Name: %-8s, First Name: %-6s, Phone: %-12s, Address: %-37s, Postal Code: %-6s\n",
 				clientId, lName, fName, phone, address, postalCode);
 	}
 

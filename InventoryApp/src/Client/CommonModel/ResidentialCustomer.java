@@ -23,8 +23,8 @@ public class ResidentialCustomer extends Customer {
             lName = rs.getString("LName");
             address = rs.getString("Address");
             phone = rs.getString("Phone");
-            type = "Residential";
             postalCode = rs.getString("PostalCode");
+            type = "Residential";
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -71,7 +71,7 @@ public class ResidentialCustomer extends Customer {
     @Override
     public String toDescriptionString() {
         String superString = super.toDescriptionString();
-        return superString + ",  " + String.format("%15s", type);
+        return superString + ", Type: " + String.format("%-15s", type);
     }
 
 }
