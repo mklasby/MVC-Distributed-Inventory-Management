@@ -83,6 +83,16 @@ public class InventoryController extends ViewController {
                 return;
             }
         }
+
+        if (searchBy.equals("id")) {
+            try {
+                int nameField = Integer.parseInt(search);
+            } catch (NumberFormatException e) {
+                view.flashErrorMessage("Please enter id as an Integer.");
+                return;
+            }
+        }
+
         try {
             query = new Message(REQUEST, GET, INVENTORY, search);
             query.addQueryType(getQueryType());
