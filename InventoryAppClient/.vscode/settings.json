@@ -1,0 +1,6 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "/home/mklasby/Documents/meng/607/Project/ENSF607_608_Project/InventoryAppClient/**/*.jar"
+    ]
+}

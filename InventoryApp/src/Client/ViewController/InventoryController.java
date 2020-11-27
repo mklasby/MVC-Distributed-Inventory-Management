@@ -31,6 +31,7 @@ public class InventoryController extends ViewController {
         view.registerButtonListener(new ButtonListener());
         view.registerRadioButtonListener(new RadioButtonListener());
         view.registerListListener(new ResultsListListener());
+        view.registerWindowClosingListener(new MyWindowStateListener());
         infoKeys = new String[] { "toolIdField", "toolNameField", "stockField", "priceField", "supplierIdField",
                 "quantityField" };
     }

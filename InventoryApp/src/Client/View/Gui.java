@@ -1,6 +1,6 @@
 package Client.View;
 
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.awt.Dimension;
 import java.awt.*;
 import javax.swing.*;
@@ -21,7 +21,6 @@ public class Gui extends JFrame {
         inventoryButton = new JButton("Inventory Management System");
         customerButton = new JButton("Client Management System");
         header = new JLabel("LaXu Automated Tool Shop Management Solution");
-
         // picture is content, frame is menu buttons and header
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -83,6 +82,10 @@ public class Gui extends JFrame {
 
     public void registerCustomerButton(ActionListener listener) {
         registerListener(listener, customerButton);
+    }
+
+    public void registerExitButton(WindowAdapter listener) {
+        this.addWindowStateListener(listener);
     }
 
     private void registerListener(ActionListener listener, JButton comp) {

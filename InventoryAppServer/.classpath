@@ -6,14 +6,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/tongxu/Documents/InventoryAppClient/lib/java-json.jar"/>
-	<classpathentry kind="lib" path="/Users/tongxu/Documents/InventoryAppClient/lib/mysql-connector-java-8.0.22.jar"/>
-	<classpathentry kind="lib" path="/Users/tongxu/UCalgary_Software_Master/ENSF607/ENSF607_608_Project/InventoryAppClient/lib/java-json.jar"/>
-	<classpathentry kind="lib" path="/Users/tongxu/UCalgary_Software_Master/ENSF607/ENSF607_608_Project/InventoryAppClient/lib/mysql-connector-java-8.0.22.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/InventoryAppClient">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="./lib/java-json.jar"/>
+	<classpathentry kind="lib" path="./lib/mysql-connector-java-8.0.22.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

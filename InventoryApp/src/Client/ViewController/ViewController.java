@@ -1,6 +1,5 @@
 package Client.ViewController;
 
-import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -68,6 +67,22 @@ public abstract class ViewController implements ClientServerConstants {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public class MyWindowStateListener extends WindowAdapter {
+        @Override
+        public void windowClosing(WindowEvent arg0) {
+            Message exit;
+            try {
+                exit = new Message();
+                exit.quitMessage();
+                clientCtrl.sendMessage(exit);
+                System.exit(0);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                System.exit(0);
+            }
+        }
     }
 
     protected abstract HashMap<String, JTextField> getInfoFields();
