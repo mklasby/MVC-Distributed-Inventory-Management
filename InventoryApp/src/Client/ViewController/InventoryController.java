@@ -56,6 +56,9 @@ public class InventoryController extends ViewController {
             query = new Message(REQUEST, GET, INVENTORY, ALL);
             query.addQueryType(ALL);
             Message response = clientCtrl.sendMessage(query);
+            if (isErrorMessage(response)) {
+                return;
+            }
             populateSearchResults(response);
         } catch (JSONException e) {
             view.flashErrorMessage("...got lost in the game...");
@@ -87,7 +90,6 @@ public class InventoryController extends ViewController {
             view.flashErrorMessage("ERROR: We were unable to process your request, please try again.");
             e.printStackTrace();
         }
-        System.out.println("MESSAGE RECEIVED: " + query.toString());
 
         Message response = null;
         try {
@@ -166,35 +168,17 @@ public class InventoryController extends ViewController {
         try {
             Message message = new Message(REQUEST, DELETE, INVENTORY, delete);
             Message response = clientCtrl.sendMessage(message);
-            isErrorMessage(response); // will return if true
+            if (isErrorMessage(response)) {
+                return;
+            }
             if (response.get(VERB).equals(OK)) {
                 view.flashSuccessMessage((String) response.get(DATA));
-                return;
-            } else {
-                view.flashErrorMessage((String) response.get(DATA));
                 return;
             }
         } catch (JSONException e) {
             view.flashErrorMessage("...I played with your heart, ...");
             e.printStackTrace();
         }
-
-        int toolId = Integer.parseInt(fieldText);
-        Message query = null;
-        try {
-            query = new Message(REQUEST, DELETE, INVENTORY, toolId);
-        } catch (JSONException e) {
-            view.flashErrorMessage("ERROR: We were unable to process your request, please try again.");
-            e.printStackTrace();
-        }
-        System.out.println(query.toString());
-        String success = String.format("Tool Id %d successfully deleted!", toolId);
-        view.flashSuccessMessage(success);
-
-        // TODO: Send out to clientCtrl
-        // clientCtrl.sendMessage(query);
-        // JSONObject response = clientCtrl.getMessage();
-        // TODO: flash message and reset info fields
     }
 
     public void updateRecord() {
@@ -205,7 +189,13 @@ public class InventoryController extends ViewController {
         try {
             JSONObject newItem = getToolJSON();
             Message put = new Message(REQUEST, PUT, INVENTORY, newItem);
-            clientCtrl.sendMessage(put);
+            Message response = clientCtrl.sendMessage(put);
+            if (isErrorMessage(response)) {
+                return;
+            } else {
+                view.flashSuccessMessage(response.getString(DATA));
+                searchAll();
+            }
         } catch (JSONException e) {
             view.flashErrorMessage("Oops, I did it again...");
             e.printStackTrace();
@@ -227,7 +217,7 @@ public class InventoryController extends ViewController {
         int existingStock = -1;
         int quantity = 0;
         try {
-            stock = sale.getInt("Stock");
+            stock = sale.getInt("Quantity");
             existingStock = stock;
         } catch (JSONException e1) {
             // logically impossible to throw, thanks java
@@ -245,19 +235,16 @@ public class InventoryController extends ViewController {
             return;
         }
         try {
-            sale.put("stock", stock - quantity);
+            sale.put("Quantity", stock - quantity);
             Message message = new Message(REQUEST, PUT, INVENTORY, sale);
             Message response = clientCtrl.sendMessage(message);
-            if (response.get(VERB).equals(OK)) {
-                view.flashSuccessMessage((String) response.get(DATA));
-                populateResultsList();
-
-                return;
-            } else {
+            if (isErrorMessage(response)) {
                 // reset sale object to original state
-                sale.put("stock", existingStock);
+                sale.put("Quantity", existingStock);
                 view.flashErrorMessage((String) response.get(DATA));
                 return;
+            } else {
+                view.flashSuccessMessage("Tool sold to one lucky customer!");
             }
         } catch (JSONException e) {
             view.flashErrorMessage("...I played with your heart, ...");
@@ -269,10 +256,12 @@ public class InventoryController extends ViewController {
         Message message;
         Message response = null;
         try {
-            message = new Message(REQUEST, "ORDER", INVENTORY);
+            message = new Message(REQUEST, "ORDER", INVENTORY, "");
             response = clientCtrl.sendMessage(message);
-            isErrorMessage(response);
-            view.flashSuccessMessage(((String) response.get(DATA)));
+            if (isErrorMessage(response)) {
+                return;
+            }
+            view.flashSuccessMessage((response.get(DATA).toString()));
         } catch (JSONException e) {
             e.printStackTrace();
         }

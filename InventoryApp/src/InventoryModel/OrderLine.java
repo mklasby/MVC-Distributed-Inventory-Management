@@ -34,9 +34,9 @@ public class OrderLine extends JSONObject {
         super();
         try {
             toolId = rs.getInt("ToolID");
-            supplierId = rs.getInt("ToolID");
-            quantity = rs.getInt("ToolID");
-            orderId = rs.getInt("ToolID");
+            supplierId = rs.getInt("SupplierID");
+            quantity = rs.getInt("Quantity");
+            orderId = rs.getInt("OrderID");
         } catch (SQLException e) {
             e.printStackTrace();
         }

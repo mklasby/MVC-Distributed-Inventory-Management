@@ -33,6 +33,7 @@ public class Order extends JSONObject {
             JSONOrderLines.put(line.encode());
         }
         try {
+            this.put("isOrdered", isOrdered);
             this.put("OrderLines", JSONOrderLines);
             this.put("Date", date);
             this.put("OrderID", orderID);

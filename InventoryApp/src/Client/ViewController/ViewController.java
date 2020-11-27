@@ -58,15 +58,16 @@ public abstract class ViewController implements ClientServerConstants {
         }
     }
 
-    protected void isErrorMessage(Message response) {
+    protected boolean isErrorMessage(Message response) {
         try {
             if (response.get(VERB).equals(ERROR)) {
                 view.flashErrorMessage((String) response.get(DATA));
-                return;
+                return true;
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     protected abstract HashMap<String, JTextField> getInfoFields();

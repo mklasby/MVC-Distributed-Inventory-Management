@@ -50,9 +50,12 @@ public class CustomerController extends ViewController {
         listModel.clear();
         Message query;
         try {
-            query = new Message(REQUEST, GET, INVENTORY, ALL);
+            query = new Message(REQUEST, GET, CUSTOMER, ALL);
             query.addQueryType(ALL);
             Message response = clientCtrl.sendMessage(query);
+            if (isErrorMessage(response)) {
+                return;
+            }
             populateSearchResults(response);
         } catch (JSONException e) {
             view.flashErrorMessage("...got lost in the game...");
@@ -78,7 +81,7 @@ public class CustomerController extends ViewController {
             }
         }
         try {
-            query = new Message(REQUEST, GET, INVENTORY, search);
+            query = new Message(REQUEST, GET, CUSTOMER, search);
             query.addQueryType(getQueryType());
         } catch (JSONException e) {
             view.flashErrorMessage("ERROR: We were unable to process your request, please try again.");
@@ -114,20 +117,13 @@ public class CustomerController extends ViewController {
         HashMap<String, JList> lists = view.getLists();
         DefaultListModel listModel = (DefaultListModel) lists.get("resultsList").getModel();
         for (int key : searchResults.keySet()) {
-            listModel.add(key, getToolString(searchResults.get(key)));
+            listModel.add(key, getCustomerString((JSONObject) searchResults.get(key)));
         }
     }
 
-    public String getToolString(JSONObject jsonTool) throws JSONException {
-        int toolId = jsonTool.getInt("ToolID");
-        String name = jsonTool.getString("Name");
-        int stock = jsonTool.getInt("Quantity");
-        Double price = jsonTool.getDouble("Price");
-        int supplierID = jsonTool.getInt("SupplierID");
-        String toolType = jsonTool.getString("Type");
-        return String.format("ToolID: %d, Name: %14s, Stock: %4d, Price: %6.2f, SupplierID: %5d, Tool Type: %10s\n",
-                toolId, name, stock, price, supplierID, toolType);
-
+    public String getCustomerString(JSONObject customerJSON) throws JSONException {
+        Customer customer = new Customer(customerJSON);
+        return customer.prettyPrint();
     }
 
     public JSONObject getCustomerJSON() throws JSONException {
@@ -163,37 +159,19 @@ public class CustomerController extends ViewController {
         }
         JSONObject delete = searchResults.get(selectedIdx);
         try {
-            Message message = new Message(REQUEST, DELETE, INVENTORY, delete);
+            Message message = new Message(REQUEST, DELETE, CUSTOMER, delete);
             Message response = clientCtrl.sendMessage(message);
-            isErrorMessage(response); // will return if true
+            if (isErrorMessage(response)) {
+                return;
+            }
             if (response.get(VERB).equals(OK)) {
                 view.flashSuccessMessage((String) response.get(DATA));
-                return;
-            } else {
-                view.flashErrorMessage((String) response.get(DATA));
                 return;
             }
         } catch (JSONException e) {
             view.flashErrorMessage("...I played with your heart, ...");
             e.printStackTrace();
         }
-
-        int toolId = Integer.parseInt(fieldText);
-        Message query = null;
-        try {
-            query = new Message(REQUEST, DELETE, CUSTOMER, toolId);
-        } catch (JSONException e) {
-            view.flashErrorMessage("ERROR: We were unable to process your request, please try again.");
-            e.printStackTrace();
-        }
-        System.out.println(query.toString());
-        String success = String.format("Tool Id %d successfully deleted!", toolId);
-        view.flashSuccessMessage(success);
-
-        // TODO: Send out to clientCtrl
-        // clientCtrl.sendMessage(query);
-        // JSONObject response = clientCtrl.getMessage();
-        // TODO: flash message and reset info fields
     }
 
     public void updateRecord() {
@@ -211,72 +189,6 @@ public class CustomerController extends ViewController {
         }
     }
 
-    private void returnTool() {
-        view.flashErrorMessage("All Sales Final! No Soup For You!");
-    }
-
-    private void sellTool() {
-        if (searchResults == null) {
-            view.flashErrorMessage("Please select a tool from the menu on the left before buying!");
-            return;
-        }
-        JSONObject sale = searchResults.get(selectedIdx);
-        int stock = -1;
-        // used in the event of db failure
-        int existingStock = -1;
-        int quantity = 0;
-        try {
-            stock = sale.getInt("Stock");
-            existingStock = stock;
-        } catch (JSONException e1) {
-            // logically impossible to throw, thanks java
-            e1.printStackTrace();
-            return;
-        }
-        try {
-            quantity = Integer.parseInt(view.getFieldText("quantity"));
-        } catch (Exception e) {
-            view.flashErrorMessage("ERROR: Please enter a number of items to buy!");
-            return;
-        }
-        if (quantity <= 0) {
-            view.flashErrorMessage("ERROR: Buying nothing is not an option in this store!");
-            return;
-        }
-        try {
-            sale.put("stock", stock - quantity);
-            Message message = new Message(REQUEST, PUT, CUSTOMER, sale);
-            Message response = clientCtrl.sendMessage(message);
-            if (response.get(VERB).equals(OK)) {
-                view.flashSuccessMessage((String) response.get(DATA));
-                populateResultsList();
-
-                return;
-            } else {
-                // reset sale object to original state
-                sale.put("stock", existingStock);
-                view.flashErrorMessage((String) response.get(DATA));
-                return;
-            }
-        } catch (JSONException e) {
-            view.flashErrorMessage("...I played with your heart, ...");
-            e.printStackTrace();
-        }
-    }
-
-    private void generateOrder() {
-        Message message;
-        Message response = null;
-        try {
-            message = new Message(REQUEST, "ORDER", CUSTOMER);
-            response = clientCtrl.sendMessage(message);
-            isErrorMessage(response);
-            view.flashSuccessMessage(((String) response.get(DATA)));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void addEntry() {
         if (areFieldsEmpty()) {
             view.flashErrorMessage("ERROR! Please input data into all info fields");
@@ -285,38 +197,33 @@ public class CustomerController extends ViewController {
     }
 
     private void populateFields(int idxSelected) {
-        JSONObject jsonTool = searchResults.get(idxSelected);
-        System.out.println("POPULATING FIELDS " + jsonTool.toString());
+        JSONObject jsonObject = searchResults.get(idxSelected);
+        System.out.println("POPULATING FIELDS " + jsonObject.toString());
         try {
-            int toolId = jsonTool.getInt("ToolID");
-            String name = jsonTool.getString("Name");
-            int stock = jsonTool.getInt("Quantity");
-            Double price = jsonTool.getDouble("Price");
-            int supplierID = jsonTool.getInt("SupplierID");
-            String toolType = jsonTool.getString("Type");
-
+            Customer customer = new Customer(jsonObject);
             HashMap<String, JTextField> fields = view.getFields();
             for (String key : fields.keySet()) {
                 JTextField thisField = fields.get(key);
-                if (key.equals("toolIdField")) {
-                    thisField.setText(Integer.toString(toolId));
-                } else if ((key.equals("toolNameField"))) {
-                    thisField.setText(name);
-                } else if ((key.equals("stockField"))) {
-                    thisField.setText(Integer.toString(stock));
-                } else if ((key.equals("priceField"))) {
-                    thisField.setText(Double.toString(price));
-                } else if ((key.equals("supplierIdField"))) {
-                    thisField.setText(Integer.toString(supplierID));
+                if (key.equals("customerIdField")) {
+                    thisField.setText(Integer.toString(customer.getId()));
+                } else if ((key.equals("firstNameField"))) {
+                    thisField.setText(customer.getFName());
+                } else if ((key.equals("lastNameField"))) {
+                    thisField.setText(customer.getFName());
+                } else if ((key.equals("addressField"))) {
+                    thisField.setText(customer.getAddress());
+                } else if ((key.equals("phoneField"))) {
+                    thisField.setText(customer.getPhone());
+                } else if (key.equals("postalCode")) {
+                    thisField.setText(customer.getPostal());
                 }
             }
-            JComboBox comboBox = view.getComboBox("toolTypeComboBox");
-            System.out.print(comboBox.getSelectedItem());
-
-            if (toolType.equals("Electrical")) {
-                comboBox.setSelectedIndex(0);
-            } else {
+            String type = jsonObject.getString("Type");
+            JComboBox comboBox = view.getComboBox("customerTypeComboBox");
+            if (type.equals("Residential")) {
                 comboBox.setSelectedIndex(1);
+            } else {
+                comboBox.setSelectedIndex(0);
             }
 
         } catch (JSONException e) {
@@ -338,17 +245,11 @@ public class CustomerController extends ViewController {
             } else if (cmd == "update") {
                 updateRecord();
             } else if (cmd == "delete") {
-                String toolIdFieldText = view.getFieldText("toolIdField");
-                deleteRecord(toolIdFieldText);
+                String idText = view.getFieldText("customerIdField");
+                deleteRecord(idText);
             } else if (cmd == "clear") {
                 clearInfoFields();
-            } else if (cmd == "sellTool") {
-                sellTool();
-            } else if (cmd == "returnTool") {
-                returnTool();
-            } else if (cmd == "generateOrder") {
-                generateOrder();
-            } else if (cmd == "addTool") {
+            } else if (cmd == "addButton") {
                 addEntry();
             } else if (cmd == "searchAll") {
                 searchAll();

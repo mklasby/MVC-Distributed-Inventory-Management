@@ -14,7 +14,7 @@ public class InventoryController extends ModelController implements ClientServer
 
 	private InventoryDBController inventoryDB;
 	private InvMgmt model;
-	
+
 	public InventoryController(InventoryDBController inventoryDB) {
 		this.inventoryDB = inventoryDB;
 		model = new InvMgmt();
@@ -23,7 +23,8 @@ public class InventoryController extends ModelController implements ClientServer
 	@Override
 	public Message notify(Message data) {
 		try {
-			if (! data.getString(DB).equals(INVENTORY)) return null;
+			if (!data.getString(DB).equals(INVENTORY))
+				return null;
 			if (data.getString(MESSAGE_TYPE).equals(REQUEST)) {
 				return processMessage(data);
 			}
@@ -36,7 +37,7 @@ public class InventoryController extends ModelController implements ClientServer
 	public Message processMessage(Message data) {
 		try {
 			Message response = null;
-			switch(data.getString(VERB)) {
+			switch (data.getString(VERB)) {
 				case GET:
 					response = searchTool(data);
 					break;
@@ -64,10 +65,14 @@ public class InventoryController extends ModelController implements ClientServer
 		try {
 			String query = data.getString(QUERY);
 			ResultSet rs = null;
-			switch(query) {
+			switch (query) {
 				case BY_ID:
-					rs = inventoryDB.searchToolbyID(Integer.parseInt(data.getString(DATA)));
-					break;
+					try {
+						rs = inventoryDB.searchToolbyID(Integer.parseInt(data.getString(DATA)));
+						break;
+					} catch (NumberFormatException e) {
+						return new Message(RESPONSE, ERROR, "Please enter a number to search by ID.");
+					}
 				case BY_NAME:
 					rs = inventoryDB.searchToolbyName(data.getString(DATA));
 					break;
@@ -90,7 +95,7 @@ public class InventoryController extends ModelController implements ClientServer
 		}
 		return null;
 	}
-	
+
 	private Message makeSale(Message data) {
 		Message response = null;
 		try {
@@ -102,7 +107,7 @@ public class InventoryController extends ModelController implements ClientServer
 				inventoryDB.reduceToolQuantity(id, qtyInStock);
 				String successMessage = "Quantity updated successfully.";
 				response = new Message(RESPONSE, OK, successMessage);
-				
+
 				// check quantity and generate orderline and order if low in stock
 				if (qtyInStock < 40) {
 					createOrderLine(tool);
@@ -111,7 +116,7 @@ public class InventoryController extends ModelController implements ClientServer
 			} catch (SQLException sqlE) {
 				String errorMessage = "Exceeded quantity in stock. Please try with smaller quantity.";
 				response = new Message(RESPONSE, ERROR, errorMessage);
-			} 
+			}
 		} catch (JSONException jsonE) {
 			jsonE.printStackTrace();
 		}
@@ -135,11 +140,21 @@ public class InventoryController extends ModelController implements ClientServer
 	}
 
 	private Message generateOrder() {
-		ResultSet order = inventoryDB.returnOrder();
-		// TODO
-		return null;
+		try {
+			ResultSet order = inventoryDB.getOrder();
+			ResultSet orderLines = inventoryDB.getOrderLines();
+			if (orderLines == null) {
+				return new Message(RESPONSE, ERROR, "No pending order line items.");
+			}
+			JSONObject newOrder = model.generateOrder(orderLines, order);
+			inventoryDB.makeOrder(newOrder);
+			return new Message(RESPONSE, OK, newOrder);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
-	
+
 	private Message addTool(Message data) {
 		Message response = null;
 		try {
@@ -150,13 +165,12 @@ public class InventoryController extends ModelController implements ClientServer
 			} catch (SQLException sqlE) {
 				String errorMessage = "Invalid ToolID, use " + inventoryDB.generateNewID() + ".";
 				response = new Message(RESPONSE, ERROR, errorMessage);
-			} 
+			}
 		} catch (JSONException jsonE) {
 			jsonE.printStackTrace();
 		}
 		return response;
 	}
-
 
 	private Message deleteTool(Message data) {
 		Message response = null;
@@ -169,5 +183,5 @@ public class InventoryController extends ModelController implements ClientServer
 		}
 		return response;
 	}
-	
+
 }
