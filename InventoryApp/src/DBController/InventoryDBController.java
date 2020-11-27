@@ -139,13 +139,15 @@ public class InventoryDBController extends DBController {
 			stmt.setInt(4, tool.getInt("Quantity"));
 			stmt.setDouble(5, tool.getDouble("Price"));
 			stmt.setInt(6, tool.getInt("SupplierID"));
+			System.out.println(stmt.toString());
 			stmt.executeUpdate();
 
 			if (tool.getString("Type").toLowerCase().equals("electrical")) {
 				sql = "INSERT INTO ELECTRICAL VALUES(?,?);";
 				stmt = conn.prepareStatement(sql);
-				stmt.setInt(1, tool.getInt("ToolID"));
-				stmt.setString(2, null);
+				stmt.setInt(1, id);
+				stmt.setString(2, tool.getString("PowerType"));
+				System.out.println(stmt.toString());
 				stmt.executeUpdate();
 			}
 		} catch (Exception e) {
