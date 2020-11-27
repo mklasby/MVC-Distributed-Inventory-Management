@@ -123,6 +123,7 @@ public class InventoryController extends ViewController {
         }
     }
 
+    // TODO: Move to tool
     public String getToolString(JSONObject jsonTool) throws JSONException {
         int toolId = jsonTool.getInt("ToolID");
         String name = jsonTool.getString("Name");
