@@ -124,10 +124,17 @@ public class InventoryDBController extends DBController {
 	 */
 	public void addTool(JSONObject tool) {
 		String sql = "INSERT INTO TOOL VALUES(?,?,?,?,?,?);";
+		System.out.print(tool.toString());
+		int id = generateNewID();
+		System.out.println(id);
+
 		try {
 			stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, generateNewID());
+			System.out.println(stmt.toString());
+			stmt.setInt(1, id);
+			System.out.println(stmt.toString());
 			stmt.setString(2, tool.getString("Name"));
+			System.out.println(stmt.toString());
 			stmt.setString(3, tool.getString("Type"));
 			stmt.setInt(4, tool.getInt("Quantity"));
 			stmt.setDouble(5, tool.getDouble("Price"));
@@ -138,7 +145,7 @@ public class InventoryDBController extends DBController {
 				sql = "INSERT INTO ELECTRICAL VALUES(?,?);";
 				stmt = conn.prepareStatement(sql);
 				stmt.setInt(1, tool.getInt("ToolID"));
-				stmt.setString(2, tool.getString("PowerType"));
+				stmt.setString(2, null);
 				stmt.executeUpdate();
 			}
 		} catch (Exception e) {
