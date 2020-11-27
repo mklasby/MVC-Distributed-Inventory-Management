@@ -194,7 +194,12 @@ public class CustomerView extends SubView {
         resultsList.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setViewportView(resultsList);
+<<<<<<< HEAD
         scrollPane.setPreferredSize(new Dimension(ViewConstants.X_DIMENSION / 2 + 100, 250));
+=======
+        scrollPane.setPreferredSize(
+                new Dimension(ViewConstants.X_DIMENSION / 2 + 100, 200));
+>>>>>>> c3289470ea124ff9ada62612d69c75ec8536272d
         searchResultsPanel.add(scrollPane, c);
     }
 
