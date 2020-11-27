@@ -71,7 +71,14 @@ public class CustomerController extends ModelController implements ClientServerC
 	}
 
 	private Message modifyCustomerInfo(Message data) {
-		// TODO Auto-generated method stub
+		Message response = null;
+		try {
+			customerDB.modifyInfo(data.getJSONObject(DATA));
+			String successMessage = "Customer updated successfully.";
+			response = new Message(RESPONSE, OK, successMessage);
+		} catch (JSONException jsonE) {
+			jsonE.printStackTrace();
+		}
 		return null;
 	}
 

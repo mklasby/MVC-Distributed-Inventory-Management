@@ -79,16 +79,19 @@ public class CustomerDBController extends DBController {
 	}
 	
 	/**
-	 * Update client info for given attribute to newValue for client with given clientID.
-	 * @param clientID client id
-	 * @param attribute attribute name
-	 * @param newValue new value of the attribute
+	 * Update client info for given client.
+	 * @param client JSONObject with client info
 	 */
-	public void modifyInfo(int clientID, String attribute, String newValue) {
+	public void modifyInfo(JSONObject client) {
 		try {
-			stmt = conn.prepareStatement(updateOperation(attribute));
-			stmt.setString(1, newValue);
-			stmt.setInt(2, clientID);
+			String sql = "UPDATE CLIENT SET LName=?, FName=?, Type=?, Phone=?, Address=?, PostalCode=? WHERE ClientID=?;";
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, client.getString("LName"));
+			stmt.setString(2, client.getString("FName"));
+			stmt.setString(3, client.getString("Type"));
+			stmt.setString(4, client.getString("Phone"));
+			stmt.setString(5, client.getString("Address"));
+			stmt.setString(5, client.getString("PostalCode"));
 			stmt.executeUpdate();
 		} catch(Exception e) {
 			e.printStackTrace();
