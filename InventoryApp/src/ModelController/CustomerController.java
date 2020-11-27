@@ -63,7 +63,7 @@ public class CustomerController extends ModelController implements ClientServerC
 	private Message deleteCustomer(Message data) {
 		Message response = null;
 		try {
-			customerDB.removeCustomer(data.getJSONObject(DATA).getInt("ClientId"));
+			customerDB.removeCustomer(data.getJSONObject(DATA).getInt("ClientID"));
 			String successMessage = "Customer deleted successfully.";
 			response = new Message(RESPONSE, OK, successMessage);
 		} catch (JSONException jsonE) {
