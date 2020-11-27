@@ -54,6 +54,7 @@ public class InventoryController extends ModelController implements ClientServer
 					response = generateOrder();
 					break;
 			}
+			System.out.println(data.getString(VERB));
 			return response;
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -188,7 +189,7 @@ public class InventoryController extends ModelController implements ClientServer
 	private Message deleteTool(Message data) {
 		Message response = null;
 		try {
-			inventoryDB.deleteToolbyID(data.getJSONObject(DATA).getInt("ToolId"));
+			inventoryDB.deleteToolbyID(data.getJSONObject(DATA).getInt("ToolID"));
 			String successMessage = "Tool deleted successfully.";
 			response = new Message(RESPONSE, OK, successMessage);
 		} catch (JSONException jsonE) {

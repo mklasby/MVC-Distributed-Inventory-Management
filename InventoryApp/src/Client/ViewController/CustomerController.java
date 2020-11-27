@@ -10,9 +10,9 @@ import java.util.HashMap;
 
 import Client.View.*;
 import Client.ClientController.*;
-import Client.CommonModel.CommercialCustomer;
-import Client.CommonModel.Customer;
-import Client.CommonModel.ResidentialCustomer;
+import CustomerModel.CommercialCustomer;
+import CustomerModel.Customer;
+import CustomerModel.ResidentialCustomer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
