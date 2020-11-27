@@ -67,6 +67,7 @@ public class InventoryController extends ModelController implements ClientServer
 			inventoryDB.modifyInfo(data.getJSONObject(DATA));
 			String successMessage = "Tool info updated successfully.";
 			response = new Message(RESPONSE, OK, successMessage);
+			return response;
 		} catch (JSONException jsonE) {
 			jsonE.printStackTrace();
 		}
