@@ -177,7 +177,7 @@ public class InventoryController extends ModelController implements ClientServer
 				String successMessage = "Tool added successfully.";
 				response = new Message(RESPONSE, OK, successMessage);
 			} catch (SQLException sqlE) {
-				String errorMessage = "Invalid ToolID, use " + inventoryDB.generateNewID() + ".";
+				String errorMessage = "Invalid ToolID, please try again";
 				response = new Message(RESPONSE, ERROR, errorMessage);
 			}
 		} catch (JSONException jsonE) {

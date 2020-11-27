@@ -194,8 +194,7 @@ public class CustomerView extends SubView {
         resultsList.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setViewportView(resultsList);
-        scrollPane.setPreferredSize(
-                new Dimension(ViewConstants.X_DIMENSION / 2 + 100, 250));
+        scrollPane.setPreferredSize(new Dimension(ViewConstants.X_DIMENSION / 2 + 100, 250));
         searchResultsPanel.add(scrollPane, c);
     }
 
@@ -227,7 +226,7 @@ public class CustomerView extends SubView {
         customerInfoPanel.add(customerIdLabel, c);
 
         customerIdField = new JTextField(TEXT_FIELD_WIDTH);
-        customerIdField.setEditable(true);
+        customerIdField.setEditable(false);
         c.gridx = 2;
         customerInfoPanel.add(customerIdField, c);
 

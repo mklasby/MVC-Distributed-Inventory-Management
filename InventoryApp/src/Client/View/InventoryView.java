@@ -302,7 +302,7 @@ public class InventoryView extends SubView {
         inventoryInfoPanel.add(toolIdLabel, c);
 
         toolIdField = new JTextField(TEXT_FIELD_WIDTH);
-        toolIdField.setEditable(true);
+        toolIdField.setEditable(false);
         c.gridx = 2;
         inventoryInfoPanel.add(toolIdField, c);
 

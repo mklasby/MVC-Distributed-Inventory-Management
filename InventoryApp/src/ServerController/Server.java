@@ -46,5 +46,4 @@ public class Server {
 		Server myServer = new Server();
 		myServer.serve();
 	}
-
 }

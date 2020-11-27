@@ -237,7 +237,7 @@ public class InventoryController extends ViewController {
         }
         try {
             sale.put("Quantity", stock - quantity);
-            Message message = new Message(REQUEST, PUT, INVENTORY, sale);
+            Message message = new Message(REQUEST, SALE, INVENTORY, sale);
             Message response = clientCtrl.sendMessage(message);
             if (isErrorMessage(response)) {
                 // reset sale object to original state
