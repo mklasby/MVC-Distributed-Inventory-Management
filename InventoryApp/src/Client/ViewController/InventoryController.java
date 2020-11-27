@@ -48,6 +48,7 @@ public class InventoryController extends ViewController {
     }
 
     public void searchAll() {
+        searchResults = new HashMap<Integer, JSONObject>();
         HashMap<String, JList> lists = view.getLists();
         DefaultListModel listModel = (DefaultListModel) lists.get("resultsList").getModel();
         listModel.clear();
@@ -67,6 +68,7 @@ public class InventoryController extends ViewController {
     }
 
     public void search() {
+        searchResults = new HashMap<Integer, JSONObject>();
         HashMap<String, JList> lists = view.getLists();
         DefaultListModel listModel = (DefaultListModel) lists.get("resultsList").getModel();
         listModel.clear();
@@ -260,6 +262,8 @@ public class InventoryController extends ViewController {
                 return;
             } else {
                 view.flashSuccessMessage("Tool sold to one lucky customer!");
+                searchAll();
+                clearInfoFields();
             }
         } catch (JSONException e) {
             view.flashErrorMessage("...I played with your heart, ...");
