@@ -142,7 +142,7 @@ public class CustomerController extends ViewController {
             String lName = fields.get("lastNameField").getText();
             String address = fields.get("addressField").getText();
             String postal = fields.get("postalField").getText();
-            String phone = fields.get("phone").getText();
+            String phone = fields.get("phoneField").getText();
             String custType = view.getComboBox("custTypeComboBox").getSelectedItem().toString();
             // TODO: Use switch statement on type and encode as dervied classes\
             if (custType.equals("Residential")) {
@@ -207,6 +207,20 @@ public class CustomerController extends ViewController {
             view.flashErrorMessage("ERROR! Please input data into all info fields");
             return;
         }
+        try {
+            JSONObject newItem = getCustomerJSON();
+            Message post = new Message(REQUEST, POST, CUSTOMER, newItem);
+            Message response = clientCtrl.sendMessage(post);
+            if (isErrorMessage(response)) {
+                return;
+            } else {
+                view.flashSuccessMessage(response.getString(DATA));
+                searchAll();
+            }
+        } catch (JSONException e) {
+            view.flashErrorMessage("Oops, I did it again...");
+            e.printStackTrace();
+        }
     }
 
     private void populateFields(int idxSelected) {
@@ -265,7 +279,7 @@ public class CustomerController extends ViewController {
                 deleteRecord(idText);
             } else if (cmd == "clear") {
                 clearInfoFields();
-            } else if (cmd == "addButton") {
+            } else if (cmd == "add") {
                 addEntry();
             } else if (cmd == "searchAll") {
                 searchAll();

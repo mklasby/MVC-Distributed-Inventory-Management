@@ -12,10 +12,11 @@ public class CustomerDBController extends DBController {
 	 * @param newCustomer new client info
 	 */
 	public void addCustomer(JSONObject newCustomer) throws SQLException {
+		int id = generateNewID();
 		String sql = "INSERT INTO CLIENT VALUES(?,?,?,?,?,?,?);";
 		try {
 			stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, newCustomer.getInt("ClientID"));
+			stmt.setInt(1, id);
 			stmt.setString(2, newCustomer.getString("LName"));
 			stmt.setString(3, newCustomer.getString("FName"));
 			stmt.setString(4, newCustomer.getString("Type"));
@@ -97,7 +98,7 @@ public class CustomerDBController extends DBController {
 			stmt.setString(3, client.getString("Type"));
 			stmt.setString(4, client.getString("Phone"));
 			stmt.setString(5, client.getString("Address"));
-			stmt.setString(5, client.getString("PostalCode"));
+			stmt.setString(6, client.getString("PostalCode"));
 			stmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
