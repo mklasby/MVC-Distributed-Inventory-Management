@@ -53,6 +53,8 @@ public class InventoryController extends ModelController implements ClientServer
 				case ORDER:
 					response = generateOrder();
 					break;
+				case SALE:
+					response = makeSale(data);
 			}
 			System.out.println(data.getString(VERB));
 			return response;
@@ -172,14 +174,9 @@ public class InventoryController extends ModelController implements ClientServer
 	private Message addTool(Message data) {
 		Message response = null;
 		try {
-			try {
-				inventoryDB.addTool(data.getJSONObject(DATA));
-				String successMessage = "Tool added successfully.";
-				response = new Message(RESPONSE, OK, successMessage);
-			} catch (SQLException sqlE) {
-				String errorMessage = "Invalid ToolID, please try again";
-				response = new Message(RESPONSE, ERROR, errorMessage);
-			}
+			inventoryDB.addTool(data.getJSONObject(DATA));
+			String successMessage = "Tool added successfully.";
+			response = new Message(RESPONSE, OK, successMessage);
 		} catch (JSONException jsonE) {
 			jsonE.printStackTrace();
 		}
