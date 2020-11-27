@@ -199,10 +199,14 @@ public class CustomerView extends SubView {
         c.fill = GridBagConstraints.BOTH;
         listModel = new DefaultListModel<String>();
         resultsList = new JList<String>(listModel);
-        resultsList.setPreferredSize(new Dimension(ViewConstants.X_DIMENSION / 2, ViewConstants.Y_DIMENSION / 2 - 10));
-        resultsList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        resultsList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-        searchResultsPanel.add(resultsList, c);
+        resultsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        resultsList.setLayoutOrientation(JList.VERTICAL);
+        resultsList.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setViewportView(resultsList);
+        scrollPane.setPreferredSize(
+                new Dimension(ViewConstants.X_DIMENSION / 2 + 100, ViewConstants.Y_DIMENSION / 2 + 10));
+        searchResultsPanel.add(scrollPane, c);
     }
 
     private void buildCustomerInfoPanel() {
