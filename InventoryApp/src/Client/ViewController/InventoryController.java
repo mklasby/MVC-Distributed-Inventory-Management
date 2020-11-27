@@ -273,6 +273,20 @@ public class InventoryController extends ViewController {
             view.flashErrorMessage("ERROR! Please input data into all info fields");
             return;
         }
+        try {
+            JSONObject newItem = getToolJSON();
+            Message post = new Message(REQUEST, POST, INVENTORY, newItem);
+            Message response = clientCtrl.sendMessage(post);
+            if (isErrorMessage(response)) {
+                return;
+            } else {
+                view.flashSuccessMessage(response.getString(DATA));
+                searchAll();
+            }
+        } catch (JSONException e) {
+            view.flashErrorMessage("Oops, I did it again...");
+            e.printStackTrace();
+        }
     }
 
     private void populateFields(int idxSelected) {
@@ -339,7 +353,7 @@ public class InventoryController extends ViewController {
                 returnTool();
             } else if (cmd == "generateOrder") {
                 generateOrder();
-            } else if (cmd == "addTool") {
+            } else if (cmd == "add") {
                 addEntry();
             } else if (cmd == "searchAll") {
                 searchAll();
