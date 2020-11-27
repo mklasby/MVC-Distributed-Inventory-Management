@@ -123,17 +123,15 @@ public class InventoryController extends ViewController {
         }
     }
 
-    // TODO: Move to tool
     public String getToolString(JSONObject jsonTool) throws JSONException {
-        int toolId = jsonTool.getInt("ToolID");
-        String name = jsonTool.getString("Name");
-        int stock = jsonTool.getInt("Quantity");
-        Double price = jsonTool.getDouble("Price");
-        int supplierID = jsonTool.getInt("SupplierID");
         String toolType = jsonTool.getString("Type");
-        return String.format("ToolID: %d, Name: %14s, Stock: %4d, Price: %6.2f, SupplierID: %5d, Tool Type: %10s\n",
-                toolId, name, stock, price, supplierID, toolType);
-
+        if (toolType.equals("Electrical")) {
+            Electrical thisTool = new Electrical(jsonTool);
+            return thisTool.toDescriptionString();
+        } else {
+            NonElectrical thisTool = new NonElectrical(jsonTool);
+            return thisTool.toDescriptionString();
+        }
     }
 
     public JSONObject getToolJSON() throws JSONException {
@@ -145,8 +143,14 @@ public class InventoryController extends ViewController {
             double price = Double.parseDouble(fields.get("priceField").getText());
             int supplierId = Integer.parseInt(fields.get("supplierIdField").getText());
             String toolType = view.getComboBox("toolTypeComboBox").getSelectedItem().toString();
-            Tool tool = new Tool(toolId, name, toolType, quantity, price, supplierId);
-            return tool.encode();
+            if (toolType.equals("Electrical")) {
+                String powerType = "Type A";
+                Electrical thisTool = new Electrical(toolId, name, quantity, price, supplierId, powerType);
+                return thisTool.encode();
+            } else {
+                NonElectrical thisTool = new NonElectrical(toolId, name, quantity, price, supplierId);
+                return thisTool.encode();
+            }
         } catch (Exception e) {
             view.flashErrorMessage("ERROR: Bad Input! Please check input field types!");
             return null;

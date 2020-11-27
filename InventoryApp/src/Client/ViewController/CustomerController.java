@@ -144,7 +144,6 @@ public class CustomerController extends ViewController {
             String postal = fields.get("postalField").getText();
             String phone = fields.get("phoneField").getText();
             String custType = view.getComboBox("custTypeComboBox").getSelectedItem().toString();
-            // TODO: Use switch statement on type and encode as dervied classes\
             if (custType.equals("Residential")) {
                 ResidentialCustomer thisCust = new ResidentialCustomer(clientId, fName, lName, address, postal, phone);
                 return thisCust.encode();

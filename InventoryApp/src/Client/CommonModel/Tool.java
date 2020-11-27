@@ -17,27 +17,27 @@ public class Tool extends JSONObject {
 	 * tool id
 	 */
 	protected int toolId;
-		
-	/** 
+
+	/**
 	 * description or name of tool
 	 */
 	protected String name;
-	
+
 	/**
 	 * tool quantity in stock
 	 */
 	protected int qty;
-	
+
 	/**
 	 * tool price
 	 */
 	protected double price;
-	
+
 	/**
 	 * supplier
 	 */
 	protected int supplierID;
-	
+
 	/**
 	 * Construct a Tool object with the specified information
 	 * 
@@ -56,27 +56,28 @@ public class Tool extends JSONObject {
 		setSupplierID(supplier);
 	}
 
-	public Tool (JSONObject jsonTool) throws JSONException {
-        toolId = jsonTool.getInt("ToolID");
-        name = jsonTool.getString("Name");
-        qty = jsonTool.getInt("Quantity");
-        price = jsonTool.getDouble("Price");
-        supplierID = jsonTool.getInt("SupplierID");
+	public Tool(JSONObject jsonTool) throws JSONException {
+		toolId = jsonTool.getInt("ToolID");
+		name = jsonTool.getString("Name");
+		qty = jsonTool.getInt("Quantity");
+		price = jsonTool.getDouble("Price");
+		supplierID = jsonTool.getInt("SupplierID");
 	}
-	
-	public Tool() {}
-	
-    public JSONObject encode() {
-        this.putFields();
-        return this;
-    }
-    
-    public String toDescriptionString() {
-        return String.format("ToolID: %d, Name: %-14s, Stock: %-4d, Price: %-6.2f, SupplierID: %-5d, Tool Type: %-10s\n",
-                toolId, name, qty, price, supplierID);
-    }
-    
-    public void putFields() {
+
+	public Tool() {
+	}
+
+	public JSONObject encode() {
+		this.putFields();
+		return this;
+	}
+
+	public String toDescriptionString() {
+		return String.format("ToolID: %d, Name: %-14s, Stock: %-4d, Price: %-6.2f, SupplierID: %-5d", toolId, name, qty,
+				price, supplierID);
+	}
+
+	public void putFields() {
 		try {
 			put("ToolID", toolId);
 			put("Name", name);
@@ -86,8 +87,8 @@ public class Tool extends JSONObject {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-    }
-    
+	}
+
 	public int getToolId() {
 		return toolId;
 	}
@@ -127,6 +128,5 @@ public class Tool extends JSONObject {
 	public void setSupplierID(int supplierID) {
 		this.supplierID = supplierID;
 	}
-
 
 }

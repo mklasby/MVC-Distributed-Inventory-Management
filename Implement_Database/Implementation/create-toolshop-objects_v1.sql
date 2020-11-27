@@ -211,6 +211,7 @@ INSERT INTO PURCHASES VALUES
     (2001, 1001, '2020-11-25');
 
     
+SELECT * FROM TOOL;
 
 -- 	Basic Retrieval Query (Retrieve all non-electrical tools)
 --     SELECT * FROM TOOL WHERE Type='Non-Electrical';
