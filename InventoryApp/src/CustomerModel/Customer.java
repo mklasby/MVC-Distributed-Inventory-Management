@@ -5,25 +5,28 @@ import org.json.JSONObject;
 
 public class Customer extends JSONObject {
 
-	int clientID;
+	int clientId;
 	String lName, fName, phone, address, postalCode;
-	  
-    public Customer(int clientId, String fName, String lName, String address, String postal, String phone,
-            String postalCode) {
-    	clientID = clientId;
-    	this.fName = fName;
-    	this.lName = lName;
-    	this.phone = phone;
-    	this.address = address;
-    	postalCode = postal;
-    }
-    
-    public int getClientID() {
-		return clientID;
+
+	public Customer(int clientId, String fName, String lName, String address, String postal, String phone,
+			String postalCode) {
+		this.clientId = clientId;
+		this.fName = fName;
+		this.lName = lName;
+		this.phone = phone;
+		this.address = address;
+		this.postalCode = postal;
 	}
 
-	public void setClientID(int clientID) {
-		this.clientID = clientID;
+	public Customer() {
+	}
+
+	public int getClientId() {
+		return clientId;
+	}
+
+	public void setClientId(int clientId) {
+		this.clientId = clientId;
 	}
 
 	public String getlName() {
@@ -67,28 +70,27 @@ public class Customer extends JSONObject {
 	}
 
 	public String toDescriptionString() {
-        return String.format("ClientID: %4d, Last Name: %10s, First Name: %10s, Phone: %20s, Address: %50s, Postal Code: %10s\n", 
-        		clientID, lName, fName, phone, address, postalCode);
-    }
+		return String.format(
+				"ClientID: %4d, Last Name: %10s, First Name: %10s, Phone: %20s, Address: %50s, Postal Code: %10s\n",
+				clientId, lName, fName, phone, address, postalCode);
+	}
 
-    public void putFields() {
-        try {
-            this.put("ClientID", clientID);
-            this.put("LName", lName);
-            this.put("FName", fName);
-            this.put("Phone", phone);
-            this.put("Address", address);
-            this.put("PostalCode", postalCode);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    public JSONObject encode() {
-    	putFields();
-        return this;
-    }
+	public void putFields() {
+		try {
+			this.put("ClientID", clientId);
+			this.put("LName", lName);
+			this.put("FName", fName);
+			this.put("Phone", phone);
+			this.put("Address", address);
+			this.put("PostalCode", postalCode);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
 
-
+	public JSONObject encode() {
+		putFields();
+		return this;
+	}
 
 }

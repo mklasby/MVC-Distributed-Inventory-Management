@@ -6,9 +6,9 @@ import org.json.JSONObject;
 public class DomesticSupplier extends Supplier {
     private String type;
 
-    public DomesticSupplier(int supplierID, String name, String address, String cName, String phone, String type) {
+    public DomesticSupplier(int supplierID, String name, String address, String cName, String phone) {
         super(supplierID, name, address, cName, phone);
-        setType(type);
+        setType("Domestic");
     }
 
     public String getType() {

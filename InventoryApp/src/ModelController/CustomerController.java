@@ -8,13 +8,13 @@ import org.json.JSONException;
 import Client.ClientController.ClientServerConstants;
 import Client.ClientController.Message;
 import DBController.CustomerDBController;
-import InventoryModel.InvMgmt;
+import CustomerModel.CustomerMgmt;
 
 public class CustomerController extends ModelController implements ClientServerConstants {
 
 	private CustomerDBController customerDB;
-	private InvMgmt model;
-	
+	private CustomerMgmt model;
+
 	public CustomerController(CustomerDBController customerDB) {
 		this.customerDB = customerDB;
 	}
@@ -22,7 +22,8 @@ public class CustomerController extends ModelController implements ClientServerC
 	@Override
 	public Message notify(Message data) {
 		try {
-			if (! data.getString(DB).equals(CUSTOMER)) return null;
+			if (!data.getString(DB).equals(CUSTOMER))
+				return null;
 			if (data.getString(MESSAGE_TYPE).equals(REQUEST)) {
 				return processMessage(data);
 			}
@@ -30,14 +31,14 @@ public class CustomerController extends ModelController implements ClientServerC
 			jse.printStackTrace();
 		}
 		return null;
-		
+
 	}
 
 	@Override
 	public Message processMessage(Message data) {
 		try {
 			Message response = null;
-			switch(data.getString(VERB)) {
+			switch (data.getString(VERB)) {
 				case POST:
 					response = addCustomer(data);
 					break;
@@ -86,7 +87,7 @@ public class CustomerController extends ModelController implements ClientServerC
 		try {
 			String query = data.getString(QUERY);
 			ResultSet rs = null;
-			switch(query) {
+			switch (query) {
 				case BY_ID:
 					rs = customerDB.searchByID(Integer.parseInt(data.getString(DATA)));
 					break;
@@ -122,12 +123,11 @@ public class CustomerController extends ModelController implements ClientServerC
 			} catch (SQLException sqlE) {
 				String errorMessage = "Invalid ClientID, use " + customerDB.generateNewID() + ".";
 				response = new Message(RESPONSE, ERROR, errorMessage);
-			} 
+			}
 		} catch (JSONException jsonE) {
 			jsonE.printStackTrace();
 		}
 		return response;
 	}
 
-	
 }
