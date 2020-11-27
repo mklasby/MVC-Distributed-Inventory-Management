@@ -103,7 +103,7 @@ public class InventoryController extends ModelController implements ClientServer
 				// make sale
 				JSONObject tool = data.getJSONObject(DATA);
 				int id = tool.getInt("ToolID");
-				int qtyInStock = tool.getInt("ToolID");
+				int qtyInStock = tool.getInt("Quantity");
 				inventoryDB.reduceToolQuantity(id, qtyInStock);
 				String successMessage = "Quantity updated successfully.";
 				response = new Message(RESPONSE, OK, successMessage);

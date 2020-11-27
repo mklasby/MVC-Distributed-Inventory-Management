@@ -19,10 +19,8 @@ public class InternationalSupplier extends Supplier {
             double importTax) {
         super(supplierID, name, address, cName, phone);
 
-        this.setName(name);
-        this.setAddress(address);
-        this.setCName(cName);
-        this.putFields();
+        setType(type);
+        setImportTax(importTax);
     }
 
     public String getType() {
