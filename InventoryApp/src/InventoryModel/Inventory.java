@@ -20,10 +20,10 @@ public class Inventory {
 
 				if (type.equalsIgnoreCase("electrical")) {
 					String powerType = rs.getString("PowerType");
-					Electrical electrical = new Electrical(toolID, name, type, qty, price, supplierID, powerType);
+					Electrical electrical = new Electrical(toolID, name, qty, price, supplierID, powerType);
 					jsonArray.put((JSONObject) electrical.encode());
 				} else {
-					Tool tool = new NonElectrical(toolID, name, type, qty, price, supplierID);
+					Tool tool = new NonElectrical(toolID, name, qty, price, supplierID);
 					jsonArray.put((JSONObject) tool.encode());
 				}
 			} while (rs.next());
