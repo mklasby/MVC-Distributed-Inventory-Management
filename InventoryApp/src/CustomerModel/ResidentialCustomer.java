@@ -10,9 +10,8 @@ public class ResidentialCustomer extends Customer {
 
     String type;
 
-    public ResidentialCustomer(int clientId, String fName, String lName, String address, String postal, String phone,
-            String postalCode) {
-        super(clientId, fName, lName, address, postal, phone, postalCode);
+    public ResidentialCustomer(int clientId, String fName, String lName, String address, String postal, String phone) {
+        super(clientId, fName, lName, address, postal, phone);
         setType("Residential");
     }
 
@@ -24,8 +23,23 @@ public class ResidentialCustomer extends Customer {
             lName = rs.getString("LName");
             address = rs.getString("Address");
             phone = rs.getString("Phone");
+            postalCode = rs.getString("PostalCode");
             type = "Residential";
         } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ResidentialCustomer(JSONObject jsonObject) {
+        try {
+            clientId = jsonObject.getInt("ClientID");
+            fName = jsonObject.getString("FName");
+            lName = jsonObject.getString("LName");
+            address = jsonObject.getString("Address");
+            phone = jsonObject.getString("Phone");
+            postalCode = jsonObject.getString("PostalCode");
+            type = "Residential";
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }

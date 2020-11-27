@@ -8,8 +8,7 @@ public class Customer extends JSONObject {
 	int clientId;
 	String lName, fName, phone, address, postalCode;
 
-	public Customer(int clientId, String fName, String lName, String address, String postal, String phone,
-			String postalCode) {
+	public Customer(int clientId, String fName, String lName, String address, String postal, String phone) {
 		this.clientId = clientId;
 		this.fName = fName;
 		this.lName = lName;

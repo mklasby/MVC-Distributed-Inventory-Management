@@ -339,6 +339,22 @@ public class InventoryDBController extends DBController {
 		}
 	}
 
+	public void modifyInfo(JSONObject jsonObject) {
+		try {
+			String sql = "UPDATE TOOL SET Name=?, Type=?, Quantity=?, Price=?, SupplierID = ?, WHERE ToolID=?;";
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, jsonObject.getString("Name"));
+			stmt.setString(2, jsonObject.getString("Type"));
+			stmt.setString(3, jsonObject.getString("Quantity"));
+			stmt.setDouble(4, jsonObject.getDouble("Price"));
+			stmt.setInt(5, jsonObject.getInt("SupplierID"));
+			stmt.setInt(6, jsonObject.getInt("ToolID"));
+			stmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	// public static void main(String[] args) {
 	// try {
 	// InventoryDBController c = new InventoryDBController();

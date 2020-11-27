@@ -1,4 +1,4 @@
-package CustomerModel;
+package Client.CommonModel;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -6,15 +6,16 @@ import java.sql.SQLException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class CommercialCustomer extends Customer {
+public class ResidentialCustomer extends Customer {
+
     String type;
 
-    public CommercialCustomer(int clientId, String fName, String lName, String address, String postal, String phone) {
+    public ResidentialCustomer(int clientId, String fName, String lName, String address, String postal, String phone) {
         super(clientId, fName, lName, address, postal, phone);
-        setType("Commercial");
+        setType("Residential");
     }
 
-    public CommercialCustomer(ResultSet rs) {
+    public ResidentialCustomer(ResultSet rs) {
         super();
         try {
             clientId = rs.getInt("ClientID");
@@ -22,15 +23,14 @@ public class CommercialCustomer extends Customer {
             lName = rs.getString("LName");
             address = rs.getString("Address");
             phone = rs.getString("Phone");
+            type = "Residential";
             postalCode = rs.getString("PostalCode");
-            type = "Commercial";
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public CommercialCustomer(JSONObject jsonObject) {
-        super();
+    public ResidentialCustomer(JSONObject jsonObject) {
         try {
             clientId = jsonObject.getInt("ClientID");
             fName = jsonObject.getString("FName");
@@ -38,7 +38,7 @@ public class CommercialCustomer extends Customer {
             address = jsonObject.getString("Address");
             phone = jsonObject.getString("Phone");
             postalCode = jsonObject.getString("PostalCode");
-            type = "Commercial";
+            type = "Residential";
         } catch (JSONException e) {
             e.printStackTrace();
         }

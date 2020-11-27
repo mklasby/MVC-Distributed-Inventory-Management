@@ -25,7 +25,7 @@ public class ServerController implements Runnable, ClientServerConstants {
 			messageOut = new ObjectOutputStream(socket.getOutputStream());
 			messageIn = new ObjectInputStream(socket.getInputStream());
 			models = new ArrayList<>();
-			
+
 			InventoryController inv = new InventoryController(new InventoryDBController());
 			registerModel(inv);
 			CustomerController customer = new CustomerController(new CustomerDBController());
@@ -45,15 +45,17 @@ public class ServerController implements Runnable, ClientServerConstants {
 		while (true) {
 			try {
 				String rawData = (String) messageIn.readObject();
-				System.out.println(rawData);
+				System.out.println("MESSAGE RECEIVED: " + rawData.toString());
 				Message data = new Message(rawData);
 
 				if (data.getBoolean(QUIT))
 					break;
 				for (ModelController model : models) {
 					Message response = model.notify(data);
-					System.out.println(response);
-					if (response != null) messageOut.writeObject(response.toString());
+					if (response != null) {
+						messageOut.writeObject(response.toString());
+						System.out.println("MESSAGE SENT: " + response.toString());
+					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -61,6 +63,4 @@ public class ServerController implements Runnable, ClientServerConstants {
 		}
 
 	}
-
-
 }

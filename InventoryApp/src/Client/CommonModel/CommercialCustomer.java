@@ -1,4 +1,4 @@
-package CustomerModel;
+package Client.CommonModel;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,7 +30,6 @@ public class CommercialCustomer extends Customer {
     }
 
     public CommercialCustomer(JSONObject jsonObject) {
-        super();
         try {
             clientId = jsonObject.getInt("ClientID");
             fName = jsonObject.getString("FName");

@@ -17,6 +17,7 @@ public class CustomerController extends ModelController implements ClientServerC
 
 	public CustomerController(CustomerDBController customerDB) {
 		this.customerDB = customerDB;
+		model = new CustomerMgmt();
 	}
 
 	@Override
@@ -92,12 +93,13 @@ public class CustomerController extends ModelController implements ClientServerC
 					rs = customerDB.searchByID(Integer.parseInt(data.getString(DATA)));
 					break;
 				case BY_NAME:
-					rs = customerDB.searchByName(data.getJSONObject(DATA).getString("LName"),
-							data.getJSONObject(DATA).getString("FName"));
+					rs = customerDB.searchByName(data.getString(DATA));
 					break;
 				case BY_TYPE:
 					rs = customerDB.searchByType(data.getString(DATA));
 					break;
+				case ALL:
+					rs = customerDB.getAllCustomers();
 			}
 			Message response;
 			if (rs == null) {

@@ -59,19 +59,9 @@ public class CustomerView extends SubView {
         registerFields();
         registerButtons();
         registerRadioButtons();
+        registerComboBoxes();
         registerLists();
         gui.addCard(mainPanel, mainPanelKey);
-    }
-
-    private void addFields() {
-        fields = new HashMap<String, JTextField>();
-        this.fields.put("searchQueryField", searchQueryField);
-        this.fields.put("customerIdField", customerIdField);
-        this.fields.put("firstNameField", firstNameField);
-        this.fields.put("lastNameField", lastNameField);
-        this.fields.put("addressField", addressField);
-        this.fields.put("postalField", postalField);
-        this.fields.put("phoneField", phoneField);
     }
 
     public String getFieldText(String fieldName) {
@@ -108,11 +98,11 @@ public class CustomerView extends SubView {
 
         idButton = new JRadioButton("Customer ID");
         idButton.setSelected(true);
-        idButton.setActionCommand("customerId");
+        idButton.setActionCommand("id");
         nameButton = new JRadioButton("Last Name");
-        nameButton.setActionCommand("lastName");
+        nameButton.setActionCommand("name");
         typeButton = new JRadioButton("Customer Type");
-        typeButton.setActionCommand("customerType");
+        typeButton.setActionCommand("type");
         buttonGroup = new ButtonGroup();
         buttonGroup.add(idButton);
         buttonGroup.add(nameButton);

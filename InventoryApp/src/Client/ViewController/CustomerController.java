@@ -10,7 +10,9 @@ import java.util.HashMap;
 
 import Client.View.*;
 import Client.ClientController.*;
+import Client.CommonModel.CommercialCustomer;
 import Client.CommonModel.Customer;
+import Client.CommonModel.ResidentialCustomer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -122,8 +124,14 @@ public class CustomerController extends ViewController {
     }
 
     public String getCustomerString(JSONObject customerJSON) throws JSONException {
-        Customer customer = new Customer(customerJSON);
-        return customer.prettyPrint();
+        String type = customerJSON.getString("Type");
+        if (type.equals("Residential")) {
+            ResidentialCustomer customer = new ResidentialCustomer(customerJSON);
+            return customer.toDescriptionString();
+        } else {
+            CommercialCustomer customer = new CommercialCustomer(customerJSON);
+            return customer.toDescriptionString();
+        }
     }
 
     public JSONObject getCustomerJSON() throws JSONException {
@@ -136,9 +144,14 @@ public class CustomerController extends ViewController {
             String postal = fields.get("postalField").getText();
             String phone = fields.get("phone").getText();
             String custType = view.getComboBox("custTypeComboBox").getSelectedItem().toString();
-            // TODO: Use switch statement on type and encode as dervied classes
-            Customer thisCust = new Customer(clientId, fName, lName, address, postal, phone, lName);
-            return thisCust.encode();
+            // TODO: Use switch statement on type and encode as dervied classes\
+            if (custType.equals("Residential")) {
+                ResidentialCustomer thisCust = new ResidentialCustomer(clientId, fName, lName, address, postal, phone);
+                return thisCust.encode();
+            } else {
+                CommercialCustomer thisCust = new CommercialCustomer(clientId, fName, lName, address, postal, phone);
+                return thisCust.encode();
+            }
         } catch (Exception e) {
             view.flashErrorMessage("ERROR: Bad Input! Please check input field types!");
             return null;
@@ -200,30 +213,33 @@ public class CustomerController extends ViewController {
         JSONObject jsonObject = searchResults.get(idxSelected);
         System.out.println("POPULATING FIELDS " + jsonObject.toString());
         try {
-            Customer customer = new Customer(jsonObject);
+            String type = jsonObject.getString("Type");
+            JComboBox comboBox = view.getComboBox("custTypeComboBox");
+            Customer customer;
+            if (type.equals("Residential")) {
+                comboBox.setSelectedIndex(1);
+                customer = new ResidentialCustomer(jsonObject);
+            } else {
+                comboBox.setSelectedIndex(0);
+                customer = new CommercialCustomer(jsonObject);
+            }
+
             HashMap<String, JTextField> fields = view.getFields();
             for (String key : fields.keySet()) {
                 JTextField thisField = fields.get(key);
                 if (key.equals("customerIdField")) {
-                    thisField.setText(Integer.toString(customer.getId()));
+                    thisField.setText(Integer.toString(customer.getClientId()));
                 } else if ((key.equals("firstNameField"))) {
-                    thisField.setText(customer.getFName());
+                    thisField.setText(customer.getfName());
                 } else if ((key.equals("lastNameField"))) {
-                    thisField.setText(customer.getFName());
+                    thisField.setText(customer.getlName());
                 } else if ((key.equals("addressField"))) {
                     thisField.setText(customer.getAddress());
                 } else if ((key.equals("phoneField"))) {
                     thisField.setText(customer.getPhone());
-                } else if (key.equals("postalCode")) {
-                    thisField.setText(customer.getPostal());
+                } else if (key.equals("postalField")) {
+                    thisField.setText(customer.getPostalCode());
                 }
-            }
-            String type = jsonObject.getString("Type");
-            JComboBox comboBox = view.getComboBox("customerTypeComboBox");
-            if (type.equals("Residential")) {
-                comboBox.setSelectedIndex(1);
-            } else {
-                comboBox.setSelectedIndex(0);
             }
 
         } catch (JSONException e) {

@@ -42,7 +42,7 @@ public class InventoryController extends ModelController implements ClientServer
 					response = searchTool(data);
 					break;
 				case PUT:
-					response = makeSale(data);
+					response = modifyTool(data);
 					break;
 				case POST:
 					response = addTool(data);
@@ -57,6 +57,18 @@ public class InventoryController extends ModelController implements ClientServer
 			return response;
 		} catch (JSONException e) {
 			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private Message modifyTool(Message data) {
+		Message response = null;
+		try {
+			inventoryDB.modifyInfo(data.getJSONObject(DATA));
+			String successMessage = "Tool info updated successfully.";
+			response = new Message(RESPONSE, OK, successMessage);
+		} catch (JSONException jsonE) {
+			jsonE.printStackTrace();
 		}
 		return null;
 	}

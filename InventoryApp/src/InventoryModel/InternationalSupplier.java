@@ -15,11 +15,10 @@ public class InternationalSupplier extends Supplier {
     private String type;
     private double importTax;
 
-    public InternationalSupplier(int supplierID, String name, String address, String cName, String phone, String type,
+    public InternationalSupplier(int supplierID, String name, String address, String cName, String phone,
             double importTax) {
         super(supplierID, name, address, cName, phone);
-
-        setType(type);
+        setType("International");
         setImportTax(importTax);
     }
 
