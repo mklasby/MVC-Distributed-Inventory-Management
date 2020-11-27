@@ -14,6 +14,31 @@ import org.json.JSONObject;
 public class Tool extends JSONObject {
 
 	/**
+	 * tool id
+	 */
+	protected int toolId;
+		
+	/** 
+	 * description or name of tool
+	 */
+	protected String name;
+	
+	/**
+	 * tool quantity in stock
+	 */
+	protected int qty;
+	
+	/**
+	 * tool price
+	 */
+	protected double price;
+	
+	/**
+	 * supplier
+	 */
+	protected int supplierID;
+	
+	/**
 	 * Construct a Tool object with the specified information
 	 * 
 	 * @param id       tool id
@@ -23,47 +48,85 @@ public class Tool extends JSONObject {
 	 * @param price    unit price
 	 * @param supplier Supplier object
 	 */
-	public Tool(int id, String name, String type, int qty, double price, int supplier) {
+	public Tool(int id, String name, int qty, double price, int supplier) {
+		setToolId(id);
+		setName(name);
+		setQty(qty);
+		setPrice(price);
+		setSupplierID(supplier);
+	}
+
+	public Tool (JSONObject jsonTool) throws JSONException {
+        toolId = jsonTool.getInt("ToolID");
+        name = jsonTool.getString("Name");
+        qty = jsonTool.getInt("Quantity");
+        price = jsonTool.getDouble("Price");
+        supplierID = jsonTool.getInt("SupplierID");
+	}
+	
+	public Tool() {}
+	
+    public JSONObject encode() {
+        this.putFields();
+        return this;
+    }
+    
+    public String toDescriptionString() {
+        return String.format("ToolID: %d, Name: %-14s, Stock: %-4d, Price: %-6.2f, SupplierID: %-5d, Tool Type: %-10s\n",
+                toolId, name, qty, price, supplierID);
+    }
+    
+    public void putFields() {
 		try {
-			put("ToolID", id);
+			put("ToolID", toolId);
 			put("Name", name);
-			put("Type", type);
 			put("Quantity", qty);
 			put("Price", price);
-			put("SupplierID", supplier);
+			put("SupplierID", supplierID);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-	}
-
-    // TODO: Move to tool
-    public String getToolString(JSONObject jsonTool) throws JSONException {
-        int toolId = jsonTool.getInt("ToolID");
-        String name = jsonTool.getString("Name");
-        int stock = jsonTool.getInt("Quantity");
-        Double price = jsonTool.getDouble("Price");
-        int supplierID = jsonTool.getInt("SupplierID");
-        String toolType = jsonTool.getString("Type");
-        return String.format("ToolID: %d, Name: %14s, Stock: %4d, Price: %6.2f, SupplierID: %5d, Tool Type: %10s\n",
-                toolId, name, stock, price, supplierID, toolType);
-
     }
-	
-	public JSONObject encode() {
-		return this;
+    
+	public int getToolId() {
+		return toolId;
 	}
 
-	// // TODO: Move to tool
-	// public String getToolString(JSONObject jsonTool) throws JSONException {
-	// int toolId = jsonTool.getInt("ToolID");
-	// String name = jsonTool.getString("Name");
-	// int stock = jsonTool.getInt("Quantity");
-	// Double price = jsonTool.getDouble("Price");
-	// int supplierID = jsonTool.getInt("SupplierID");
-	// String toolType = jsonTool.getString("Type");
-	// return String.format("ToolID: %d, Name: %14s, Stock: %4d, Price: %6.2f,
-	// SupplierID: %5d, Tool Type: %10s\n",
-	// toolId, name, stock, price, supplierID, toolType);
+	public void setToolId(int toolId) {
+		this.toolId = toolId;
+	}
 
-	// }
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getQty() {
+		return qty;
+	}
+
+	public void setQty(int qty) {
+		this.qty = qty;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public int getSupplierID() {
+		return supplierID;
+	}
+
+	public void setSupplierID(int supplierID) {
+		this.supplierID = supplierID;
+	}
+
+
 }

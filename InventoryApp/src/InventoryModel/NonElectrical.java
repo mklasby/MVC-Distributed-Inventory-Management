@@ -3,28 +3,26 @@ package InventoryModel;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Electrical extends Tool {
+public class NonElectrical extends Tool {
 
-	private String toolType, powerType;
+	private String toolType;
 	
-	public Electrical(int toolID, String name, String type, int qty, double price, int supplierID, String powerType) {
+	public NonElectrical(int toolID, String name, String type, int qty, double price, int supplierID) {
 		super(toolID, name, qty, price, supplierID);
 		setToolType(type);
-		setPowerType(powerType);
 	}
 
-	public Electrical (JSONObject jsonTool) throws JSONException {
+	public NonElectrical (JSONObject jsonTool) throws JSONException {
         toolId = jsonTool.getInt("ToolID");
         name = jsonTool.getString("Name");
         qty = jsonTool.getInt("Quantity");
         price = jsonTool.getDouble("Price");
         supplierID = jsonTool.getInt("SupplierID");
         toolType = jsonTool.getString("Type");
-        powerType = jsonTool.getString("PowerType");
 	}
 	
     public String toDescriptionString() {
-        return super.toDescriptionString() + String.format(", Type: %-15s, PowerType: %-6s", toolType, powerType); 
+        return super.toDescriptionString() + String.format(", Type: %-15s", toolType); 
     }
     
     @Override 
@@ -32,7 +30,6 @@ public class Electrical extends Tool {
 		try {
 			super.putFields();
 			put("Type", toolType);
-			put("PowerType", powerType);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -50,14 +47,6 @@ public class Electrical extends Tool {
 
 	public void setToolType(String toolType) {
 		this.toolType = toolType;
-	}
-
-	public String getPowerType() {
-		return powerType;
-	}
-
-	public void setPowerType(String powerType) {
-		this.powerType = powerType;
 	}
 
 }

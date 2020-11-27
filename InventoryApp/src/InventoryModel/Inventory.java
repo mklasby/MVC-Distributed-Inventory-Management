@@ -23,7 +23,7 @@ public class Inventory {
 					Electrical electrical = new Electrical(toolID, name, type, qty, price, supplierID, powerType);
 					jsonArray.put((JSONObject) electrical.encode());
 				} else {
-					Tool tool = new Tool(toolID, name, type, qty, price, supplierID);
+					Tool tool = new NonElectrical(toolID, name, type, qty, price, supplierID);
 					jsonArray.put((JSONObject) tool.encode());
 				}
 			} while (rs.next());
