@@ -141,13 +141,15 @@ public class InventoryController extends ModelController implements ClientServer
 
 	private void createOrderLine(JSONObject data) {
 		try {
-			ResultSet hasOrderline = inventoryDB.hasOrderLine(data.getInt("ToolID"));
+			int toolId = data.getInt("ToolID");
+			int orderId = inventoryDB.getPendingOrderId();
+			ResultSet existingOrderLine = inventoryDB.hasOrderLine(toolId, orderId);
 			JSONObject orderline;
-			if (hasOrderline == null) {
-				orderline = model.restock(data, hasOrderline);
+			if (existingOrderLine == null) {
+				orderline = model.restock(data, orderId);
 				inventoryDB.generateOrderLine(orderline);
 			} else {
-				orderline = model.incrementOrderLine(data, hasOrderline);
+				orderline = model.incrementOrderLine(data, existingOrderLine);
 				inventoryDB.updateOrderLine(orderline);
 			}
 		} catch (JSONException e) {

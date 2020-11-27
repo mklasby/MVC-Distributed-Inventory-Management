@@ -53,13 +53,12 @@ public class InvMgmt {
     /**
      * Returns JSON object of a new OrderLine
      * 
-     * @param tool		(JSONObject) tool representation
-     * @param order		(ResultSet) today's order
+     * @param tool  (JSONObject) tool representation
+     * @param order (ResultSet) today's order
      * @return (JSONObject)
      */
-    public JSONObject restock(JSONObject tool, ResultSet order) {
+    public JSONObject restock(JSONObject tool, int orderId) {
         try {
-            int orderId = order.getInt("OrderID");
             int toolId = tool.getInt("ToolID");
             int supplierId = tool.getInt("SupplierID");
             int toolQuantity = tool.getInt("Quantity");
@@ -74,9 +73,10 @@ public class InvMgmt {
 
     /**
      * Increment existing orderLine
-     * @param tool			(JSONObject) Tool to be incremented. required to
-     * 						calculate new quantity
-     * @param rs			(ResultSet) exiting orderLine from db
+     * 
+     * @param tool (JSONObject) Tool to be incremented. required to calculate new
+     *             quantity
+     * @param rs   (ResultSet) exiting orderLine from db
      * @return (JSONObject) orderLine to put in db
      */
     public JSONObject incrementOrderLine(JSONObject tool, ResultSet rs) {

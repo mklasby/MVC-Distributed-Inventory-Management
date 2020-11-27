@@ -203,25 +203,50 @@ public class InventoryDBController extends DBController {
 	}
 
 	/**
-	 * Check if an order existing for current date.
+	 * Check if a pending order exists. If so, return that id. Otherwise, create a
+	 * new order and return its id.
 	 * 
 	 * @return order id for current date, or null if there is no order
 	 */
-	private Integer checkOrder() {
-		// check if order exist
-		Date date = Date.valueOf(LocalDate.now());
-		String sql = "SELECT * FROM ORDERS WHERE Date=?;";
+	public int getPendingOrderId() {
+		String sql = "SELECT * FROM ORDERS WHERE IsOrdered=false;";
+
 		try {
 			stmt = conn.prepareStatement(sql);
-			stmt.setDate(1, date);
 			rs = stmt.executeQuery();
-
-			if (rs.next())
+			if (rs.next()) {
 				return rs.getInt("OrderID");
+			} else {
+				Date date = Date.valueOf(LocalDate.now());
+				int orderId = generateNextOrderId();
+				String newOrder = "INSERT INTO ORDERS VALUES (?, ?, ?)";
+				stmt.setInt(1, orderId);
+				stmt.setDate(2, date);
+				stmt.setBoolean(3, false);
+				stmt = conn.prepareStatement(newOrder);
+				return orderId;
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return 0;
+	}
+
+	private int generateNextOrderId() {
+		String sql = "SELECT MAX(OrderID) FROM ORDER;";
+		try {
+			stmt = conn.prepareStatement(sql);
+			rs = stmt.executeQuery();
+
+			if (rs.next())
+				return rs.getInt("MAX(OrderID)") + 1;
+			else
+				return 1000;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 
 	/**
@@ -231,21 +256,18 @@ public class InventoryDBController extends DBController {
 	 * @return ResultSet with data of orderline for tool with given id or null if
 	 *         not found
 	 */
-	public ResultSet hasOrderLine(int id) {
-		if (checkOrder() != null) {
-			try {
-				// check if orderline exist
-				int orderID = rs.getInt("OrderID");
-				String sql = "SELECT * FROM ORDERLINE WHERE OrderID=? AND ToolID=?;";
-				stmt = conn.prepareStatement(sql);
-				stmt.setInt(1, orderID);
-				stmt.setInt(2, id);
-				rs = stmt.executeQuery();
-				if (rs.next())
-					return rs;
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+	public ResultSet hasOrderLine(int toolId, int orderId) {
+		try {
+			// check if orderline exist
+			String sql = "SELECT * FROM ORDERLINE WHERE OrderID=? AND ToolID=?;";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, orderId);
+			stmt.setInt(2, toolId);
+			rs = stmt.executeQuery();
+			if (rs.next())
+				return rs;
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		return null;
 	}
@@ -261,7 +283,7 @@ public class InventoryDBController extends DBController {
 		try {
 			String sql = "INSERT INTO ORDERLINE VALUES(?,?,?,?);";
 			stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, checkOrder());
+			stmt.setInt(1, orderline.getInt("OrderID"));
 			stmt.setInt(2, orderline.getInt("ToolID"));
 			stmt.setInt(3, orderline.getInt("SupplierID"));
 			stmt.setInt(4, orderline.getInt("Quantity"));
@@ -298,7 +320,7 @@ public class InventoryDBController extends DBController {
 		String sql = "SELECT * FROM ORDERS WHERE AS O JOIN ORDERLINE AS OL ON O.OrderID = OL.OrderID WHERE O.OrderID=?;";
 		try {
 			stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, checkOrder());
+			stmt.setInt(1, getPendingOrderId());
 			rs = stmt.executeQuery();
 			if (rs.next())
 				return rs;
