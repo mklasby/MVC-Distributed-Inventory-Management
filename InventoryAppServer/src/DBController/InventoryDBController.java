@@ -364,7 +364,7 @@ public class InventoryDBController extends DBController {
 			String sql = "UPDATE ORDERS SET IsOrdered=true WHERE OrderID = ?";
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, orderId);
-			rs = stmt.executeQuery();
+			stmt.executeUpdate();
 		} catch (JSONException | SQLException e) {
 			e.printStackTrace();
 		}

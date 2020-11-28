@@ -20,8 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class OrderWriter implements ClientServerConstants {
-    private static String OUTPUT_DIR = String.format("%slib%stoolshop%sorders%s", File.separator, File.separator,
-            File.separator, File.separator);
+
     private static BufferedWriter bw;
 
     /**
@@ -33,7 +32,7 @@ public class OrderWriter implements ClientServerConstants {
     public static String writeOrder(Message order) {
         String userDir = System.getProperty("user.dir");
         
-        File file = new File(userDir + OUTPUT_DIR, "Order.txt");
+        File file = new File(userDir, "Order.txt");
 
         try {
             bw = new BufferedWriter(new FileWriter(file));
@@ -44,7 +43,7 @@ public class OrderWriter implements ClientServerConstants {
 
         try {
 
-        	JSONArray orderlines = order.getJSONArray(DATA);
+        	JSONArray orderlines = order.getJSONObject(DATA).getJSONArray("OrderLines");
         	int numItems = orderlines.length(); 
             if (numItems == 0) {
                 bw.write("Nothing to order today.\n");
@@ -58,9 +57,9 @@ public class OrderWriter implements ClientServerConstants {
             	for(int n = 0; n < orderlines.length(); n++)
             	{
             		orderline = orderlines.getJSONObject(n);
-//                    bw.write(String.format("%20s%40s\n", "Item Description: ", line.getDescription()));
+                    bw.write(String.format("%20s%40s\n", "Tool ID: ", orderline.getInt("ToolID")));
                     bw.write(String.format("%20s%40d\n", "Amount Ordered: ", orderline.getInt("Quantity")));
-//                    bw.write(String.format("%20s%40s\n", "Supplier: ", line.getSupplier()));
+                    bw.write(String.format("%20s%40s\n", "Supplier ID: ", orderline.getInt("SupplierID")));
                     bw.write("\n");
             	}
             }
