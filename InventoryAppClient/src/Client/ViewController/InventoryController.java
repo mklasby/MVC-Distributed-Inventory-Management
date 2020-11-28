@@ -22,7 +22,7 @@ import Client.CommonModel.*;
 public class InventoryController extends ViewController {
     public HashMap<Integer, JSONObject> searchResults;
     private String searchBy = "id";
-    private int selectedIdx = 0;
+    private int selectedIdx = -1;
     private String[] infoKeys;
 
     public InventoryController(SubView view, ClientController clientCtrl) {
@@ -32,8 +32,7 @@ public class InventoryController extends ViewController {
         view.registerRadioButtonListener(new RadioButtonListener());
         view.registerListListener(new ResultsListListener());
         view.registerWindowClosingListener(new MyWindowStateListener());
-        infoKeys = new String[] { "toolIdField", "toolNameField", "stockField", "priceField", "supplierIdField",
-                "quantityField" };
+        infoKeys = new String[] { "toolNameField", "stockField", "priceField", "supplierIdField", "quantityField" };
     }
 
     private String getQueryType() {
@@ -149,26 +148,26 @@ public class InventoryController extends ViewController {
         }
     }
 
-    public JSONObject getToolJSON() throws JSONException {
+    public JSONObject getToolJSON() {
         HashMap<String, JTextField> fields = getInfoFields();
-        try {
-            int toolId = Integer.parseInt(fields.get("toolIdField").getText());
-            String name = fields.get("toolNameField").getText();
-            int quantity = Integer.parseInt(fields.get("stockField").getText());
-            double price = Double.parseDouble(fields.get("priceField").getText());
-            int supplierId = Integer.parseInt(fields.get("supplierIdField").getText());
-            String toolType = view.getComboBox("toolTypeComboBox").getSelectedItem().toString();
-            if (toolType.equals("Electrical")) {
-                String powerType = "Type A";
-                Electrical thisTool = new Electrical(toolId, name, quantity, price, supplierId, powerType);
-                return thisTool.encode();
-            } else {
-                NonElectrical thisTool = new NonElectrical(toolId, name, quantity, price, supplierId);
-                return thisTool.encode();
-            }
-        } catch (Exception e) {
-            view.flashErrorMessage("ERROR: Bad Input! Please check input field types!");
-            return null;
+        int toolId;
+        if (selectedIdx == -1) {
+            toolId = -1;
+        } else {
+            toolId = Integer.parseInt(view.getFieldText("toolIdField"));
+        }
+        String name = fields.get("toolNameField").getText();
+        int quantity = Integer.parseInt(fields.get("stockField").getText());
+        double price = Double.parseDouble(fields.get("priceField").getText());
+        int supplierId = Integer.parseInt(fields.get("supplierIdField").getText());
+        String toolType = view.getComboBox("toolTypeComboBox").getSelectedItem().toString();
+        if (toolType.equals("Electrical")) {
+            String powerType = "Type A";
+            Electrical thisTool = new Electrical(toolId, name, quantity, price, supplierId, powerType);
+            return thisTool.encode();
+        } else {
+            NonElectrical thisTool = new NonElectrical(toolId, name, quantity, price, supplierId);
+            return thisTool.encode();
         }
     }
 

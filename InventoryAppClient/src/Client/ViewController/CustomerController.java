@@ -21,7 +21,7 @@ import org.json.JSONObject;
 public class CustomerController extends ViewController {
     public HashMap<Integer, JSONObject> searchResults;
     private String searchBy = "id";
-    private int selectedIdx = 0;
+    private int selectedIdx = -1;
     private String[] infoKeys;
 
     public CustomerController(SubView view, ClientController clientCtrl) {
@@ -30,8 +30,7 @@ public class CustomerController extends ViewController {
         view.registerButtonListener(new ButtonListener());
         view.registerRadioButtonListener(new RadioButtonListener());
         view.registerListListener(new ResultsListListener());
-        infoKeys = new String[] { "customerIdField", "firstNameField", "lastNameField", "addressField", "postalField",
-                "phoneField" };
+        infoKeys = new String[] { "firstNameField", "lastNameField", "addressField", "postalField", "phoneField" };
     }
 
     private String getQueryType() {
@@ -145,8 +144,13 @@ public class CustomerController extends ViewController {
 
     public JSONObject getCustomerJSON() throws JSONException {
         HashMap<String, JTextField> fields = getInfoFields();
+        int clientId;
         try {
-            int clientId = Integer.parseInt(fields.get("customerIdField").getText());
+            if (selectedIdx == -1) {
+                clientId = -1;
+            } else {
+                clientId = Integer.parseInt(view.getFieldText("customerIdField"));
+            }
             String fName = fields.get("firstNameField").getText();
             String lName = fields.get("lastNameField").getText();
             String address = fields.get("addressField").getText();
