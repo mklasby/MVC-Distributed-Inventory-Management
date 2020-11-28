@@ -34,6 +34,12 @@ public class ClientController implements ClientServerConstants {
 
     public Message sendMessage(Message message) throws JSONException {
         try {
+            if (message.getBoolean(QUIT)) {
+                messageOut.writeObject(message.toString());
+                System.out.println("MESSAGE SENT: " + message.toString());
+                socket.close();
+                System.exit(0);
+            }
             messageOut.writeObject(message.toString());
             System.out.println("MESSAGE SENT: " + message.toString());
             String rawData = (String) messageIn.readObject();

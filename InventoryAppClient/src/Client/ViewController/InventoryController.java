@@ -463,4 +463,20 @@ public class InventoryController extends ViewController {
         }
         return infoFields;
     }
+
+    public class MyWindowStateListener extends WindowAdapter {
+        @Override
+        public void windowClosing(WindowEvent arg0) {
+            Message exit;
+            try {
+                exit = new Message();
+                exit.quitMessage();
+                clientCtrl.sendMessage(exit);
+                System.exit(0);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                System.exit(0);
+            }
+        }
+    }
 }

@@ -77,20 +77,4 @@ public abstract class ViewController implements ClientServerConstants {
     protected abstract void clearInfoFields();
 
     protected abstract void registerListeners();
-
-    public class MyWindowStateListener extends WindowAdapter {
-        @Override
-        public void windowClosed(WindowEvent arg0) {
-            Message exit;
-            try {
-                exit = new Message();
-                exit.quitMessage();
-                clientCtrl.sendMessage(exit);
-                System.exit(0);
-            } catch (JSONException e) {
-                e.printStackTrace();
-                System.exit(0);
-            }
-        }
-    }
 }

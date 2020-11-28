@@ -30,7 +30,6 @@ public class CustomerController extends ViewController {
         view.registerButtonListener(new ButtonListener());
         view.registerRadioButtonListener(new RadioButtonListener());
         view.registerListListener(new ResultsListListener());
-        view.registerWindowClosingListener(new MyWindowStateListener());
         infoKeys = new String[] { "customerIdField", "firstNameField", "lastNameField", "addressField", "postalField",
                 "phoneField" };
     }

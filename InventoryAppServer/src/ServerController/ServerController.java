@@ -19,9 +19,11 @@ public class ServerController implements Runnable, ClientServerConstants {
 	private ObjectOutputStream messageOut;
 	private ObjectInputStream messageIn;
 	private ArrayList<ModelController> models;
+	private Socket socket;
 
 	public ServerController(Socket socket) {
 		try {
+			this.socket = socket;
 			messageOut = new ObjectOutputStream(socket.getOutputStream());
 			messageIn = new ObjectInputStream(socket.getInputStream());
 			models = new ArrayList<>();
@@ -48,8 +50,11 @@ public class ServerController implements Runnable, ClientServerConstants {
 				System.out.println("MESSAGE RECEIVED: " + rawData.toString());
 				Message data = new Message(rawData);
 
-				if (data.getBoolean(QUIT))
-					break;
+				if (data.getBoolean(QUIT)) {
+					socket.close();
+					return;
+				}
+
 				for (ModelController model : models) {
 					Message response = model.notify(data);
 					if (response != null) {

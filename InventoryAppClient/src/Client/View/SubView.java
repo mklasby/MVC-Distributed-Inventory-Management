@@ -1,7 +1,5 @@
 package Client.View;
 
-import Client.ViewController.ViewController.MyWindowStateListener;
-
 import java.util.HashMap;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -154,7 +152,7 @@ public abstract class SubView {
         return comboBoxes.get(key);
     }
 
-    public void registerWindowClosingListener(MyWindowStateListener listener) {
+    public void registerWindowClosingListener(WindowAdapter listener) {
         gui.registerExitButton(listener);
     }
 
