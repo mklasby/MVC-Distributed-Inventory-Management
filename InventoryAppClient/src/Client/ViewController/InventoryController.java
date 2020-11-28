@@ -79,11 +79,13 @@ public class InventoryController extends ViewController {
         }
         Message query = null;
         if (searchBy.equals("type")) {
-            String typeField = view.getField("searchQueryField").getText().toLowerCase();
-            if (!typeField.equals("hand") && !typeField.equals("electrical")) {
+            if (!search.equalsIgnoreCase("hand") && !search.equalsIgnoreCase("electrical")) {
                 view.flashErrorMessage("ERROR: Please enter \"Hand\" or \"Electrical\" for Tool Type");
                 return;
             }
+            if (search.equalsIgnoreCase("hand"))
+            	search = "non-electrical";
+
         }
 
         if (searchBy.equals("id")) {
