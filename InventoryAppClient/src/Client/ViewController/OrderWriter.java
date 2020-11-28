@@ -12,8 +12,14 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalTime;
 
-public class OrderWriter {
+import Client.ClientController.Message;
+import Client.ClientController.ClientServerConstants;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+public class OrderWriter implements ClientServerConstants {
     private static String OUTPUT_DIR = String.format("%slib%stoolshop%sorders%s", File.separator, File.separator,
             File.separator, File.separator);
     private static BufferedWriter bw;
@@ -24,46 +30,50 @@ public class OrderWriter {
      * @param order: Order - order object to writ to file
      * @return: String - message of success/fail
      */
-    public static String writeOrder(JSONObject order) {
+    public static String writeOrder(Message order) {
         String userDir = System.getProperty("user.dir");
-        File file = new File(userDir + OUTPUT_DIR,
-                String.format("OrderNo_%d_%s.txt", order.getOrderID(), order.getDate()));
+        
+        File file = new File(userDir + OUTPUT_DIR, "Order.txt");
 
         try {
             bw = new BufferedWriter(new FileWriter(file));
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.print("\nERROR! Cannot write file!!\n");
+            return "\nERROR! Cannot write file!!\n";
         }
 
         try {
 
-            bw.write("*".repeat(80) + "\n");
-            bw.write(String.format("%20s%40d\n", "ORDER ID: ", order.getOrderID()));
-            bw.write(String.format("%20s%40s\n", "DATE ORDERED: ", order.getDate()));
-            bw.write("\n");
-
-            if (order.getItems().size() == 0) {
+        	JSONArray orderlines = order.getJSONArray(DATA);
+        	int numItems = orderlines.length(); 
+            if (numItems == 0) {
                 bw.write("Nothing to order today.\n");
             } else {
-
-                for (OrderLine line : order.getItems()) {
-                    bw.write(String.format("%20s%40s\n", "Item Description: ", line.getDescription()));
-                    bw.write(String.format("%20s%40d\n", "Amount Ordered: ", line.getAmount()));
-                    bw.write(String.format("%20s%40s\n", "Supplier: ", line.getSupplier()));
+            	JSONObject orderline = orderlines.getJSONObject(0);
+                bw.write("*".repeat(80) + "\n");
+                bw.write(String.format("%20s%40d\n", "ORDER ID: ", orderline.getInt("OrderID")));
+                bw.write(String.format("%20s%40s\n", "DATE ORDERED: ", LocalTime.now()));
+                bw.write("\n");
+                
+            	for(int n = 0; n < orderlines.length(); n++)
+            	{
+            		orderline = orderlines.getJSONObject(n);
+//                    bw.write(String.format("%20s%40s\n", "Item Description: ", line.getDescription()));
+                    bw.write(String.format("%20s%40d\n", "Amount Ordered: ", orderline.getInt("Quantity")));
+//                    bw.write(String.format("%20s%40s\n", "Supplier: ", line.getSupplier()));
                     bw.write("\n");
-                }
+            	}
             }
+
             bw.write("*".repeat(80) + "\n");
             bw.close();
-        } catch (IOException e) {
+            return "Order written to file!";
+        } catch (Exception e) {
             e.printStackTrace();
             return "\nERROR! UNABLE TO WRITE TO FILE!\n";
-
         }
-
-        return String.format("Successfully wrote Order No. %d to file at %s.\n", order.getOrderID(),
-                userDir + OUTPUT_DIR + String.format("OrderNo%d_%s.txt", order.getOrderID(), order.getDate()));
+        
     }
+    
 
 }

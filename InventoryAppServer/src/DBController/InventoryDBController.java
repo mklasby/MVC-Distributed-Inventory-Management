@@ -360,7 +360,7 @@ public class InventoryDBController extends DBController {
 
 	public void makeOrder(JSONObject newOrder) {
 		try {
-			int orderId = newOrder.getInt("orderID");
+			int orderId = newOrder.getInt("OrderID");
 			String sql = "UPDATE ORDERS SET IsOrdered=true WHERE OrderID = ?";
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, orderId);
