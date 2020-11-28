@@ -220,10 +220,11 @@ public class InventoryDBController extends DBController {
 				Date date = Date.valueOf(LocalDate.now());
 				int orderId = generateNextOrderId();
 				String newOrder = "INSERT INTO ORDERS VALUES (?,?,?);";
+				stmt = conn.prepareStatement(newOrder);
 				stmt.setInt(1, orderId);
 				stmt.setDate(2, date);
 				stmt.setBoolean(3, false);
-				stmt = conn.prepareStatement(newOrder);
+				stmt.executeUpdate();
 				return orderId;
 			}
 		} catch (SQLException e) {
@@ -241,7 +242,7 @@ public class InventoryDBController extends DBController {
 			if (rs.next())
 				return rs.getInt("MAX(OrderID)") + 1;
 			else
-				return 1000;
+				return 10000;
 
 		} catch (SQLException e) {
 			e.printStackTrace();

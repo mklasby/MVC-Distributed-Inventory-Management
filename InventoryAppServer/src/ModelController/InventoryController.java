@@ -147,6 +147,8 @@ public class InventoryController extends ModelController implements ClientServer
 			JSONObject orderline;
 			if (existingOrderLine == null) {
 				orderline = model.restock(data, orderId);
+				System.out.print(orderline.toString());
+
 				inventoryDB.generateOrderLine(orderline);
 			} else {
 				orderline = model.incrementOrderLine(data, existingOrderLine);
