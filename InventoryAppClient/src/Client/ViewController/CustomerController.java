@@ -206,6 +206,8 @@ public class CustomerController extends ViewController {
             Message put = new Message(REQUEST, PUT, CUSTOMER, newItem);
             clientCtrl.sendMessage(put);
             view.flashSuccessMessage("Customer updated successfully!");
+            clearInfoFields();
+            searchAll();
         } catch (JSONException e) {
             view.flashErrorMessage("Oops, I did it again...");
             e.printStackTrace();
