@@ -79,12 +79,10 @@ public class InventoryController extends ViewController {
         }
         Message query = null;
         if (searchBy.equals("type")) {
-            if (!search.equalsIgnoreCase("hand") && !search.equalsIgnoreCase("electrical")) {
-                view.flashErrorMessage("ERROR: Please enter \"Hand\" or \"Electrical\" for Tool Type");
+            if (!search.equalsIgnoreCase("non-electrical") && !search.equalsIgnoreCase("electrical")) {
+                view.flashErrorMessage("ERROR: Please enter \"non-electrical\" or \"Electrical\" for Tool Type");
                 return;
             }
-            if (search.equalsIgnoreCase("hand"))
-                search = "non-electrical";
 
         }
 
@@ -192,6 +190,8 @@ public class InventoryController extends ViewController {
             }
             if (response.get(VERB).equals(OK)) {
                 view.flashSuccessMessage((String) response.get(DATA));
+                searchAll();
+                clearInfoFields();
                 return;
             }
         } catch (JSONException e) {
@@ -214,6 +214,7 @@ public class InventoryController extends ViewController {
             } else {
                 view.flashSuccessMessage(response.getString(DATA));
                 searchAll();
+                clearInfoFields();
             }
         } catch (JSONException e) {
             view.flashErrorMessage("Oops, I did it again...");
@@ -305,6 +306,7 @@ public class InventoryController extends ViewController {
             } else {
                 view.flashSuccessMessage(response.getString(DATA));
                 searchAll();
+                clearInfoFields();
             }
         } catch (JSONException e) {
             view.flashErrorMessage("Oops, I did it again...");

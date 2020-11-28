@@ -178,9 +178,14 @@ public class InventoryController extends ModelController implements ClientServer
 	private Message addTool(Message data) {
 		Message response = null;
 		try {
-			inventoryDB.addTool(data.getJSONObject(DATA));
-			String successMessage = "Tool added successfully.";
-			response = new Message(RESPONSE, OK, successMessage);
+			try {
+				inventoryDB.addTool(data.getJSONObject(DATA));
+				String successMessage = "Tool added successfully.";
+				response = new Message(RESPONSE, OK, successMessage);
+			} catch (SQLException e) {
+				String errorMessage = "Invalid Supplier ID.";
+				response = new Message(RESPONSE, ERROR, errorMessage);
+			}
 		} catch (JSONException jsonE) {
 			jsonE.printStackTrace();
 		}

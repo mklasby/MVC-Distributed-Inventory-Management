@@ -191,6 +191,8 @@ public class CustomerController extends ViewController {
             }
             if (response.get(VERB).equals(OK)) {
                 view.flashSuccessMessage((String) response.get(DATA));
+                clearInfoFields();
+                searchAll();
                 return;
             }
         } catch (JSONException e) {
@@ -230,6 +232,7 @@ public class CustomerController extends ViewController {
                 return;
             } else {
                 view.flashSuccessMessage(response.getString(DATA));
+                clearInfoFields();
                 searchAll();
             }
         } catch (JSONException e) {

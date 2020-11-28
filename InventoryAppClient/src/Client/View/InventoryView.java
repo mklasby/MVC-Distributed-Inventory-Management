@@ -61,7 +61,6 @@ public class InventoryView extends SubView {
         buildSearchResultsPanel();
         buildInventoryInfoPanel();
         buildPosPanel();
-        generateTestList();
         buildMainPanel();
         registerFields();
         registerButtons();
@@ -415,11 +414,6 @@ public class InventoryView extends SubView {
         radioButtons.put("idButton", idButton);
         radioButtons.put("nameButton", nameButton);
         radioButtons.put("typeButton", typeButton);
-    }
-
-    public void generateTestList() {
-        listModel.addElement("Test1");
-        listModel.addElement("Test2");
     }
 
     public String getSearchField() {

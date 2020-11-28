@@ -11,7 +11,6 @@ public class Message extends JSONObject implements ClientServerConstants {
 
     public Message(String rawData) throws JSONException {
         super(rawData);
-        put(QUIT, false);
     };
 
     public Message(String messageType, String verb, String db, Object data) throws JSONException {
