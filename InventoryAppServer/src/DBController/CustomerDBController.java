@@ -54,37 +54,6 @@ public class CustomerDBController extends DBController {
 	}
 
 	/**
-	 * Return sql statement to update given client attribute.
-	 * 
-	 * @param attribute a client attribute
-	 * @return sql update statement
-	 */
-	private String updateOperation(String attribute) {
-		String sql = "";
-		switch (attribute) {
-			case "LName":
-				sql = "UPDATE CLIENT SET LName=? WHERE ClientID=?;";
-				break;
-			case "FName":
-				sql = "UPDATE CLIENT SET FName=? WHERE ClientID=?;";
-				break;
-			case "Type":
-				sql = "UPDATE CLIENT SET Type=? WHERE ClientID=?;";
-				break;
-			case "Phone":
-				sql = "UPDATE CLIENT SET Phone=? WHERE ClientID=?;";
-				break;
-			case "Address":
-				sql = "UPDATE CLIENT SET Address=? WHERE ClientID=?;";
-				break;
-			case "PostalCode":
-				sql = "UPDATE CLIENT SET PostalCode=? WHERE ClientID=?;";
-				break;
-		}
-		return sql;
-	}
-
-	/**
 	 * Update client info for given client.
 	 * 
 	 * @param client JSONObject with client info
@@ -99,6 +68,7 @@ public class CustomerDBController extends DBController {
 			stmt.setString(4, client.getString("Phone"));
 			stmt.setString(5, client.getString("Address"));
 			stmt.setString(6, client.getString("PostalCode"));
+			stmt.setInt(7, client.getInt("ClientID"));
 			stmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();

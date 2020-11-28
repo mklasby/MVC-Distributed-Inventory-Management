@@ -204,6 +204,7 @@ public class CustomerController extends ViewController {
             JSONObject newItem = getCustomerJSON();
             Message put = new Message(REQUEST, PUT, CUSTOMER, newItem);
             clientCtrl.sendMessage(put);
+            view.flashSuccessMessage("Customer updated successfully!");
         } catch (JSONException e) {
             view.flashErrorMessage("Oops, I did it again...");
             e.printStackTrace();
