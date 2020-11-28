@@ -219,7 +219,7 @@ public class InventoryDBController extends DBController {
 			} else {
 				Date date = Date.valueOf(LocalDate.now());
 				int orderId = generateNextOrderId();
-				String newOrder = "INSERT INTO ORDERS VALUES (?, ?, ?)";
+				String newOrder = "INSERT INTO ORDERS VALUES (?,?,?);";
 				stmt.setInt(1, orderId);
 				stmt.setDate(2, date);
 				stmt.setBoolean(3, false);
@@ -233,7 +233,7 @@ public class InventoryDBController extends DBController {
 	}
 
 	private int generateNextOrderId() {
-		String sql = "SELECT MAX(OrderID) FROM ORDER;";
+		String sql = "SELECT MAX(OrderID) FROM ORDERS;";
 		try {
 			stmt = conn.prepareStatement(sql);
 			rs = stmt.executeQuery();
