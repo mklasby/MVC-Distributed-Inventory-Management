@@ -81,7 +81,7 @@ public class CustomerController extends ModelController implements ClientServerC
 		} catch (JSONException jsonE) {
 			jsonE.printStackTrace();
 		}
-		return null;
+		return response;
 	}
 
 	private Message searchCustomer(Message data) {

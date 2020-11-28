@@ -12,11 +12,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-<<<<<<< HEAD
-import java.time.LocalTime;
-=======
 import java.time.LocalDate;
->>>>>>> 0596c5272c76d4e9b7588595dd2acfeeb6975b36
 
 import Client.ClientController.Message;
 import Client.ClientController.ClientServerConstants;
@@ -55,11 +51,7 @@ public class OrderWriter implements ClientServerConstants {
             	JSONObject orderline = orderlines.getJSONObject(0);
                 bw.write("*".repeat(80) + "\n");
                 bw.write(String.format("%20s%40d\n", "ORDER ID: ", orderline.getInt("OrderID")));
-<<<<<<< HEAD
-                bw.write(String.format("%20s%40s\n", "DATE ORDERED: ", LocalTime.now()));
-=======
                 bw.write(String.format("%20s%40s\n", "DATE ORDERED: ", LocalDate.now()));
->>>>>>> 0596c5272c76d4e9b7588595dd2acfeeb6975b36
                 bw.write("\n");
                 
             	for(int n = 0; n < orderlines.length(); n++)

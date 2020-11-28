@@ -283,17 +283,14 @@ public class InventoryController extends ViewController {
             if (isErrorMessage(response)) {
                 return;
             }
-<<<<<<< HEAD
             System.out.println(response);
 
             view.flashSuccessMessage(OrderWriter.writeOrder(response));
-=======
             OrderWriter orderWriter = new OrderWriter();
             // orderWriter.writeOrder(response);
             view.flashSuccessMessage("Order written to file!");
             System.out.println(response);
 
->>>>>>> 0596c5272c76d4e9b7588595dd2acfeeb6975b36
         } catch (JSONException e) {
             e.printStackTrace();
         }
