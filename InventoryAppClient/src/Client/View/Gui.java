@@ -1,6 +1,6 @@
 package Client.View;
 
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.awt.Dimension;
 import java.awt.*;
 import javax.swing.*;
@@ -23,7 +23,7 @@ public class Gui extends JFrame {
         header = new JLabel("LaXu Automated Tool Shop Management Solution");
 
         // picture is content, frame is menu buttons and header
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setPreferredSize(ViewConstants.FRAME_DIMENSION);
 
@@ -92,6 +92,10 @@ public class Gui extends JFrame {
     public void setPanel(String panelName) {
         CardLayout pictureLayout = (CardLayout) picture.getLayout();
         pictureLayout.show(picture, panelName);
+    }
+
+    public void registerExitButton(WindowAdapter listener) {
+        this.addWindowListener(listener);
     }
 
     public JButton getButton(String key) {
