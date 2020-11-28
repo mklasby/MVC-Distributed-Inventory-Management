@@ -80,11 +80,13 @@ public class InventoryController extends ViewController {
         }
         Message query = null;
         if (searchBy.equals("type")) {
-            String typeField = view.getField("searchQueryField").getText().toLowerCase();
-            if (!typeField.equals("hand") && !typeField.equals("electrical")) {
+            if (!search.equalsIgnoreCase("hand") && !search.equalsIgnoreCase("electrical")) {
                 view.flashErrorMessage("ERROR: Please enter \"Hand\" or \"Electrical\" for Tool Type");
                 return;
             }
+            if (search.equalsIgnoreCase("hand"))
+            	search = "non-electrical";
+
         }
 
         if (searchBy.equals("id")) {
@@ -281,9 +283,15 @@ public class InventoryController extends ViewController {
             if (isErrorMessage(response)) {
                 return;
             }
+<<<<<<< HEAD
             OrderWriter orderWriter = new OrderWriter();
             // orderWriter.writeOrder(response);
             view.flashSuccessMessage("Order written to file!");
+=======
+            System.out.println(response);
+
+            view.flashSuccessMessage(OrderWriter.writeOrder(response));
+>>>>>>> 29063e1713702f34126169729198cefd81db96a0
         } catch (JSONException e) {
             e.printStackTrace();
         }
