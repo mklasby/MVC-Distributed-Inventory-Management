@@ -270,7 +270,7 @@ public class InventoryView extends SubView {
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setViewportView(resultsList);
         scrollPane.setPreferredSize(
-                new Dimension(ViewConstants.X_DIMENSION / 2 + 100, ViewConstants.Y_DIMENSION / 2 + 10));
+                new Dimension(200, 180));
         searchResultsPanel.add(scrollPane, c);
     }
 
