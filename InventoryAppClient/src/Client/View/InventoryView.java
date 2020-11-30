@@ -268,7 +268,7 @@ public class InventoryView extends SubView {
         c.fill = GridBagConstraints.BOTH;
         listModel = new DefaultListModel<String>();
         resultsList = new JList<String>(listModel);
-        resultsList.setVisibleRowCount(20);
+        resultsList.setVisibleRowCount(10);
         resultsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         resultsList.setLayoutOrientation(JList.VERTICAL);
         resultsList.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
