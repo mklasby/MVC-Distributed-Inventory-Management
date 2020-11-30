@@ -76,9 +76,10 @@ public class InventoryView extends SubView {
         mainPanel.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
-        c.insets = new Insets(3, 20, 20, 20); // top, right, bottom, left;
+        c.insets = new Insets(3, 3, 3, 3); // top, right, bottom, left;
         c.gridx = 0;
         c.gridy = 0;
+        c.gridheight = 1;
         mainPanel.add(searchQueryPanel, c);
 
         c.gridy = 1;
@@ -145,16 +146,16 @@ public class InventoryView extends SubView {
     private void buildSearchQueryPanel() {
         searchQueryPanel = new JPanel();
         searchQueryPanel.setLayout(new GridBagLayout());
-        searchQueryPanel.setSize(new Dimension(ViewConstants.X_DIMENSION / 2, ViewConstants.Y_DIMENSION / 2));
+        searchQueryPanel.setPreferredSize(new Dimension(ViewConstants.X_DIMENSION / 2, ViewConstants.Y_DIMENSION / 2));
         GridBagConstraints c = new GridBagConstraints();
 
         c.weightx = 0.5;
         c.weighty = 0.5;
-        c.insets = new Insets(10, 3, 10, 3); // top, right, bottom, left;
+        c.insets = new Insets(3, 3, 3, 3); // top, right, bottom, left;
 
         searchInvLabel = new JLabel("Search Inventory");
         searchInvLabel.setFont(ViewConstants.SUBTITLE_FONT);
-        c.insets = new Insets(3, 3, 3, 3); // top, right, bottom, left;
+        c.insets = new Insets(0, 0, 0, 0); // top, right, bottom, left;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.gridy = 0;
@@ -191,7 +192,7 @@ public class InventoryView extends SubView {
         c.gridy = 4;
         searchQueryPanel.add(typeButton, c);
 
-        c.insets = new Insets(10, 3, 0, 3); // top, right, bottom, left;
+        c.insets = new Insets(0, 3, 0, 3); // top, right, bottom, left;
         searchQueryLabel = new JLabel("Enter Search Parameter below:");
         c.fill = GridBagConstraints.NONE;
         c.gridx = 0;
@@ -268,8 +269,7 @@ public class InventoryView extends SubView {
         resultsList.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setViewportView(resultsList);
-        scrollPane.setPreferredSize(
-                new Dimension(200, 180));
+        scrollPane.setPreferredSize(new Dimension(1, ViewConstants.Y_DIMENSION / 2 - 100));
         searchResultsPanel.add(scrollPane, c);
     }
 

@@ -59,13 +59,13 @@ public class Gui extends JFrame {
         c.gridwidth = 2;
         c.anchor = GridBagConstraints.CENTER;
         c.fill = GridBagConstraints.BOTH;
-        c.insets = new Insets(0, ViewConstants.X_DIMENSION / 4 - 10, 0, 0); // top, right, bottom, left
+        c.insets = new Insets(0, ViewConstants.X_DIMENSION / 3, 0, 0); // top, right, bottom, left
         frame.add(header, c);
     }
 
     public void display() {
         this.add(frame);
-        this.pack();
+        // this.pack();
         this.setVisible(true);
     }
 

@@ -3,7 +3,7 @@ package Client.View;
 import java.awt.*;
 
 public final class ViewConstants {
-    public static final Dimension FRAME_DIMENSION = new Dimension(1500, 1100);
+    public static final Dimension FRAME_DIMENSION = new Dimension(1500, 1000);
     static public int X_DIMENSION = 1500;
     static public int Y_DIMENSION = 900;
     static public Dimension PICTURE_DIMENSION = new Dimension(X_DIMENSION, Y_DIMENSION);
