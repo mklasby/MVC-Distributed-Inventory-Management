@@ -71,7 +71,8 @@ public class CustomerView extends SubView {
     private void buildSearchQueryPanel() {
         searchQueryPanel = new JPanel();
         searchQueryPanel.setLayout(new GridBagLayout());
-        searchQueryPanel.setSize(new Dimension(ViewConstants.X_DIMENSION / 2, ViewConstants.Y_DIMENSION / 2));
+        // searchQueryPanel.setPreferredSize(new Dimension(ViewConstants.X_DIMENSION /
+        // 2, ViewConstants.Y_DIMENSION / 2));
         GridBagConstraints c = new GridBagConstraints();
 
         c.weightx = 0.5;
@@ -127,7 +128,7 @@ public class CustomerView extends SubView {
         searchQueryPanel.add(searchQueryLabel, c);
 
         c.insets = new Insets(0, 3, 0, 3); // top, right, bottom, left;
-        searchQueryField = new JTextField(15);
+        searchQueryField = new JTextField(50);
         searchQueryField.setEditable(true);
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
@@ -169,7 +170,9 @@ public class CustomerView extends SubView {
 
     private void buildSearchResultsPanel() {
         searchResultsPanel = new JPanel();
-        searchResultsPanel.setSize(new Dimension(ViewConstants.X_DIMENSION / 2, ViewConstants.Y_DIMENSION / 2));
+        // searchResultsPanel
+        // .setPreferredSize(new Dimension(ViewConstants.X_DIMENSION / 2,
+        // ViewConstants.Y_DIMENSION / 2));
         searchResultsPanel.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(20, 3, 10, 0); // top, right, bottom, left;
@@ -189,19 +192,22 @@ public class CustomerView extends SubView {
         c.fill = GridBagConstraints.BOTH;
         listModel = new DefaultListModel<String>();
         resultsList = new JList<String>(listModel);
+        resultsList.setVisibleRowCount(20);
         resultsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         resultsList.setLayoutOrientation(JList.VERTICAL);
         resultsList.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setViewportView(resultsList);
-        scrollPane.setPreferredSize(new Dimension(ViewConstants.X_DIMENSION / 2, ViewConstants.Y_DIMENSION / 2 - 100));
+        // scrollPane.setPreferredSize(new Dimension(ViewConstants.X_DIMENSION / 4,
+        // 10));
         searchResultsPanel.add(scrollPane, c);
     }
 
     private void buildCustomerInfoPanel() {
         customerInfoPanel = new JPanel();
         customerInfoPanel.setLayout(new GridBagLayout());
-        customerInfoPanel.setSize(new Dimension(ViewConstants.X_DIMENSION / 2, ViewConstants.Y_DIMENSION));
+        // customerInfoPanel.setPreferredSize(new Dimension(ViewConstants.X_DIMENSION /
+        // 2, ViewConstants.Y_DIMENSION));
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(3, 3, 3, 3); // top, right, bottom, left;
         c.weightx = 0.5;

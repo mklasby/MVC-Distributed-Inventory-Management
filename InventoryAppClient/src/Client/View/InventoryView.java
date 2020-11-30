@@ -97,7 +97,8 @@ public class InventoryView extends SubView {
     private void buildPosPanel() {
         posPanel = new JPanel();
         posPanel.setLayout(new GridBagLayout());
-        posPanel.setSize(new Dimension(ViewConstants.X_DIMENSION / 2, ViewConstants.Y_DIMENSION / 2));
+        // posPanel.setPreferredSize(new Dimension(ViewConstants.X_DIMENSION / 2,
+        // ViewConstants.Y_DIMENSION / 2));
         GridBagConstraints c = new GridBagConstraints();
 
         c.weightx = 0.5;
@@ -146,7 +147,8 @@ public class InventoryView extends SubView {
     private void buildSearchQueryPanel() {
         searchQueryPanel = new JPanel();
         searchQueryPanel.setLayout(new GridBagLayout());
-        searchQueryPanel.setPreferredSize(new Dimension(ViewConstants.X_DIMENSION / 2, ViewConstants.Y_DIMENSION / 2));
+        // searchQueryPanel.setPreferredSize(new Dimension(ViewConstants.X_DIMENSION /
+        // 2, ViewConstants.Y_DIMENSION / 2));
         GridBagConstraints c = new GridBagConstraints();
 
         c.weightx = 0.5;
@@ -202,7 +204,7 @@ public class InventoryView extends SubView {
         searchQueryPanel.add(searchQueryLabel, c);
 
         c.insets = new Insets(0, 3, 0, 3); // top, right, bottom, left;
-        searchQueryField = new JTextField(15);
+        searchQueryField = new JTextField(50);
         searchQueryField.setEditable(true);
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
@@ -244,12 +246,14 @@ public class InventoryView extends SubView {
 
     private void buildSearchResultsPanel() {
         searchResultsPanel = new JPanel();
-        searchResultsPanel.setSize(new Dimension(ViewConstants.X_DIMENSION / 2, ViewConstants.Y_DIMENSION / 2));
+        // searchResultsPanel
+        // .setPreferredSize(new Dimension(ViewConstants.X_DIMENSION / 2,
+        // ViewConstants.Y_DIMENSION / 2));
         searchResultsPanel.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(20, 3, 10, 0); // top, right, bottom, left;
         c.weightx = 0.5;
-        c.weighty = 1.0;
+        c.weighty = 0.5;
 
         searchResultsLabel = new JLabel("Search Results:");
         searchResultsLabel.setFont(ViewConstants.SUBTITLE_FONT);
@@ -264,19 +268,21 @@ public class InventoryView extends SubView {
         c.fill = GridBagConstraints.BOTH;
         listModel = new DefaultListModel<String>();
         resultsList = new JList<String>(listModel);
+        resultsList.setVisibleRowCount(20);
         resultsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         resultsList.setLayoutOrientation(JList.VERTICAL);
         resultsList.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setViewportView(resultsList);
-        scrollPane.setPreferredSize(new Dimension(1, ViewConstants.Y_DIMENSION / 2 - 100));
+        // scrollPane.setPreferredSize(new Dimension(700, 200));
         searchResultsPanel.add(scrollPane, c);
     }
 
     private void buildInventoryInfoPanel() {
         inventoryInfoPanel = new JPanel();
         inventoryInfoPanel.setLayout(new GridBagLayout());
-        inventoryInfoPanel.setSize(new Dimension(ViewConstants.X_DIMENSION / 2, ViewConstants.Y_DIMENSION / 2));
+        // inventoryInfoPanel.setSize(new Dimension(ViewConstants.X_DIMENSION / 2,
+        // ViewConstants.Y_DIMENSION / 2));
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(3, 3, 3, 3); // top, right, bottom, left;
         c.weightx = 0.5;

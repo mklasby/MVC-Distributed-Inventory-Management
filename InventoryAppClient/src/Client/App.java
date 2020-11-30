@@ -14,8 +14,8 @@ import Client.ViewController.*;
 public class App {
     public static void main(String[] args) {
         Gui gui = new Gui();
-        String serverName = "50.99.198.77";
-        // String serverName = "localhost";
+        // String serverName = "50.99.198.77";
+        String serverName = "localhost";
         CustomerView custView = new CustomerView(gui, "customerPanel");
         ClientController clientCtrl = new ClientController(serverName, 4444);
         CustomerController custCtrl = new CustomerController(custView, clientCtrl);

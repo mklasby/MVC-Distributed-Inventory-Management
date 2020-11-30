@@ -24,7 +24,7 @@ public class ClientController implements ClientServerConstants {
             InetAddress serverIP = InetAddress.getByName(serverName);
             // TODO: Comment me out to run over IP
             socket = new Socket(serverName, portNumber);
-            socket = new Socket(serverIP, portNumber);
+            // socket = new Socket(serverIP, portNumber);
             messageIn = new ObjectInputStream(socket.getInputStream());
             messageOut = new ObjectOutputStream(socket.getOutputStream());
         } catch (IOException e) {
