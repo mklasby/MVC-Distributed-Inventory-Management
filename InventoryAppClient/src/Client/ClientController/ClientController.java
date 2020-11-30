@@ -21,10 +21,10 @@ public class ClientController implements ClientServerConstants {
     public ClientController(String serverName, int portNumber) {
         try {
             // TODO: Comment me out to run local
-            // InetAddress serverIP = InetAddress.getByName(serverName);
-            // gameSocket = new Socket(serverIP, portNumber);
+            InetAddress serverIP = InetAddress.getByName(serverName);
             // TODO: Comment me out to run over IP
             socket = new Socket(serverName, portNumber);
+            socket = new Socket(serverIP, portNumber);
             messageIn = new ObjectInputStream(socket.getInputStream());
             messageOut = new ObjectOutputStream(socket.getOutputStream());
         } catch (IOException e) {
