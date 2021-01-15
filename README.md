@@ -2,9 +2,13 @@
 ## By: Michael Lasby and Tong Xu
 ## Submitted On: Nov. 30, 2020
 
+### 
+Design and Development of a Distributed Inventory Management System Using MVC.
+
 ### Project directory map
 * See `./InventoryAppClient/src/` for client side source files.
 * See `./InventoryAppServer/src/` for server side source files. 
+
 ### Compiling and running
 * To compile and run the **server**, please complete the following steps: 
     * Execute the file `./create-toolshop-objects_v1.sql` in MySQL workbench to initialize the database.  
